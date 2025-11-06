@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOIR - Fashion Forward</title>
+    <title>BIBITNESIA </title>
     <link rel="stylesheet" href="templatemo-noir-fashion.css">
 <!-- 
 TemplateMo 599 Noir Fashion
@@ -18,20 +18,19 @@ https://templatemo.com/tm-599-noir-fashion
                     <defs>
                         <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff3366;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#e6881d;stop-opacity:1" />
                         </linearGradient>
                     </defs>
                     <polygon points="50,10 20,50 50,90 80,50" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
                     <circle cx="50" cy="50" r="5" fill="url(#logoGrad)"/>
                 </svg>
-                <span class="logo-text">NOIR</span>
+                <span class="logo-text">BIBITNESIA</span>
             </a>
             <ul class="nav-links">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#collections" class="nav-link">Collections</a></li>
                 <li><a href="#featured" class="nav-link">Featured</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="#contact" class="nav-cta">Get In Touch</a></li>
+
             </ul>
             <div class="menu-toggle" id="menuToggle">
                 <span></span>
@@ -46,7 +45,7 @@ https://templatemo.com/tm-599-noir-fashion
             <li><a href="#home">Home</a></li>
             <li><a href="#collections">Collections</a></li>
             <li><a href="#featured">Featured</a></li>
-            <li><a href="#contact">Contact</a></li>
+            
         </ul>
     </div>
 
@@ -318,84 +317,7 @@ https://templatemo.com/tm-599-noir-fashion
         </div>
     </section>
 
-    <section class="contact" id="contact">
-        <div class="contact-container">
-            <div class="contact-header">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">We'd love to hear from you</p>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-form-wrapper">
-                    <form id="contactForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Tell us more about your inquiry..." required></textarea>
-                        </div>
-                        <button type="submit" class="form-submit">Send Message</button>
-                    </form>
-                </div>
-                
-                <div class="contact-info">
-                    <div class="info-item">
-                        <div class="info-icon">📍</div>
-                        <div class="info-content">
-                            <h3>Visit Our Flagship Store</h3>
-                            <p>123 Fashion Avenue<br>
-                            Bangkok, Thailand 10110<br>
-                            Siam District</p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">📞</div>
-                        <div class="info-content">
-                            <h3>Call Us</h3>
-                            <p>Main: <a href="tel:+66021234567">+66 02 123 4567</a><br>
-                            Support: <a href="tel:+66021234568">+66 02 123 4568</a><br>
-                            Mon-Fri, 9AM-6PM ICT</p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">✉️</div>
-                        <div class="info-content">
-                            <h3>Email Us</h3>
-                            <p>General: <a href="mailto:hello@noir.fashion">hello@noir.fashion</a><br>
-                            Support: <a href="mailto:support@noir.fashion">support@noir.fashion</a><br>
-                            Press: <a href="mailto:press@noir.fashion">press@noir.fashion</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="map-section">
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.551370220076!2d100.53515!3d13.730314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e2993fa2f8c6d9%3A0x92cf0e47c4c2ed08!2sSilom%20MRT%20Station!5e0!3m2!1sen!2sth!4v1697000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
