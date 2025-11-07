@@ -1,377 +1,440 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIBITNESIA </title>
-    <link rel="stylesheet" href="templatemo-noir-fashion.css">
-<!-- 
-TemplateMo 599 Noir Fashion
-https://templatemo.com/tm-599-noir-fashion
--->
+    <title>Layout Default - Mazer Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./dist/assets/css/bootstrap.css">
+
+    <link rel="stylesheet" href="./dist/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="./dist/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="./dist/assets/css/app.css">
+    <link rel="shortcut icon" href="./dist/assets/images/favicon.svg" type="image/x-icon">
 </head>
+
 <body>
-    <nav id="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo-link">
-                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#e6881d;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <polygon points="50,10 20,50 50,90 80,50" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
-                    <circle cx="50" cy="50" r="5" fill="url(#logoGrad)"/>
-                </svg>
-                <span class="logo-text">BIBITNESIA</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link active">Home</a></li>
-                <li><a href="#collections" class="nav-link">Collections</a></li>
-                <li><a href="#featured" class="nav-link">Featured</a></li>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="logo">
+                            <a href="index.html"><img src="./dist/assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                        </div>
+                        <div class="toggler">
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">Menu</li>
 
-            </ul>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
+                        <li class="sidebar-item  ">
+                            <a href="index.html" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>Components</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="component-alert.html">Alert</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-badge.html">Badge</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-breadcrumb.html">Breadcrumb</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-button.html">Button</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-card.html">Card</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-carousel.html">Carousel</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-dropdown.html">Dropdown</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-list-group.html">List Group</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-modal.html">Modal</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-navs.html">Navs</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-pagination.html">Pagination</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-progress.html">Progress</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-spinner.html">Spinner</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="component-tooltip.html">Tooltip</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Extra Components</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="extra-component-avatar.html">Avatar</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="extra-component-sweetalert.html">Sweet Alert</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="extra-component-toastify.html">Toastify</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="extra-component-rating.html">Rating</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="extra-component-divider.html">Divider</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item active has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Layouts</span>
+                            </a>
+                            <ul class="submenu active">
+                                <li class="submenu-item active">
+                                    <a href="layout-default.html">Default Layout</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="layout-vertical-1-column.html">1 Column</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="layout-vertical-navbar.html">Vertical with Navbar</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="layout-horizontal.html">Horizontal Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Forms &amp; Tables</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-hexagon-fill"></i>
+                                <span>Form Elements</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="form-element-input.html">Input</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-element-input-group.html">Input Group</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-element-select.html">Select</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-element-radio.html">Radio</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-element-checkbox.html">Checkbox</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-element-textarea.html">Textarea</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="form-layout.html" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-medical-fill"></i>
+                                <span>Form Layout</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-pen-fill"></i>
+                                <span>Form Editor</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="form-editor-quill.html">Quill</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-editor-ckeditor.html">CKEditor</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-editor-summernote.html">Summernote</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="form-editor-tinymce.html">TinyMCE</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="table.html" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Table</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="table-datatable.html" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                <span>Datatable</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-title">Extra UI</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-pentagon-fill"></i>
+                                <span>Widgets</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="ui-widgets-chatbox.html">Chatbox</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-widgets-pricing.html">Pricing</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-widgets-todolist.html">To-do List</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-egg-fill"></i>
+                                <span>Icons</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="ui-icons-bootstrap-icons.html">Bootstrap Icons </a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-icons-fontawesome.html">Fontawesome</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-icons-dripicons.html">Dripicons</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-bar-chart-fill"></i>
+                                <span>Charts</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="ui-chart-chartjs.html">ChartJS</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-chart-apexcharts.html">Apexcharts</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="ui-file-uploader.html" class='sidebar-link'>
+                                <i class="bi bi-cloud-arrow-up-fill"></i>
+                                <span>File Uploader</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-map-fill"></i>
+                                <span>Maps</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="ui-map-google-map.html">Google Map</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="ui-map-jsvectormap.html">JS Vector Map</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Pages</li>
+
+                        <li class="sidebar-item  ">
+                            <a href="application-email.html" class='sidebar-link'>
+                                <i class="bi bi-envelope-fill"></i>
+                                <span>Email Application</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="application-chat.html" class='sidebar-link'>
+                                <i class="bi bi-chat-dots-fill"></i>
+                                <span>Chat Application</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="application-gallery.html" class='sidebar-link'>
+                                <i class="bi bi-image-fill"></i>
+                                <span>Photo Gallery</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="application-checkout.html" class='sidebar-link'>
+                                <i class="bi bi-basket-fill"></i>
+                                <span>Checkout Page</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-person-badge-fill"></i>
+                                <span>Authentication</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="auth-login.html">Login</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="auth-register.html">Register</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="auth-forgot-password.html">Forgot Password</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-x-octagon-fill"></i>
+                                <span>Errors</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="error-403.html">403</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="error-404.html">404</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="error-500.html">500</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Raise Support</li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://zuramai.github.io/mazer/docs" class='sidebar-link'>
+                                <i class="bi bi-life-preserver"></i>
+                                <span>Documentation</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://github.com/zuramai/mazer/blob/main/CONTRIBUTING.md" class='sidebar-link'>
+                                <i class="bi bi-puzzle"></i>
+                                <span>Contribute</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://github.com/zuramai/mazer#donate" class='sidebar-link'>
+                                <i class="bi bi-cash"></i>
+                                <span>Donate</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
-    </nav>
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
 
-    <div class="mobile-nav" id="mobileNav">
-        <ul class="mobile-nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#collections">Collections</a></li>
-            <li><a href="#featured">Featured</a></li>
-            
-        </ul>
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Layout Default</h3>
+                            <p class="text-subtitle text-muted">The default layout </p>
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Layout Default</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Default Layout</h4>
+                        </div>
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, commodi? Ullam quaerat
+                            similique iusto
+                            temporibus, vero aliquam praesentium, odit deserunt eaque nihil saepe hic deleniti? Placeat
+                            delectus
+                            quibusdam ratione ullam!
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2021 &copy; Mazer</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                                href="http://ahmadsaugi.com">A. Saugi</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>
+    <script src="./dist/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="./dist/assets/js/bootstrap.bundle.min.js"></script>
 
-    <section class="hero" id="home">
-        <div class="hero-bg"></div>
-        <div class="hero-container">
-            <div class="hero-left">
-                <div class="hero-badge">New Collection 2025</div>
-                <h1 class="hero-title">
-                    <span class="line"><span>Redefine</span></span>
-                    <span class="line"><span>Your <span class="accent">Style</span></span></span>
-                    <span class="line"><span>Revolution</span></span>
-                </h1>
-                <p class="hero-description">
-                    Discover our avant-garde collection where high fashion meets street culture. 
-                    Each piece tells a story of rebellion, elegance, and innovation.
-                </p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">Exclusive Pieces</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">48H</span>
-                        <span class="stat-label">Fast Delivery</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Sustainable</span>
-                    </div>
-                </div>
-                <div class="cta-group">
-                    <a href="#collections" class="cta-button primary">Explore Collection</a>
-                    <a href="#featured" class="cta-button outline">Watch Runway</a>
-                </div>
-            </div>
-            <div class="hero-right">
-                <div class="hero-image-wrapper">
-                    <div class="hero-carousel">
-                        <div class="carousel-slide active">
-                            <img src="images/noir-fashion-hero-01.avif" alt="Fashion Model 1">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/noir-fashion-hero-02.avif" alt="Fashion Model 2">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/noir-fashion-hero-03.avif" alt="Fashion Model 3">
-                        </div>
-                        <div class="carousel-overlay"></div>
-                        <div class="carousel-indicators">
-                            <span class="indicator active" data-slide="0"></span>
-                            <span class="indicator" data-slide="1"></span>
-                            <span class="indicator" data-slide="2"></span>
-                        </div>
-                    </div>
-                    <div class="floating-tags">
-                        <div class="tag">Limited Edition</div>
-                        <div class="tag">Handcrafted</div>
-                        <div class="tag">Premium Quality</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <span></span>
-        </div>
-    </section>
-
-    <section class="collections" id="collections">
-        <div class="section-header">
-            <h2 class="section-title">Latest Collections</h2>
-            <p class="section-subtitle">Discover our curated selection</p>
-        </div>
-        
-        <div class="category-tabs">
-            <button class="tab-btn active" data-category="all">All</button>
-            <button class="tab-btn" data-category="women">Women</button>
-            <button class="tab-btn" data-category="men">Men</button>
-            <button class="tab-btn" data-category="accessories">Accessories</button>
-            <button class="tab-btn" data-category="limited">Limited Edition</button>
-        </div>
-
-        <div class="grid" id="collectionsGrid">
-            <div class="collection-card" data-category="women">
-                <div class="collection-thumbnail">
-                    <img src="images/urban-edge.avif" alt="Urban Edge Women's Collection">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">New Arrival</span>
-                    <h3 class="card-title">Urban Edge</h3>
-                    <p class="card-subtitle">Women's Collection</p>
-                    <p class="card-price">From $299</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="limited">
-                <div class="collection-thumbnail">
-                    <img src="images/midnight-luxe.avif" alt="Midnight Luxe Limited Edition">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Limited</span>
-                    <h3 class="card-title">Midnight Luxe</h3>
-                    <p class="card-subtitle">Exclusive Drop</p>
-                    <p class="card-price">From $899</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="men">
-                <div class="collection-thumbnail">
-                    <img src="images/neo-classic.avif" alt="Neo Classic Men's Essentials">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Bestseller</span>
-                    <h3 class="card-title">Neo Classic</h3>
-                    <p class="card-subtitle">Men's Essentials</p>
-                    <p class="card-price">From $399</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="accessories">
-                <div class="collection-thumbnail">
-                    <img src="images/accent-pieces.avif" alt="Accent Pieces Accessories">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Trending</span>
-                    <h3 class="card-title">Accent Pieces</h3>
-                    <p class="card-subtitle">Accessories</p>
-                    <p class="card-price">From $149</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="women">
-                <div class="collection-thumbnail">
-                    <img src="images/spring-bloom.avif" alt="Spring Bloom Women's Spring">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Pre-Order</span>
-                    <h3 class="card-title">Spring Bloom</h3>
-                    <p class="card-subtitle">Women's Spring</p>
-                    <p class="card-price">From $249</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="men">
-                <div class="collection-thumbnail">
-                    <img src="images/street-rebel.avif" alt="Street Rebel Men's Streetwear">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Hot</span>
-                    <h3 class="card-title">Street Rebel</h3>
-                    <p class="card-subtitle">Men's Streetwear</p>
-                    <p class="card-price">From $199</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="limited">
-                <div class="collection-thumbnail">
-                    <img src="images/avant-garde.avif" alt="Avant Garde Art Meets Fashion">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Exclusive</span>
-                    <h3 class="card-title">Avant Garde</h3>
-                    <p class="card-subtitle">Art Meets Fashion</p>
-                    <p class="card-price">From $1,299</p>
-                </div>
-            </div>
-            <div class="collection-card" data-category="accessories">
-                <div class="collection-thumbnail">
-                    <img src="images/minimal-chic.avif" alt="Minimal Chic Timeless Accessories">
-                </div>
-                <div class="card-content">
-                    <span class="card-badge">Essentials</span>
-                    <h3 class="card-title">Minimal Chic</h3>
-                    <p class="card-subtitle">Timeless Accessories</p>
-                    <p class="card-price">From $89</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="featured" id="featured">
-        <div class="featured-container">
-            <div class="featured-hero">
-                <div class="featured-content">
-                    <span class="label">Crafted with Passion</span>
-                    <h2>The Art of Fashion</h2>
-                    <p>Where tradition meets innovation. Our master craftsmen blend centuries-old techniques with cutting-edge design to create pieces that transcend time and trends. This template is proudly crafted by TemplateMo, featuring beautiful imagery from Unsplash.</p>
-                    
-                    <div class="feature-highlights">
-                        <div class="highlight-item">
-                            <div class="highlight-icon">👑</div>
-                            <div class="highlight-title">Premium Quality</div>
-                            <div class="highlight-desc">Only the finest materials and fabrics make it into our collections</div>
-                        </div>
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🌱</div>
-                            <div class="highlight-title">Sustainable</div>
-                            <div class="highlight-desc">Ethically sourced materials with carbon-neutral production</div>
-                        </div>
-                        <div class="highlight-item">
-                            <div class="highlight-icon">✨</div>
-                            <div class="highlight-title">Handcrafted</div>
-                            <div class="highlight-desc">Each piece is carefully crafted by skilled artisans</div>
-                        </div>
-                    </div>
-                    
-                    <a href="#collections" class="feature-cta">Discover Our Craft</a>
-                </div>
-                
-                <div class="featured-image-section">
-                    <div class="featured-image-grid">
-                        <div class="featured-img">
-                            <img src="images/art-of-fashion-01.avif" alt="Fashion Collection Showcase">
-                        </div>
-                        <div class="featured-img">
-                            <img src="images/art-of-fashion-02.avif" alt="Luxury Fashion Details">
-                        </div>
-                        <div class="featured-img">
-                            <img src="images/art-of-fashion-03.avif" alt="Artisan Craftsmanship">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="testimonials">
-                <div class="testimonials-header">
-                    <h3>What Our Customers Say</h3>
-                    <p class="section-subtitle">Real stories from fashion enthusiasts</p>
-                </div>
-                
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">★★★★★</div>
-                        <div class="testimonial-quote">
-                            "NOIR has completely transformed my wardrobe. The quality and attention to detail is unmatched. Every piece feels like a work of art."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">S</div>
-                            <div class="author-info">
-                                <h4>Sarah Chen</h4>
-                                <p>Fashion Blogger</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">★★★★★</div>
-                        <div class="testimonial-quote">
-                            "The sustainable approach combined with luxury design is exactly what I was looking for. NOIR proves you don't have to compromise."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">M</div>
-                            <div class="author-info">
-                                <h4>Marcus Rodriguez</h4>
-                                <p>Creative Director</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">★★★★★</div>
-                        <div class="testimonial-quote">
-                            "I've been a customer for three years now, and each collection keeps exceeding my expectations. The fit and quality are consistently outstanding."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">A</div>
-                            <div class="author-info">
-                                <h4>Alexandra Kim</h4>
-                                <p>Entrepreneur</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    
-    <footer>
-        <div class="footer-content">
-            <div class="footer-brand">
-                <h3>NOIR</h3>
-                <p>Redefining fashion with bold designs, sustainable practices, and uncompromising quality. Join us in creating the future of style.</p>
-                <div class="social-links">
-                    <a href="#" class="social-link">f</a>
-                    <a href="#" class="social-link">t</a>
-                    <a href="#" class="social-link">i</a>
-                    <a href="#" class="social-link">p</a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h4>Shop</h4>
-                <ul>
-                    <li><a href="#">New Arrivals</a></li>
-                    <li><a href="#">Women</a></li>
-                    <li><a href="#">Men</a></li>
-                    <li><a href="#">Accessories</a></li>
-                    <li><a href="#">Sale</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Size Guide</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                    <li><a href="#">Sustainability</a></li>
-                    <li><a href="#">Terms</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 NOIR. All rights reserved. | Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow" style="color: var(--accent); text-decoration: none;">TemplateMo</a></p>
-            <div class="payment-methods">
-                <div class="payment-icon">VISA</div>
-                <div class="payment-icon">MC</div>
-                <div class="payment-icon">AMEX</div>
-                <div class="payment-icon">PAY</div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="templatemo-noir-scripts.js"></script>
+    <script src="./dist/assets/js/main.js"></script>
 </body>
+
 </html>
