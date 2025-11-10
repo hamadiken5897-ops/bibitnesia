@@ -13,7 +13,7 @@
             <h1 class="auth-title">Sign Up</h1>
             <p class="auth-subtitle mb-5">Input your data to register to our website.</p>
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register.post') }}">
                 @csrf
                 <div class="form-group position-relative has-icon-left mb-4">
                     <input type="email" name="email" class="form-control form-control-xl" placeholder="Email" required>
