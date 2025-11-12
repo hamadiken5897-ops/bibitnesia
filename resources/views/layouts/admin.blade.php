@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('layouts.partials.head')
 </head>
@@ -7,21 +8,23 @@
 <body>
     <div id="app">
         @include('layouts.partials.sidebar')
-
-        <div id="main" class="layout-navbar">
+        
+        <div id="main">
             @include('layouts.partials.navbar')
 
-            <div id="main-content">
-                {{-- Konten dinamis di sini --}}
-                @yield('content')
-
-                @include('layouts.partials.footer')
+            <div class="page-heading">
+                <h3>@yield('page-title', 'Dashboard')</h3>
             </div>
+            
+            <div class="page-content">
+                @yield('content')
+            </div>
+
+            @include('layouts.partials.footer')
         </div>
     </div>
-
-    <script src="{{ asset('dist/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/main.js') }}"></script>
+    
+    @include('layouts.partials.scripts')
 </body>
+
 </html>
