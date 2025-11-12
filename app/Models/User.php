@@ -17,12 +17,23 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'users';
+    protected $primaryKey = 'id_user';
+    public $incrementing = false; // karena bukan auto-increment
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'name',
+        'id_user',
+        'nama',
         'email',
         'password',
+        'no_telepon',
+        'alamat',
+        'role',
+        'tanggal_daftar',
+        'status_akun',
+        'terakhir_login',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -30,7 +41,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
