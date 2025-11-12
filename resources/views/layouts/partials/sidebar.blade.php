@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between">
                 <div class="logo">
                     <a href="{{ route('admin.dashboard') }}">
-                        <img src="{{ asset('dist/assets/images/logo/logo.png') }}" alt="Logo">
+                        <img src="{{ asset('dist/assets/images/logo/logo bibitnesia.png') }}" alt="Logo">
                     </a>
                 </div>
                 <div class="toggler">

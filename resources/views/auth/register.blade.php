@@ -7,8 +7,8 @@
     <div class="col-lg-5 col-12">
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="/"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo"></a>
-            </div>
+                <img src="{{ asset('dist/assets/images/logo/logo bibitnesia.png') }}" alt="Logo" style="width:250px; height:auto;">
+</a>
 
             <h1 class="auth-title">Sign Up</h1>
             <p class="auth-subtitle mb-5">Input your data to register to our website.</p>
