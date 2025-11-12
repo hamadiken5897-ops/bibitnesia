@@ -981,7 +981,7 @@
 
 .sidebar-wrapper .menu .sidebar-link i,
 .sidebar-wrapper .menu .sidebar-link svg {
-    color: #7c8db5
+    color: #81a42c
 }
 
 .sidebar-wrapper .menu .sidebar-link span {
@@ -1042,14 +1042,14 @@
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item.active>a {
-    color: #435ebe;
+    color: #41A67E;
     font-weight: 700
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item a {
     padding: .7rem 2rem;
     display: block;
-    color: #25396f;
+    color: #41A67E;
     font-size: .85rem;
     font-weight: 600;
     letter-spacing: .5px;
