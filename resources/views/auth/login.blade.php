@@ -12,7 +12,7 @@
 </a>
             </div>
             <h1 class="auth-title">Log in.</h1>
-            <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
+            <p class="auth-subtitle mb-5">Grow with us — log in to your account.</p>
             
             <form method="POST" action="{{ route('login') }}">
                 @csrf
