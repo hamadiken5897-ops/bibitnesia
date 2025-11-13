@@ -12,21 +12,22 @@ Route::get('/', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
-Route::get('/', [AuthController::class, 'showLogin']);
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+#Route::get('/', [AuthController::class, 'showLogin']);
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+// Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+// Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+// Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+// Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+// Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard'); // pastikan file-nya ada
-    })->name('dashboard');
-});
+// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('admin.dashboard'); // pastikan file-nya ada
+//     })->name('dashboard');
+// });
