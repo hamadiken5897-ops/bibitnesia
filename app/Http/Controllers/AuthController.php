@@ -5,88 +5,108 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+    // 🔹 Tampilkan halaman login
     public function showLogin()
     {
         return view('auth.login', ['title' => 'Login']);
     }
+
+    // 🔹 Proses login
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:6']
+            'password' => ['required', 'string', 'min:6'],
         ]);
-        if (
-            session()->has('login_attempts') && session('login_attempts') >=
-            5
-        ) {
-            return back()->withErrors([
-                'email' => 'Terlalu banyak percobaan login. Silakan coba lagi
-dalam 1 menit.'
-            ]);
-        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            session()->forget('login_attempts');
-            return redirect()->intended('/dashboard')->with('success', 'Login
-berhasil!');
+
+            $user = Auth::user();
+            \App\Models\User::where('id_user', $user->id_user)
+                ->update(['terakhir_login' => now()]);
+
+
+            // arahkan sesuai role
+            return match ($user->role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'penjual' => redirect()->route('penjual.dashboard'),
+                default => redirect()->route('pembeli.dashboard'),
+            };
         }
-        session()->increment('login_attempts', 1);
+
         throw ValidationException::withMessages([
-            'email' => 'Email atau password salah.'
+            'email' => 'Email atau password salah.',
         ]);
     }
+
+    // 🔹 Tampilkan halaman register
     public function showRegister()
     {
         return view('auth.register', ['title' => 'Daftar']);
     }
+
+    // 🔹 Proses register user baru
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|min:3|max:100',
+            'nama' => 'required|string|min:3|max:100',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
+            'no_telepon' => 'required|string|max:25',
+            // 'alamat' dihapus dari validasi karena opsional
         ]);
+
+        // simpan ke database
         User::create([
-            'name' => e($validated['name']),
+            'id_user' => 'USR' . strtoupper(Str::random(5)),
+            'nama' => e($validated['nama']),
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'no_telepon' => $validated['no_telepon'],
+            'alamat' => null, // bisa diisi nanti di profil
+            'role' => 'pembeli', // default role
+            'tanggal_daftar' => Carbon::now()->toDateString(),
+            'status_akun' => 'AKTIF',
         ]);
-        return redirect()->route('login')->with('success', 'Registrasi
-berhasil. Silakan login.');
+
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
+
+    // 🔹 Halaman lupa password
     public function showForgotPassword()
     {
-    return view('auth.forgot-password', ['title' => 'Lupa Password']);
+        return view('auth.forgot-password', ['title' => 'Lupa Password']);
     }
+
+    // 🔹 Kirim link reset password
     public function sendResetLink(Request $request)
     {
-    // Validasi email
-    $request->validate([
-        'email' => 'required|email|exists:users,email',
-    ]);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-    // Kirim link reset password
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
+        $status = Password::sendResetLink($request->only('email'));
 
-    // Cek apakah berhasil dikirim
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with(['success' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['success' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
     }
+
+    // 🔹 Logout
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Anda telah
-logout.');
+        return redirect()->route('login')->with('success', 'Anda telah logout.');
     }
 }
