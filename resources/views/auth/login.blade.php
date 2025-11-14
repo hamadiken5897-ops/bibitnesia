@@ -19,6 +19,19 @@
                 <h1 class="auth-title">Log in.</h1>
                 <p class="auth-subtitle mb-5">Grow with us — log in to your account.</p>
 
+                {{-- Notifikasi sukses atau error --}}
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        {{ $errors->first() }} {{-- Contoh: "Email atau password salah" --}}
+                    </div>
+                @endif
+
                 {{-- FORM LOGIN --}}
                 <form method="POST" action="{{ route('login.post') }}">
                     @csrf

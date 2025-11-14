@@ -70,7 +70,7 @@ class AuthController extends Controller
             'id_user' => 'USR' . strtoupper(Str::random(5)),
             'nama' => e($validated['nama']),
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+           'password' => Hash::make($validated['password']), // wajib Hash::make
             'no_telepon' => $validated['no_telepon'],
             'alamat' => null, // bisa diisi nanti di profil
             'role' => 'pembeli', // default role

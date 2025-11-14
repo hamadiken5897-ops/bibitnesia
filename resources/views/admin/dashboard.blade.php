@@ -329,7 +329,7 @@
                             <img src="{{ asset('dist/assets/images/faces/5.jpg') }}">
                         </div>
                         <div class="name ms-4">
-                            <h5 class="mb-1">Dean Winchester</h5>
+                          <h5 class="mb-1">Dean Winchester</h5>
                             <h6 class="text-muted mb-0">@imdean</h6>
                         </div>
                     </div>
