@@ -13,20 +13,30 @@ class User extends Authenticatable
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
+    protected $rememberTokenName = 'remember_token';
 
     protected $fillable = [
-    'id_user',
-    'nama',
-    'email',
-    'password',
-    'no_telepon',
-    'alamat',
-    'role',
-    'tanggal_daftar',
-    'status_akun',
-    'terakhir_login',
-];
-
+        'id_user',
+        'nama',
+        'email',
+        'password',
+        'no_telepon',
+        'alamat',
+        'role',
+        'tanggal_daftar',
+        'status_akun',
+        'terakhir_login',
+    ];
 
     protected $hidden = ['password'];
+
+    public function getAuthIdentifierName()
+    {
+        return 'id_user';
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->attributes['id_user'];
+    }
 }

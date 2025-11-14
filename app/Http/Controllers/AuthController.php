@@ -26,10 +26,11 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required', 'string', 'min:6'],
         ]);
-
+        //dd(Auth::attempt($credentials)); // ⬅ TEST 1
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
+            
+            //dd(Auth::id(), Auth::user()); // ⬅ TEST 3
             $user = Auth::user();
             \App\Models\User::where('id_user', $user->id_user)
                 ->update(['terakhir_login' => now()]);

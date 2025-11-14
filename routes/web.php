@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('penjual.dashboard');
 
     Route::get('/pembeli/dashboard', function () {
+        //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('pembeli.dashboard');
     })->name('pembeli.dashboard');
 });
