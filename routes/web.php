@@ -37,4 +37,17 @@ Route::middleware(['auth'])->group(function () {
         //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('pembeli.dashboard');
     })->name('pembeli.dashboard');
+    
+   
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class,'showProfile'])
+            ->name('profile.show');
+
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class,'updateProfile'])
+            ->name('profile.update'); 
+  
 });
+
+Route::get('/files/{id}/{action}', function ($id, $action) {
+    $file = \App\Models\File::findOrFail($id);
+    return $file->handleAction($action);
+    })->name('files.action');

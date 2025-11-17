@@ -39,4 +39,12 @@ class User extends Authenticatable
     {
         return $this->attributes['id_user'];
     }
+    public function file()
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
+    public function admin()
+    {
+        return $this->hasOne(\App\Models\Admin::class, 'id_user');
+    }
 }

@@ -23,339 +23,100 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Components</span>
+                <li class="sidebar-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                    <a href="{{ route('profile.show') }}" class="sidebar-link">
+                        <i class="iconly-boldProfile"></i>
+                        <span>Profile</span>
                     </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Alert</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Badge</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Breadcrumb</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Button</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Card</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Carousel</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Dropdown</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">List Group</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Modal</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Navs</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Pagination</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Progress</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Spinner</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Tooltip</a>
-                        </li>
-                    </ul>
                 </li>
-
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-collection-fill"></i>
-                        <span>Extra Components</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Avatar</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Sweet Alert</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Toastify</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Rating</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Divider</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Layouts</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Default Layout</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">1 Column</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Vertical with Navbar</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Horizontal Menu</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-title">Forms &amp; Tables</li>
+                
+                <li class="sidebar-title">Management</li>
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-hexagon-fill"></i>
-                        <span>Form Elements</span>
+                        <span>Users Management</span>
                     </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Input</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Input Group</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Select</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Radio</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Checkbox</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Textarea</a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="sidebar-item">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-file-earmark-medical-fill"></i>
-                        <span>Form Layout</span>
+                        <span>Product Management</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
-                        <span>Form Editor</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Quill</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">CKEditor</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Summernote</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">TinyMCE</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Table</span>
+                        <span>Payment Management</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-file-earmark-spreadsheet-fill"></i>
-                        <span>Datatable</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-title">Extra UI</li>
+                
+                <li class="sidebar-title">Services</li>
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pentagon-fill"></i>
-                        <span>Widgets</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Chatbox</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Pricing</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">To-do List</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-egg-fill"></i>
-                        <span>Icons</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Bootstrap Icons</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Fontawesome</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Dripicons</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-bar-chart-fill"></i>
-                        <span>Charts</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">ChartJS</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Apexcharts</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-cloud-arrow-up-fill"></i>
-                        <span>File Uploader</span>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Komplain</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-map-fill"></i>
-                        <span>Maps</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Google Map</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">JS Vector Map</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-title">Pages</li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-envelope-fill"></i>
-                        <span>Email Application</span>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Antrian Validasi</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-chat-dots-fill"></i>
-                        <span>Chat Application</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-image-fill"></i>
-                        <span>Photo Gallery</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-basket-fill"></i>
-                        <span>Checkout Page</span>
-                    </a>
-                </li>
-
+                
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-person-badge-fill"></i>
-                        <span>Authentication</span>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Aktivitas</span>
                     </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">Login</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Register</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">Forgot Password</a>
-                        </li>
-                    </ul>
                 </li>
 
+                <li class="sidebar-title">Teams</li>
+                
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-x-octagon-fill"></i>
-                        <span>Errors</span>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Staff</span>
                     </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="#">403</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">404</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="#">500</a>
-                        </li>
-                    </ul>
                 </li>
-
-                <li class="sidebar-title">Raise Support</li>
-
-                <li class="sidebar-item">
-                    <a href="https://zuramai.github.io/mazer/docs" class='sidebar-link'>
-                        <i class="bi bi-life-preserver"></i>
-                        <span>Documentation</span>
+                 
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Team Conversation</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-pen-fill"></i>
+                        <span>Log out</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-                    <a href="https://github.com/zuramai/mazer/blob/main/CONTRIBUTING.md" class='sidebar-link'>
-                        <i class="bi bi-puzzle"></i>
-                        <span>Contribute</span>
-                    </a>
-                </li>
 
-                <li class="sidebar-item">
-                    <a href="https://github.com/zuramai/mazer#donate" class='sidebar-link'>
-                        <i class="bi bi-cash"></i>
-                        <span>Donate</span>
-                    </a>
-                </li>
-
-            </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("user-menu-btn");
+        const dropdown = document.getElementById("user-dropdown");
+        btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("opacity-0");
+        dropdown.classList.toggle("scale-95");
+        dropdown.classList.toggle("pointer-events-none");
+        });
+        document.addEventListener("click", () => {
+        dropdown.classList.add("opacity-0", "scale-95", "pointer-
+        events-none");
+        });
+        });
+    </script>
 </div>

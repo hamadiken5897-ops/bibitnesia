@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard - Mazer Admin')
-@section('page-title', 'Profile Statistics')
+@section('title', 'Dashboard - BibitNesia Admin')
+@section('page-title', 'Dashboard Overview')
 
 @section('content')
 
     {{-- ✅ Tambahkan CSS Shadow di sini --}}
     <style>
         .card {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
             border-radius: 12px;
             transition: all 0.3s ease;
         }
@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Profile Views</h6>
+                                    <h6 class="text-muted font-semibold">Kunjungan User</h6>
                                     <h6 class="font-extrabold mb-0">112.000</h6>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Profile Visit</h4>
+                            <h4>Kunjungan Pengguna</h4>
                         </div>
                         <div class="card-body">
                             <div id="chart-profile-visit"></div>
@@ -105,13 +105,68 @@
                     </div>
                 </div>
             </div>
+        </div>
+        {{-- Sidebar Section --}}
+        <div class="col-12 col-lg-3">
+            <div class="card">
+                <div class="card-body py-4 px-5">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar avatar-xl">
+                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}" alt="Face 1">
+                        </div>
+                        <div class="ms-3 name">
+                            <h5 class="font-bold">John Duck</h5>
+                            <h6 class="text-muted mb-0">@johnducky</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="card">
+                <div class="card-header">
+                    <h4>Recent Messages</h4>
+                </div>
+                <div class="card-content pb-4">
+                    <div class="recent-message d-flex px-4 py-3">
+                        <div class="avatar avatar-lg">
+                            <img src="{{ asset('dist/assets/images/faces/4.jpg') }}">
+                        </div>
+                        <div class="name ms-4">
+                            <h5 class="mb-1">Hank Schrader</h5>
+                            <h6 class="text-muted mb-0">@johnducky</h6>
+                        </div>
+                    </div>
+                    <div class="recent-message d-flex px-4 py-3">
+                        <div class="avatar avatar-lg">
+                            <img src="{{ asset('dist/assets/images/faces/5.jpg') }}">
+                        </div>
+                        <div class="name ms-4">
+                          <h5 class="mb-1">Dean Winchester</h5>
+                            <h6 class="text-muted mb-0">@imdean</h6>
+                        </div>
+                    </div>
+                    <div class="recent-message d-flex px-4 py-3">
+                        <div class="avatar avatar-lg">
+                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}">
+                        </div>
+                        <div class="name ms-4">
+                            <h5 class="mb-1">John Dodol</h5>
+                            <h6 class="text-muted mb-0">@dodoljohn</h6>
+                        </div>
+                    </div>
+                    <div class="px-4">
+                        <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start Conversation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-9">
             {{-- Regional Chart Section --}}
             <div class="row">
                 <div class="col-12 col-xl-4">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Profile Visit</h4>
+                            <h4>Kunjungan Pengguna</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -121,7 +176,7 @@
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
-                                        <h5 class="mb-0 ms-3">Europe</h5>
+                                        <h5 class="mb-0 ms-3">Sumatera</h5>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -133,16 +188,16 @@
                             </div>
 
                             <div class="row mt-3">
-                                <div class="col-6">
+                                <div class="col-7">
                                     <div class="d-flex align-items-center">
                                         <svg class="bi text-success" width="32" height="32" fill="blue" style="width:10px">
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
-                                        <h5 class="mb-0 ms-3">America</h5>
+                                        <h5 class="mb-0 ms-3">Kalimantan</h5>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-5">
                                     <h5 class="mb-0">375</h5>
                                 </div>
                                 <div class="col-12">
@@ -157,7 +212,7 @@
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
-                                        <h5 class="mb-0 ms-3">Indonesia</h5>
+                                        <h5 class="mb-0 ms-3">Jawa</h5>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -171,8 +226,8 @@
                     </div>
                 </div>
 
-                {{-- Latest Comments --}}
-                {{-- Ganti bagian Latest Comments dengan ini --}}
+                
+                {{-- Chart Keuangan --}}
                 <div class="col-12 col-xl-8">
                     <div class="card finance-card">
                         <div class="card-header border-0">
@@ -294,68 +349,9 @@
             </div>
         </div>
 
-        {{-- Sidebar Section --}}
-        <div class="col-12 col-lg-3">
-            <div class="card">
-                <div class="card-body py-4 px-5">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        
 
-            <div class="card">
-                <div class="card-header">
-                    <h4>Recent Messages</h4>
-                </div>
-                <div class="card-content pb-4">
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/4.jpg') }}">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/5.jpg') }}">
-                        </div>
-                        <div class="name ms-4">
-                          <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
-                        </div>
-                    </div>
-                    <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start Conversation</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h4>Visitors Profile</h4>
-                </div>
-                <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
-                </div>
-            </div>
+           
         </div>
     </section>
 @endsection
