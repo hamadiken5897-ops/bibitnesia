@@ -16,7 +16,7 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:100',
+            'nama' => 'required|string|max:100',
             'no_telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:255',
             'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -25,9 +25,9 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $user->update([
-            'name' => $request->nama, 
-            'no_telepon' => $request->no_telepon, 
-            'alamat' => $request->alamat
+            'nama' => $request->nama,
+            'no_telepon' => $request->no_telepon,
+            'alamat' => $request->alamat,
         ]);
 
         if ($request->hasFile('profile')) {
@@ -49,6 +49,8 @@ class ProfileController extends Controller
                 'path' => $path,
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
+                'fileable_type' => 'App\Models\User',
+                'fileable_id' => (int) $user->id, // ← Cast ke integer
             ]);
         }
 

@@ -1,110 +1,124 @@
 @extends('layouts.admin')
-@section('title', 'Profile - BibitNesia Admin')
-@section('page-title', 'Profile Admin')
+
+@section('title', 'Profil Admin')
 
 @section('content')
+<div class="page-heading">
+    <h3>Profil Saya</h3>
+</div>
 
-    <div class="page-content">
-        <section class="row">
-            <div class="col-md-10">
+<div class="page-content">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
 
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+            {{-- CARD PROFIL --}}
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
 
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Administrator Profile</h4>
-                    </div>
-                    <div class="card-body">
+                    {{-- FOTO + IDENTITAS --}}
+                    <div class="text-center">
+
                         {{-- Foto Profil --}}
-                        <div class="form-group mt-3 text-center">
+                        @if ($user->file)
+                            <img src="{{ $user->file->file_stream }}"
+                                class="rounded-circle border"
+                                style="width: 130px; height: 130px; object-fit: cover;">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
+                                class="rounded-circle border"
+                                style="width: 130px; height: 130px; object-fit: cover;">
+                        @endif
 
-                            @if ($user->file)
-                                <img src="{{ $user->file->file_stream }}" class="rounded-circle mb-3 border"
-                                    style="width: 130px; height: 130px; object-fit: cover;">
-                            @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
-                                    class="rounded-circle mb-3 border"
-                                    style="width: 130px; height: 130px; object-fit: cover;">
-                            @endif
+                        {{-- Nama --}}
+                        <h2 class="fw-bold mt-3 mb-0">{{ $user->nama }}</h2>
 
-                            {{-- Nama & Jabatan --}}
-                            <div class="text-center mt-2">
-                                <h2 class="fw-bold mb-0">{{ $user->nama }}</h2>
-                                <h5 class="text-muted" style="margin-top: 4px;">
-                                    {{ $user->admin->jabatan_alias ?? 'Tidak ada jabatan' }}
-                                </h5>
-                            </div>
-                        </div>
+                        {{-- Jabatan --}}
+                        <p class="text-muted" style="margin-top:4px;">
+                            {{ $user->admin->jabatan_alias ?? 'Tidak ada jabatan' }}
+                        </p>
 
+                        {{-- Informasi Users --}}
+                        <p class="mt-3">
+                            <i class="bi bi-telephone-fill me-2 text-primary"></i>
+                            <strong>{{ $user->no_telepon ?? '-' }}</strong>
+                        </p>
 
-                        {{-- Informasi Profil (Hanya Tampilan Baca) --}}
-                        <div id="profile-view">
-                            <p><strong>Nama:</strong> {{ $user->nama }}</p>
-                            <p><strong>Email:</strong> {{ $user->email }}</p>
-                            <p class="mt-2"><strong>Nomor Telepon:</strong> {{ $user->no_telepon ?? '-' }}</p>
-                            <p><strong>Alamat:</strong> {{ $user->alamat ?? '-' }}</p>
+                        <p>
+                            <i class="bi bi-geo-alt-fill me-2 text-danger"></i>
+                            <strong>{{ $user->alamat ?? '-' }}</strong>
+                        </p>
 
-                            <button class="btn btn-primary mt-2" onclick="toggleEdit(true)">
-                                Edit Profile
-                            </button>
-                        </div>
-
-                        {{-- Form Edit Profil (Tersembunyi Awal) --}}
-                        <div id="profile-edit" style="display: none;">
-                            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data"
-                                class="mt-3">
-                                @csrf
-                                @method('PUT')
-
-                                {{-- Input Nama --}}
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" name="name" value="{{ $user->name }}" class="form-control">
-                                </div>
-
-                                {{-- Input Nomor Telepon --}}
-                                <div class="form-group mt-3">
-                                    <label>Nomor Telepon</label>
-                                    <input type="text" name="no_telepon" value="{{ $user->no_telepon }}"
-                                        class="form-control">
-                                </div>
-
-                                {{-- Input Alamat --}}
-                                <div class="form-group mt-3">
-                                    <label>Alamat</label>
-                                    <textarea name="alamat" class="form-control" rows="3">{{ $user->alamat }}</textarea>
-                                </div>
-
-                                {{-- Input Foto --}}
-                                <div class="form-group mt-3">
-                                    <label>Foto Baru (opsional)</label>
-                                    <input type="file" name="profile" class="form-control mt-2">
-                                    <small>Format: JPG, JPEG, PNG | Max: 2MB</small>
-                                </div>
-
-                                <button type="submit" class="btn btn-success mt-3">Simpan</button>
-                                <button type="button" class="btn btn-secondary mt-3"
-                                    onclick="toggleEdit(false)">Batal</button>
-                            </form>
-                        </div>
-
-                        {{-- Script untuk Toggle Edit --}}
-                        <script>
-                            function toggleEdit(show) {
-                                document.getElementById('profile-view').style.display = show ? 'none' : 'block';
-                                document.getElementById('profile-edit').style.display = show ? 'block' : 'none';
-                            }
-                        </script>
-
-
-                        <button class="btn btn-primary mt-3">Simpan</button>
-                        </form>
-
+                        {{-- Tombol Edit --}}
+                        <button class="btn btn-primary mt-2" onclick="toggleEdit(true)">
+                            <i class="bi bi-pencil-square"></i> Edit Profil
+                        </button>
                     </div>
+
+
+                    {{-- FORM EDIT (DISEMBUNYIKAN AWAL) --}}
+                    <div id="profile-edit" style="display:none;" class="mt-4">
+
+                        <hr class="my-4">
+
+                        <h5 class="fw-bold mb-3">Edit Profil</h5>
+
+                        <form action="{{ route('profile.update') }}"
+                              method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            {{-- Nama --}}
+                            <div class="form-group mb-3">
+                                <label class="fw-semibold">Nama</label>
+                                <input type="text" name="name" class="form-control"
+                                       value="{{ $user->nama }}">
+                            </div>
+
+                            {{-- Nomor Telepon --}}
+                            <div class="form-group mb-3">
+                                <label class="fw-semibold">Nomor Telepon</label>
+                                <input type="text" name="no_telepon" class="form-control"
+                                       value="{{ $user->no_telepon }}">
+                            </div>
+
+                            {{-- Alamat --}}
+                            <div class="form-group mb-3">
+                                <label class="fw-semibold">Alamat</label>
+                                <textarea name="alamat" rows="3"
+                                          class="form-control">{{ $user->alamat }}</textarea>
+                            </div>
+
+                            {{-- Upload Foto --}}
+                            <div class="form-group mb-3">
+                                <label class="fw-semibold">Foto Profil Baru</label>
+                                <input type="file" name="profile" class="form-control mt-2">
+                                <small class="text-muted">Format: JPG, JPEG, PNG | Max 2MB</small>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i> Simpan Perubahan
+                                </button>
+
+                                <button type="button" class="btn btn-secondary"
+                                        onclick="toggleEdit(false)">
+                                    Batal
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
-        </section>
+
+        </div>
     </div>
+</div>
+
+{{-- Script Show/Hide Form --}}
+<script>
+function toggleEdit(show) {
+    document.getElementById('profile-edit').style.display = show ? 'block' : 'none';
+}
+</script>
 @endsection
