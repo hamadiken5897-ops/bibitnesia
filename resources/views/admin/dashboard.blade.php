@@ -8,7 +8,7 @@
     {{-- ✅ Tambahkan CSS Shadow di sini --}}
     <style>
         .card {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             transition: all 0.3s ease;
         }
@@ -108,54 +108,62 @@
         </div>
         {{-- Sidebar Section --}}
         <div class="col-12 col-lg-3">
+            {{-- Card Profil User Login --}}
             <div class="card">
                 <div class="card-body py-4 px-5">
                     <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}" alt="Face 1">
-                        </div>
+                        @if (auth()->user()->file)
+                            <img src="{{ auth()->user()->file->file_stream }}" alt="{{ auth()->user()->nama }}"
+                                class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nama) }}&size=80&background=random"
+                                alt="{{ auth()->user()->nama }}" class="rounded-circle"
+                                class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+                        @endif
+
                         <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
+                            <h5 class="font-bold">{{ auth()->user()->nama }}</h5>
+                            <h6 class="text-muted mb-0">
+                                {{ auth()->user()->admin->jabatan_alias ?? 'Staff' }}
+                            </h6>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {{-- Card Recent Messages (Opsional: Bisa ditampilkan semua admin) --}}
             <div class="card">
                 <div class="card-header">
-                    <h4>Recent Messages</h4>
+                    <h4>Tim Admin</h4>
                 </div>
                 <div class="card-content pb-4">
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/4.jpg') }}">
+
+                    @forelse($admins ?? [] as $admin)
+                        <div class="recent-message d-flex px-4 py-3">
+                            <div class="avatar avatar-lg">
+                                @if ($admin->user->file)
+                                    <img src="{{ $admin->user->file->file_stream }}" alt="{{ $admin->user->nama }}"
+                                        class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->user->nama) }}&size=60&background=random"
+                                        alt="{{ $admin->user->nama }}" class="rounded-circle">
+                                @endif
+                            </div>
+                            <div class="name ms-4">
+                                <h5 class="mb-1">{{ $admin->user->nama }}</h5>
+                                <h6 class="text-muted mb-0">{{ $admin->jabatan_alias }}</h6>
+                            </div>
                         </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
+                    @empty
+                        <div class="px-4 py-3 text-center text-muted">
+                            <small>Belum ada admin lain</small>
                         </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/5.jpg') }}">
-                        </div>
-                        <div class="name ms-4">
-                          <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="{{ asset('dist/assets/images/faces/1.jpg') }}">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
-                        </div>
-                    </div>
+                    @endforelse
+
                     <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start Conversation</button>
+                        <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>
+                            Lihat Semua Admin
+                        </button>
                     </div>
                 </div>
             </div>
@@ -172,7 +180,8 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="d-flex align-items-center">
-                                        <svg class="bi text-primary" width="32" height="32" fill="blue" style="width:10px">
+                                        <svg class="bi text-primary" width="32" height="32" fill="blue"
+                                            style="width:10px">
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
@@ -190,7 +199,8 @@
                             <div class="row mt-3">
                                 <div class="col-7">
                                     <div class="d-flex align-items-center">
-                                        <svg class="bi text-success" width="32" height="32" fill="blue" style="width:10px">
+                                        <svg class="bi text-success" width="32" height="32" fill="blue"
+                                            style="width:10px">
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
@@ -208,7 +218,8 @@
                             <div class="row mt-3">
                                 <div class="col-6">
                                     <div class="d-flex align-items-center">
-                                        <svg class="bi text-danger" width="32" height="32" fill="blue" style="width:10px">
+                                        <svg class="bi text-danger" width="32" height="32" fill="blue"
+                                            style="width:10px">
                                             <use
                                                 xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
                                         </svg>
@@ -226,7 +237,7 @@
                     </div>
                 </div>
 
-                
+
                 {{-- Chart Keuangan --}}
                 <div class="col-12 col-xl-8">
                     <div class="card finance-card">
@@ -314,15 +325,33 @@
                         data: data,
                         options: {
                             responsive: true,
-                            plugins: { legend: { display: false } },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
                             scales: {
                                 x: {
-                                    ticks: { color: '#666', font: { size: 11 } },
-                                    grid: { color: 'rgba(0,0,0,0.05)' },
+                                    ticks: {
+                                        color: '#666',
+                                        font: {
+                                            size: 11
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(0,0,0,0.05)'
+                                    },
                                 },
                                 y: {
-                                    ticks: { color: '#999', font: { size: 11 } },
-                                    grid: { color: 'rgba(0,0,0,0.04)' },
+                                    ticks: {
+                                        color: '#999',
+                                        font: {
+                                            size: 11
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(0,0,0,0.04)'
+                                    },
                                 }
                             },
                             animation: {
@@ -349,9 +378,9 @@
             </div>
         </div>
 
-        
 
-           
+
+
         </div>
     </section>
 @endsection

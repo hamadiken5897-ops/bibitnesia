@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class,'updateProfile'])
             ->name('profile.update'); 
+
+    //Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
   
 });
 
