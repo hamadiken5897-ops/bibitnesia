@@ -16,7 +16,7 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'no_telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:255',
             'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $user->update([
-            'nama' => $request->nama,
+            'name' => $request->nama,
             'no_telepon' => $request->no_telepon,
             'alamat' => $request->alamat,
         ]);
