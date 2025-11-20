@@ -68,7 +68,7 @@ class AuthController extends Controller
 
         // simpan ke database
         User::create([
-            'id_user' => 'USR' . strtoupper(Str::random(5)),
+            //'id_user' => 'USR' . strtoupper(Str::random(5)),
             'nama' => e($validated['nama']),
             'email' => $validated['email'],
            'password' => Hash::make($validated['password']), // wajib Hash::make
