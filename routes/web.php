@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
     // dashboard per role (kalau kamu ingin beda)
     Route::get('/admin/dashboard', function () {
+        //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
