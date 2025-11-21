@@ -1,7 +1,9 @@
 <?php
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\ProdukController;
 
 // ========== ROUTE LOGIN DAN REGISTER ==========
 Route::get('/', [AuthController::class, 'showLogin'])->name('login'); // halaman login utama
@@ -37,19 +39,26 @@ Route::middleware(['auth'])->group(function () {
         //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('pembeli.dashboard');
     })->name('pembeli.dashboard');
-    
-   
-    Route::get('/profile', [\App\Http\Controllers\ProfileController::class,'showProfile'])
-            ->name('profile.show');
 
-    Route::put('/profile', [\App\Http\Controllers\ProfileController::class,'updateProfile'])
-            ->name('profile.update'); 
+
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'showProfile'])
+        ->name('profile.show');
+
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])
+        ->name('profile.update');
 
     //Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
-  
+    // rute manajemen user
+    Route::get('/admin/users', [App\Http\Controllers\Admin\UserController::class, 'index'])
+        ->name('admin.users');
+    Route::get('/admin/produk', [App\Http\Controllers\Admin\ProdukController::class, 'index'])
+        ->name('admin.produk');
+    Route::get('/admin/produk/create', [ProdukController::class, 'create'])
+        ->name('admin.produk.create');
 });
 
 Route::get('/files/{id}/{action}', function ($id, $action) {
     $file = \App\Models\File::findOrFail($id);
     return $file->handleAction($action);
-    })->name('files.action');
+})->name('files.action');
+

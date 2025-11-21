@@ -1,11 +1,8 @@
 @extends('layouts.admin')
 
 @section('title', 'Profil Admin')
-
+@section('page-title', 'Administrator Profile')
 @section('content')
-<div class="page-heading">
-    <h3>Profil Saya</h3>
-</div>
 
 <div class="page-content">
     <div class="row justify-content-center">

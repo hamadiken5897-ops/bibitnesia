@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Kunjungan User</h6>
+                                    <h6 class="text-muted font-semibold">Kunjungan</h6>
                                     <h6 class="font-extrabold mb-0">112.000</h6>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Followers</h6>
+                                    <h6 class="text-muted font-semibold">Pengguna</h6>
                                     <h6 class="font-extrabold mb-0">183.000</h6>
                                 </div>
                             </div>
@@ -62,12 +62,12 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="stats-icon green">
-                                        <i class="iconly-boldAdd-User"></i>
+                                        <i class="iconly-boldProfile"></i>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Following</h6>
-                                    <h6 class="font-extrabold mb-0">80.000</h6>
+                                    <h6 class="text-muted font-semibold">Penjual</h6>
+                                    <h6 class="font-extrabold mb-0">500</h6>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Saved Post</h6>
+                                    <h6 class="text-muted font-semibold">Produk</h6>
                                     <h6 class="font-extrabold mb-0">112</h6>
                                 </div>
                             </div>

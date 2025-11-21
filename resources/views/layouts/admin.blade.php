@@ -13,7 +13,7 @@
             @include('layouts.partials.navbar')
 
             <div class="page-heading">
-                <h3>@yield('page-title', 'Dashboard')</h3>
+                <h3>@yield('page-title', '')</h3>
             </div>
             
             <div class="page-content">
