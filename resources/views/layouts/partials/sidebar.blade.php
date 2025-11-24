@@ -55,27 +55,20 @@
                 </li>
 
                 <li class="sidebar-title">Services</li>
-
-                <li class="sidebar-item ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('admin.komplain') ? 'active' : '' }}">
+                    <a href="{{ route('admin.komplain') }}" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Komplain</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item ">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('admin.validasi') ? 'active' : '' }}">
+                    <a href="{{ route('admin.validasi') }}" class='sidebar-link'>
+                        <i class="bi bi-ui-checks-grid"></i>
                         <span>Antrian Validasi</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item ">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
-                        <span>Aktivitas</span>
-                    </a>
-                </li>
 
                 <li class="sidebar-title">Teams</li>
 
@@ -94,15 +87,14 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <form action="{{ route('logout') }}" method="POST" style="margin:0;">
-                        @csrf
-                        <button type="submit" class="sidebar-link"
-                            style="background:none; border:none; width:100%; text-align:left; padding:0;">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Log out</span>
-                        </button>
-                    </form>
+                    <button type="button" class="sidebar-link"
+                        style="background:none; border:none; width:100%; text-align:left; padding:0;"
+                        data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Log out</span>
+                    </button>
                 </li>
+
 
 
 

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PembayaranController;
+use App\Http\Controllers\Admin\KomplainController;
+use App\Http\Controllers\Admin\ValidasiController;
+
 
 // ========== ROUTE LOGIN DAN REGISTER ==========
 Route::get('/', [AuthController::class, 'showLogin'])->name('login'); // halaman login utama
@@ -53,8 +56,8 @@ Route::middleware(['auth'])->group(function () {
 
     //Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
 
-//====== Dashboard Admin ======== //
- // ===== manajemen ====== //
+    //====== Dashboard Admin ======== //
+    // ===== manajemen ====== //
     // rute manajemen user
     Route::get('/admin/users', [App\Http\Controllers\Admin\UserController::class, 'index'])
         ->name('admin.users');
@@ -69,10 +72,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])
         ->name('pembayaran.show');
 
+        Route::prefix('admin')->name('admin.')->group(function () {
+
+            Route::get('/komplain', [KomplainController::class, 'index'])
+                ->name('komplain');
+        
+            Route::get('/validasi', [ValidasiController::class, 'index'])
+                ->name('validasi');
+        
+        });
 });
 
 Route::get('/files/{id}/{action}', function ($id, $action) {
     $file = \App\Models\File::findOrFail($id);
     return $file->handleAction($action);
 })->name('files.action');
-
