@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\Admin\PembayaranController;
 
 // ========== ROUTE LOGIN DAN REGISTER ==========
 Route::get('/', [AuthController::class, 'showLogin'])->name('login'); // halaman login utama
@@ -26,22 +27,24 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.dashboard'); // ubah sesuai role nanti
     })->name('dashboard');
 
-    // dashboard per role (kalau kamu ingin beda)
+    // dashboard role admin  
     Route::get('/admin/dashboard', function () {
         //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
+    // dashboard role penjual  
     Route::get('/penjual/dashboard', function () {
         return view('penjual.dashboard');
     })->name('penjual.dashboard');
 
+    // dashboard role pembeli
     Route::get('/pembeli/dashboard', function () {
         //dd(Auth::check(), Auth::user()); // ⬅ TEST 2
         return view('pembeli.dashboard');
     })->name('pembeli.dashboard');
 
-
+    //=== Route Profile User === //
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'showProfile'])
         ->name('profile.show');
 
@@ -49,13 +52,23 @@ Route::middleware(['auth'])->group(function () {
         ->name('profile.update');
 
     //Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+
+//====== Dashboard Admin ======== //
+ // ===== manajemen ====== //
     // rute manajemen user
     Route::get('/admin/users', [App\Http\Controllers\Admin\UserController::class, 'index'])
         ->name('admin.users');
+    // rute manajemen produk
     Route::get('/admin/produk', [App\Http\Controllers\Admin\ProdukController::class, 'index'])
         ->name('admin.produk');
     Route::get('/admin/produk/create', [ProdukController::class, 'create'])
         ->name('admin.produk.create');
+    // rute manajemen pembayaran
+    Route::get('/pembayaran', [PembayaranController::class, 'index'])
+        ->name('admin.pembayaran');
+    Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])
+        ->name('pembayaran.show');
+
 });
 
 Route::get('/files/{id}/{action}', function ($id, $action) {

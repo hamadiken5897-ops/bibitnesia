@@ -35,7 +35,7 @@
 
                 <li class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                     <a href="{{ route('admin.users') }}" class='sidebar-link'>
-                        <i class="bi bi-hexagon-fill"></i>
+                        <i class="bi bi-people-fill"></i>
                         <span>Users Management</span>
                     </a>
                 </li>
@@ -47,30 +47,30 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('admin.pembayaran') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pembayaran') }}" class='sidebar-link'>
+                        <i class="bi bi-wallet-fill"></i>
                         <span>Payment Management</span>
                     </a>
                 </li>
 
                 <li class="sidebar-title">Services</li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Komplain</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Antrian Validasi</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Aktivitas</span>
@@ -79,14 +79,14 @@
 
                 <li class="sidebar-title">Teams</li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Staff</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-pen-fill"></i>
                         <span>Team Conversation</span>

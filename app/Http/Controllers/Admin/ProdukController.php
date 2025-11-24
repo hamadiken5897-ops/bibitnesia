@@ -14,7 +14,7 @@ class ProdukController extends Controller
     public function index()
     {
         $produks = Produk::with('penjual')->latest()->paginate(10);
-        return view('admin.manajemen.produk', compact('produks'));
+        return view('admin.manajemen.Produk', compact('produks'));
     }
 
     // Form tambah produk

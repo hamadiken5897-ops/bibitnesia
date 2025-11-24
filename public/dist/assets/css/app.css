@@ -911,6 +911,14 @@
     border-top: 0
 }
 
+.page-transition {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.page-transition.loaded {
+    opacity: 1;
+}
 #sidebar.active .sidebar-wrapper {
     left: 0
 }
