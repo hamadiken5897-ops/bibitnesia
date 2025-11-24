@@ -63,3 +63,14 @@ Route::get('/files/{id}/{action}', function ($id, $action) {
     return $file->handleAction($action);
 })->name('files.action');
 
+// ========== ROUTE DASHBOARD USER ==========
+Route::get('/user', function () {
+    return redirect('/user/index.html');
+});
+
+
+Route::get('/user', function () {
+    return view('/user/about.html');
+});
+
+

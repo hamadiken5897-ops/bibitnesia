@@ -1,13 +1,23 @@
-@extends('layouts.user')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('title', 'Dashboard Pembeli')
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-@section('content')
+    <!-- Title -->
+    <title>Alazea - Gardening &amp; Landscaping HTML Template</title>
 
-<h2>Selamat Datang, {{ auth()->user()->name }}</h2>
+    <!-- Favicon -->
+    <link rel="icon" href="/user/img/core-img/favicon.ico">
 
-@endsection
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('user/style.css') }}">
 
+</head>
 
 <body>
     <!-- Preloader -->
@@ -25,7 +35,7 @@
         <div class="top-header-area">
             <div class="container">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-50">
                         <div class="top-header-content d-flex align-items-center justify-content-between">
                             <!-- Top Header Content -->
                             <div class="top-header-meta">
@@ -72,7 +82,7 @@
                     <nav class="classy-navbar justify-content-between" id="alazeaNav">
 
                         <!-- Nav Brand -->
-                        <a href="index.html" class="nav-brand"><img src="/user/img/core-img/logo.png" alt=""></a>
+                        <a href="/user/index.html" class="nav-brand"><img src="/user/img/core-img/logo.png"  alt="Logo" style="width: 250px;"></a>
 
                         <!-- Navbar Toggler -->
                         <div class="classy-navbar-toggler">
@@ -90,11 +100,11 @@
                             <!-- Navbar Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="/user/index.html">Home</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="dropdown">
-                                            <li><a href="index.html">Home</a></li>
+                                            <li><a href="/user/index.html">Home</a></li>
                                             <li><a href="about.html">About</a></li>
                                             <li><a href="shop.html">Shop</a>
                                                 <ul class="dropdown">
@@ -1031,15 +1041,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
     <!-- ##### All Javascript Files ##### -->
     <!-- jQuery-2.2.4 js -->
-    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="{{ asset('user/js/jquery/jquery-2.2.4.min.js') }}"></script>
     <!-- Popper js -->
-    <script src="js/bootstrap/popper.min.js"></script>
+    <script src="{{ asset('user/js/bootstrap/popper.min.js') }}"></script>
     <!-- Bootstrap js -->
-    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <script src="{{ asset('user/js/bootstrap/bootstrap.min.js') }}"></script>
     <!-- All Plugins js -->
-    <script src="js/plugins/plugins.js"></script>
+    <script src="{{ asset('user/js/plugins/plugins.js') }}"></script>
     <!-- Active js -->
-    <script src="js/active.js"></script>
+    <script src="{{ asset('user/js/active.js') }}"></script>
 </body>
 
 </html>
