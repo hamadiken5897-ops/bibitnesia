@@ -5,7 +5,7 @@
     @include('layouts.partials.head')
 </head>
 
-<body>
+<body class="page-transition">
     <div id="app">
         @include('layouts.partials.sidebar')
         
@@ -25,6 +25,11 @@
     </div>
     
     @include('layouts.partials.scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add("loaded");
+        });
+    </script>
 </body>
 
 </html>
