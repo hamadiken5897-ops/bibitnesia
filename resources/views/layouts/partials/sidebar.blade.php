@@ -34,7 +34,7 @@
                 <li class="sidebar-title">Management</li>
 
                 <li class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                    <a href="{{ route('admin.users') }}" class='sidebar-link'>
+                    <a href="{{ route('admin.users.index') }}" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
                         <span>Users Management</span>
                     </a>
@@ -95,9 +95,6 @@
                     </button>
                 </li>
 
-
-
-
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
     </div>
@@ -112,9 +109,8 @@
                         dropdown.classList.toggle("pointer-events-none");
                     });
                     document.addEventListener("click", () => {
-                            dropdown.classList.add("opacity-0", "scale-95", "pointer-
-                                events - none ");
+                            dropdown.classList.add("opacity-0", "scale-95", "pointer-events - none ");
                             });
                     });
     </script>
-</div>
+    </div>

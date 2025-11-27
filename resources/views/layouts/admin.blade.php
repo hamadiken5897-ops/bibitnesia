@@ -16,7 +16,7 @@
                 <h3>@yield('page-title', '')</h3>
             </div>
             
-            <div class="page-content">
+            <div class="page-content" id="ajax-content">
                 @yield('content')
             </div>
 
@@ -25,7 +25,6 @@
     </div>
     
     @include('layouts.partials.scripts')
-
     {{-- ⬇ logout di sini --}}
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -48,11 +47,10 @@
                         <button type="submit" class="btn btn-danger">Ya, Logout</button>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
-
+    @yield('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.body.classList.add("loaded");

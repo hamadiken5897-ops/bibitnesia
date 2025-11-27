@@ -918,6 +918,8 @@
 
 .page-transition.loaded {
     opacity: 1;
+    transition: none !important;
+    
 }
 #sidebar.active .sidebar-wrapper {
     left: 0
