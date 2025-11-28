@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    @include('layouts.partials.head')
+    @include('layouts.admin.partials.head')
 </head>
 
 <body class="page-transition">
     <div id="app">
-        @include('layouts.partials.sidebar')
+        @include('layouts.admin.partials.sidebar')
         
         <div id="main">
-            @include('layouts.partials.navbar')
+            @include('layouts.admin.partials.navbar')
 
             <div class="page-heading">
                 <h3>@yield('page-title', '')</h3>
@@ -20,11 +20,11 @@
                 @yield('content')
             </div>
 
-            @include('layouts.partials.footer')
+            @include('layouts.admin.partials.footer')
         </div>
     </div>
     
-    @include('layouts.partials.scripts')
+    @include('layouts.admin.partials.scripts')
     {{-- ⬇ logout di sini --}}
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
