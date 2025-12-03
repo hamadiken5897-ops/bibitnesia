@@ -35,37 +35,28 @@
         <div class="top-header-area">
             <div class="container">
                 <div class="row">
-                    <div class="col-50">
+                    <div class="col-12">
                         <div class="top-header-content d-flex align-items-center justify-content-between">
                             <!-- Top Header Content -->
                             <div class="top-header-meta">
-                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="infodeercreative@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i> <span>Email: infodeercreative@gmail.com</span></a>
-                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="+1 234 122 122"><i class="fa fa-phone" aria-hidden="true"></i> <span>Call Us: +1 234 122 122</span></a>
+                                <a href="#" data-toggle="tooltip" data-placement="bottom"
+                                    title="infodeercreative@gmail.com"><i class="fa fa-envelope-o"
+                                        aria-hidden="true"></i> <span>Email: infodeercreative@gmail.com</span></a>
+                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="+1 234 122 122"><i
+                                        class="fa fa-phone" aria-hidden="true"></i> <span>Call Us: +1 234 122
+                                        122</span></a>
                             </div>
 
                             <!-- Top Header Content -->
                             <div class="top-header-meta d-flex">
-                                <!-- Language Dropdown -->
-                                <div class="language-dropdown">
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle mr-30" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Language</button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">USA</a>
-                                            <a class="dropdown-item" href="#">UK</a>
-                                            <a class="dropdown-item" href="#">Bangla</a>
-                                            <a class="dropdown-item" href="#">Hindi</a>
-                                            <a class="dropdown-item" href="#">Spanish</a>
-                                            <a class="dropdown-item" href="#">Latin</a>
-                                        </div>
-                                    </div>
-                                </div>
                                 <!-- Login -->
                                 <div class="login">
-                                    <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span>Login</span></a>
+                                    <a href=""><i class="fa fa-user" aria-hidden="true"></i> <span>Login</span></a>
                                 </div>
                                 <!-- Cart -->
                                 <div class="cart">
-                                    <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Cart <span class="cart-quantity">(1)</span></span></a>
+                                    <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Cart <span
+                                                class="cart-quantity">(1)</span></span></a>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +73,8 @@
                     <nav class="classy-navbar justify-content-between" id="alazeaNav">
 
                         <!-- Nav Brand -->
-                        <a href="/user/index.html" class="nav-brand"><img src="/user/img/core-img/logo.png"  alt="Logo" style="width: 250px;"></a>
+                        <a href="/user/index.html" class="nav-brand"><img src="/user/img/core-img/logo.png" alt="Logo"
+                                style="width: 250px;"></a>
 
                         <!-- Navbar Toggler -->
                         <div class="classy-navbar-toggler">
@@ -101,37 +93,37 @@
                             <div class="classynav">
                                 <ul>
                                     <li><a href="/user/index.html">Home</a></li>
-                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="/user/about.html">About</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="dropdown">
                                             <li><a href="/user/index.html">Home</a></li>
-                                            <li><a href="about.html">About</a></li>
-                                            <li><a href="shop.html">Shop</a>
+                                            <li><a href="/user/about.html">About</a></li>
+                                            <li><a href="/user/shop.html">Shop</a>
                                                 <ul class="dropdown">
-                                                    <li><a href="shop.html">Shop</a></li>
-                                                    <li><a href="shop-details.html">Shop Details</a></li>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="/user/shop.html">Shop</a></li>
+                                                    <li><a href="/user/shop-details.html">Shop Details</a></li>
+                                                    <li><a href="/user/cart.html">Shopping Cart</a></li>
+                                                    <li><a href="/user/checkout.html">Checkout</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="portfolio.html">Portfolio</a>
+                                            <li><a href="/user/portfolio.html">Portfolio</a>
                                                 <ul class="dropdown">
-                                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                                    <li><a href="single-portfolio.html">Portfolio Details</a></li>
+                                                    <li><a href="/user/portfolio.html">Portfolio</a></li>
+                                                    <li><a href="/user/single-portfolio.html">Portfolio Details</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="blog.html">Blog</a>
+                                            <li><a href="/user/blog.html">Blog</a>
                                                 <ul class="dropdown">
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="single-post.html">Blog Details</a></li>
+                                                    <li><a href="/user/blog.html">Blog</a></li>
+                                                    <li><a href="/user/single-post.html">Blog Details</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="/user/contact.html">Contact</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="shop.html">Shop</a></li>
-                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="/user/shop.html">Shop</a></li>
+                                    <li><a href="/user/portfolio.html">Portfolio</a></li>
+                                    <li><a href="/user/contact.html">Contact</a></li>
                                 </ul>
 
                                 <!-- Search Icon -->
@@ -147,7 +139,8 @@
                     <!-- Search Form -->
                     <div class="search-form">
                         <form action="#" method="get">
-                            <input type="search" name="search" id="search" placeholder="Type keywords &amp; press enter...">
+                            <input type="search" name="search" id="search"
+                                placeholder="Type keywords &amp; press enter...">
                             <button type="submit" class="d-none"></button>
                         </form>
                         <!-- Close Icon -->
@@ -173,7 +166,8 @@
                             <!-- Post Content -->
                             <div class="hero-slides-content text-center">
                                 <h2>Apa Yang Kita Tanam, Itu Yang Kita Tuai</h2>
-                                <p>menekankan pada nilai-nilai kehidupan seperti pertumbuhan, ketangguhan, memberi manfaat, dan kehidupan yang seimbang.</p>
+                                <p>menekankan pada nilai-nilai kehidupan seperti pertumbuhan, ketangguhan, memberi
+                                    manfaat, dan kehidupan yang seimbang.</p>
                                 <div class="welcome-btn-group">
                                     <a href="#" class="btn alazea-btn mr-30">Lihat Marketplace</a>
                                 </div>
@@ -182,9 +176,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
     <!-- ##### About Area Start ##### -->
     <section class="about-us-area section-padding-100-0">
         <div class="container">
@@ -206,7 +197,8 @@
                                 <div class="single-benefits-area">
                                     <img src="/user/img/core-img/b1.png" alt="">
                                     <h5>Quality Products</h5>
-                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel aliquam manta lagorn.</p>
+                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel
+                                        aliquam manta lagorn.</p>
                                 </div>
                             </div>
 
@@ -215,7 +207,8 @@
                                 <div class="single-benefits-area">
                                     <img src="/user/img/core-img/b2.png" alt="">
                                     <h5>Perfect Service</h5>
-                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel aliquam manta lagorn.</p>
+                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel
+                                        aliquam manta lagorn.</p>
                                 </div>
                             </div>
 
@@ -224,7 +217,8 @@
                                 <div class="single-benefits-area">
                                     <img src="/user/img/core-img/b3.png" alt="">
                                     <h5>100% Natural</h5>
-                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel aliquam manta lagorn.</p>
+                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel
+                                        aliquam manta lagorn.</p>
                                 </div>
                             </div>
 
@@ -233,7 +227,8 @@
                                 <div class="single-benefits-area">
                                     <img src="/user/img/core-img/b4.png" alt="">
                                     <h5>Environmentally friendly</h5>
-                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel aliquam manta lagorn.</p>
+                                    <p>Intiam eu sagittis est, at commodo lacini libero. Praesent dignissim sed odio vel
+                                        aliquam manta lagorn.</p>
                                 </div>
                             </div>
                         </div>
@@ -271,17 +266,19 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="single-blog-post mb-100">
                         <div class="post-thumbnail mb-30">
-                            <a href="single-post.html"><img src="/user/img/bg-img/6.jpg" alt=""></a>
+                            <a href="/user/single-post.html"><img src="/user/img/bg-img/6.jpg" alt=""></a>
                         </div>
                         <div class="post-content">
-                            <a href="single-post.html" class="post-title">
-                                <h5>Garden designers across the country forecast ideas shaping the gardening world in 2018</h5>
+                            <a href="/user/single-post.html" class="post-title">
+                                <h5>Garden designers across the country forecast ideas shaping the gardening world in
+                                    2018</h5>
                             </a>
                             <div class="post-meta">
                                 <a href="#"><i class="fa fa-clock-o" aria-hidden="true"></i> 20 Jun 2018</a>
                                 <a href="#"><i class="fa fa-user" aria-hidden="true"></i> Alan Jackson</a>
                             </div>
-                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec lacus sit amet. Aenean interdus mid vitae.</p>
+                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec
+                                lacus sit amet. Aenean interdus mid vitae.</p>
                         </div>
                     </div>
                 </div>
@@ -290,17 +287,19 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="single-blog-post mb-100">
                         <div class="post-thumbnail mb-30">
-                            <a href="single-post.html"><img src="/user/img/bg-img/7.jpg" alt=""></a>
+                            <a href="/user/single-post.html"><img src="/user/img/bg-img/7.jpg" alt=""></a>
                         </div>
                         <div class="post-content">
-                            <a href="single-post.html" class="post-title">
-                                <h5>2018 Midwest Tree and Shrub Conference: Resilient Plants for a Lasting Landscape</h5>
+                            <a href="/user/single-post.html" class="post-title">
+                                <h5>2018 Midwest Tree and Shrub Conference: Resilient Plants for a Lasting Landscape
+                                </h5>
                             </a>
                             <div class="post-meta">
                                 <a href="#"><i class="fa fa-clock-o" aria-hidden="true"></i> 20 Jun 2018</a>
                                 <a href="#"><i class="fa fa-user" aria-hidden="true"></i> Christina Aguilera</a>
                             </div>
-                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec lacus sit amet. Aenean interdus mid vitae.</p>
+                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec
+                                lacus sit amet. Aenean interdus mid vitae.</p>
                         </div>
                     </div>
                 </div>
@@ -309,17 +308,19 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="single-blog-post mb-100">
                         <div class="post-thumbnail mb-30">
-                            <a href="single-post.html"><img src="/user/img/bg-img/8.jpg" alt=""></a>
+                            <a href="/user/single-post.html"><img src="/user/img/bg-img/8.jpg" alt=""></a>
                         </div>
                         <div class="post-content">
-                            <a href="single-post.html" class="post-title">
-                                <h5>The summer coming up, it’s time for both us and the flowers to soak up the sunshine</h5>
+                            <a href="/user/single-post.html" class="post-title">
+                                <h5>The summer coming up, it’s time for both us and the flowers to soak up the sunshine
+                                </h5>
                             </a>
                             <div class="post-meta">
                                 <a href="#"><i class="fa fa-clock-o" aria-hidden="true"></i> 19 Jun 2018</a>
                                 <a href="#"><i class="fa fa-user" aria-hidden="true"></i> Mason Jenkins</a>
                             </div>
-                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec lacus sit amet. Aenean interdus mid vitae.</p>
+                            <p class="post-excerpt">Integer luctus diam ac scerisque consectetur. Vimus ottawas nec
+                                lacus sit amet. Aenean interdus mid vitae.</p>
                         </div>
                     </div>
                 </div>
@@ -385,10 +386,10 @@
                             <!-- Single Best Seller Products -->
                             <div class="single-best-seller-product d-flex align-items-center">
                                 <div class="product-thumbnail">
-                                    <a href="shop-details.html"><img src="user/img/bg-img/4.jpg" alt=""></a>
+                                    <a href="/user/shop-details.html"><img src="user/img/bg-img/4.jpg" alt=""></a>
                                 </div>
                                 <div class="product-info">
-                                    <a href="shop-details.html">Cactus Flower</a>
+                                    <a href="/user/shop-details.html">Cactus Flower</a>
                                     <p>$10.99</p>
                                 </div>
                             </div>
@@ -396,10 +397,10 @@
                             <!-- Single Best Seller Products -->
                             <div class="single-best-seller-product d-flex align-items-center">
                                 <div class="product-thumbnail">
-                                    <a href="shop-details.html"><img src="user/img/bg-img/5.jpg" alt=""></a>
+                                    <a href="/user/shop-details.html"><img src="user/img/bg-img/5.jpg" alt=""></a>
                                 </div>
                                 <div class="product-info">
-                                    <a href="shop-details.html">Tulip Flower</a>
+                                    <a href="/user/shop-details.html">Tulip Flower</a>
                                     <p>$11.99</p>
                                 </div>
                             </div>
@@ -436,10 +437,14 @@
                     <!-- Copywrite Text -->
                     <div class="col-12 col-md-6">
                         <div class="copywrite-text">
-                            <p>&copy; <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-</p>
+                            <p>&copy;
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                                template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                                    href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
                         </div>
                     </div>
                     <!-- Footer Nav -->

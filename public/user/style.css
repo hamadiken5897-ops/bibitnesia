@@ -227,7 +227,7 @@ img {
   border-style: solid;
   border-width: 2px;
   border-top-color: #70c745;
-  border-bottom-color: transparent;
+  border-bottom-color: transparent; 
   border-left-color: transparent;
   border-right-color: transparent;
   z-index: 10;

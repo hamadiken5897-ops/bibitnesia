@@ -233,3 +233,7 @@ Route::get('/user', function () {
 Route::get('/user', function () {
     return view('/user/about.html');
 });
+
+Route::get('/user', function () {
+    return view('/user/cart.html');
+});
