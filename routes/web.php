@@ -110,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
         |-----------------------------------------
         */
 
-        Route::get('/users', [UserController::class, 'index'])->name('users.index');     // list user
+        Route::get('/users', [UserController::class, 'index'])->name('users');
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // form tambah user
         Route::post('/users', [UserController::class, 'store'])->name('users.store');   // simpan user baru
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // edit user
@@ -125,7 +125,7 @@ Route::middleware(['auth'])->group(function () {
         |-----------------------------------------
         */
 
-        Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');       // list produk
+        Route::get('/produk', [ProdukController::class, 'index'])->name('produk');      // list produk
         Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create'); // tambah produk
 
 

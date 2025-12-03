@@ -175,8 +175,7 @@
                                 <h2>Apa Yang Kita Tanam, Itu Yang Kita Tuai</h2>
                                 <p>menekankan pada nilai-nilai kehidupan seperti pertumbuhan, ketangguhan, memberi manfaat, dan kehidupan yang seimbang.</p>
                                 <div class="welcome-btn-group">
-                                    <a href="#" class="btn alazea-btn mr-30">GET STARTED</a>
-                                    <a href="#" class="btn alazea-btn active">CONTACT US</a>
+                                    <a href="#" class="btn alazea-btn mr-30">Lihat Marketplace</a>
                                 </div>
                             </div>
                         </div>
