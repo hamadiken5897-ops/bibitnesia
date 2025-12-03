@@ -659,111 +659,32 @@ ol {
     }
 }
 
-/* :: 5.0 Hero Slides Area */
-
-.hero-area,
-.hero-post-slides {
-    position: relative;
-    z-index: 1;
+/* MATIKAN SEMUA EFEK ZOOM HERO SLIDE */
+/* Matikan efek zoom pada slider Alazea */
+.single-hero-post .slide-img {
+    transform: scale(1) !important;
+    transition: none !important;
 }
 
-.single-hero-post {
-    width: 100%;
-    height: 930px;
-    position: relative;
-    z-index: 3;
-    overflow: hidden;
-    @media #{$breakpoint-lg} {
-        height: 690px;
-    }
-    @media #{$breakpoint-md} {
-        height: 600px;
-    }
-    @media #{$breakpoint-xs} {
-        height: 650px;
-    }
-    @media #{$breakpoint-xs-landscape} {
-        height: 500px;
-    }
-    .slide-img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: -10;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-    }
-    .hero-slides-content {
-        position: relative;
-        z-index: 1;
-        margin-top: 132px;
-        @media #{$breakpoint-xs} {
-            margin-top: 112px;
-        }
-        h2 {
-            font-size: 45px;
-            letter-spacing: 1px;
-            color: $white-color;
-            text-transform: uppercase;
-            @media #{$breakpoint-lg} {
-                font-size: 36px;
-            }
-            @media #{$breakpoint-md} {
-                font-size: 30px;
-            }
-            @media #{$breakpoint-xs} {
-                font-size: 24px;
-            }
-        }
-        p {
-            font-size: 18px;
-            color: $white-color;
-            margin-bottom: 50px;
-            @media #{$breakpoint-md} {
-                font-size: 18px;
-            }
-            @media #{$breakpoint-xs} {
-                font-size: 16px;
-            }
-        }
-        a {
-            @media #{$breakpoint-xs} {
-                min-width: 125px;
-                padding: 0 10px;
-            }
-        }
-    }
+/* Kalau owl-carousel memberi transform juga, matikan */
+.owl-carousel .owl-item .single-hero-post .slide-img {
+    transform: scale(1) !important;
 }
 
-.hero-post-slides .owl-item.center .single-hero-post .slide-img {
-    @include animation(slide 24s linear infinite);
+/* Pastikan animasi fade+zoom dihentikan */
+.single-hero-post .slide-img,
+.single-hero-post.bg-overlay::before {
+    animation: none !important;
 }
 
-@-webkit-keyframes slide {
-    0% {
-        @include transform(scale(1));
-    }
-    50% {
-        @include transform(scale(1.3));
-    }
-    100% {
-        @include transform(scale(1));
-    }
+.owl-carousel .owl-item.active .slide-img {
+    transform: none !important;
 }
 
-@keyframes slide {
-    0% {
-        @include transform(scale(1));
-    }
-    50% {
-        @include transform(scale(1.3));
-    }
-    100% {
-        @include transform(scale(1));
-    }
+.single-hero-post:hover .slide-img {
+    transform: none !important;
 }
+
 
 /* :: 6.0 Subscribe Newsletter Area */
 
