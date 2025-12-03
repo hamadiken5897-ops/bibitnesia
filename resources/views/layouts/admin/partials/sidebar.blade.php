@@ -34,7 +34,7 @@
                 <li class="sidebar-title">Management</li>
 
                 <li class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                    <a href="{{ route('admin.users') }}" class='sidebar-link'>
+                    <a href="{{ route('admin.users.index') }}" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
                         <span>Users Management</span>
                     </a>

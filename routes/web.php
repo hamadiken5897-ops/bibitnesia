@@ -110,13 +110,26 @@ Route::middleware(['auth'])->group(function () {
         |-----------------------------------------
         */
 
-        Route::get('/users', [UserController::class, 'index'])->name('users');
-        Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // form tambah user
-        Route::post('/users', [UserController::class, 'store'])->name('users.store');   // simpan user baru
-        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // edit user
-        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update'); // update user
-        Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show'); // detail user
-        Route::get('/users/search', [UserController::class, 'search'])->name('users.search'); // search user
+        // LIST USER
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+        // FORM TAMBAH USER
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+
+        // PROSES SIMPAN USER
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+        // EDIT USER
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+        // UPDATE USER
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+        // DETAIL USER
+        Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+        // SEARCH USER
+        Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
 
         /*
@@ -188,22 +201,22 @@ Route::middleware(['auth'])->group(function () {
     */
     Route::prefix('kurir')->name('kurir.')->group(function () {
 
-            // Inbox Kurir
-            Route::get('/inbox', function () {
-                return view('kurir.inbox');
-            })->name('inbox');  // menghasilkan route: kurir.inbox
+        // Inbox Kurir
+        Route::get('/inbox', function () {
+            return view('kurir.inbox');
+        })->name('inbox');  // menghasilkan route: kurir.inbox
 
-            // Pengiriman Kurir
-            Route::get('/pengiriman', function () {
-                return view('kurir.pengiriman');
-            })->name('pengiriman'); // menghasilkan route: kurir.pengiriman
+        // Pengiriman Kurir
+        Route::get('/pengiriman', function () {
+            return view('kurir.pengiriman');
+        })->name('pengiriman'); // menghasilkan route: kurir.pengiriman
 
-            // Pembayaran Kurir
-            Route::get('/pembayaran', function () {
-                return view('kurir.pembayaran');
-            })->name('pembayaran'); // menghasilkan route: kurir.pembayaran
+        // Pembayaran Kurir
+        Route::get('/pembayaran', function () {
+            return view('kurir.pembayaran');
+        })->name('pembayaran'); // menghasilkan route: kurir.pembayaran
 
-        });
+    });
 });
 
 
