@@ -520,11 +520,11 @@
                         <a class="nav-link-custom" href="#">Marketplace</a>
                     </li>
                     <li class="nav-item ms-lg-3">
-                        @auth
+                        
                             <a href="{{ route('login') }}" class="btn btn-login">
                                 <i class="bi bi-people"></i> Login
                             </a>
-                        @endauth
+                        
                     </li>
                 </ul>
             </div>
