@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PortalController;
+
 // Controller Auth
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
@@ -14,14 +16,22 @@ use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
 
+
 /*
 |--------------------------------------------------------------------------
 | ROUTE LOGIN & REGISTER
 |--------------------------------------------------------------------------
 */
 
+// Portal/Landing Page Route (root)
+Route::get('/', function () {
+    return view('portal');
+})->name('portal');
+
+Route::get('/', [PortalController::class, 'index'])->name('portal');
+
 // Halaman login
-Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');  
 
 // Proses login
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
