@@ -24,8 +24,8 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
-                    <a href="{{ route('profile.show') }}" class="sidebar-link">
+                <li class="sidebar-item {{ request()->routeIs('kurir.profil') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.profil') }}" class="sidebar-link">
                         <i class="iconly-boldProfile"></i>
                         <span>Profile</span>
                     </a>
