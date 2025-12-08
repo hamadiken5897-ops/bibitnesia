@@ -4,17 +4,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-<<<<<<< HEAD
-use App\Http\Controllers\PortalController;
 use App\Http\Controllers\MarketplaceController;
 
-// Controller Auth
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProfileController;
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
-=======
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 /*
 |--------------------------------------------------------------------------
 | CONTROLLER IMPORT
@@ -31,21 +24,16 @@ use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
 
-<<<<<<< HEAD
-=======
 // Kurir Controllers
 use App\Http\Controllers\Kurir\KurirInboxController;
 use App\Http\Controllers\Kurir\KurirPengirimanController;
 
-
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 /*
 |--------------------------------------------------------------------------
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
 
-<<<<<<< HEAD
 // Portal/Landing Page Route (root)
 
 Route::get('/', function () {
@@ -63,13 +51,6 @@ Route::get('/', [PortalController::class, 'index'])->name('portal');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
 // Proses login
-=======
-// Landing Page
-Route::get('/', [PortalController::class, 'index'])->name('portal');
-
-// Login & Auth
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
@@ -99,15 +80,18 @@ Route::middleware(['auth'])->group(function () {
     | AUTO ROLE DASHBOARD REDIRECT
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard', function () {
-        return match (Auth::user()->role) {
-            'admin'   => redirect()->route('admin.dashboard'),
-            'penjual' => redirect()->route('penjual.dashboard'),
-            'pembeli' => redirect()->route('pembeli.dashboard'),
-            'kurir'   => redirect()->route('kurir.dashboard'),
-            default => abort(403)
-        };
-    })->name('dashboard');
+    /*
+|--------------------------------------------------------------------------
+| DASHBOARD PER ROLE (VERSI LAMA — YANG BENAR)
+|--------------------------------------------------------------------------
+*/
+
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+
+    Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
+    Route::get('/penjual/dashboard', fn() => view('penjual.dashboard'))->name('penjual.dashboard');
+    Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
+    Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -135,15 +119,14 @@ Route::middleware(['auth'])->group(function () {
     | PROFILE GLOBAL USER
     |--------------------------------------------------------------------------
     */
- Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
- Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
 
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTES
     |--------------------------------------------------------------------------
     */
-<<<<<<< HEAD
     Route::prefix('admin')
         ->name('admin.')
         ->group(function () {
@@ -173,30 +156,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/pengajuan-mitra/{id}/approve', [PengajuanMitraController::class, 'approve'])->name('pengajuan.approve');
             Route::post('/pengajuan-mitra/{id}/reject', [PengajuanMitraController::class, 'reject'])->name('pengajuan.reject');
-=======
-    Route::prefix('admin')->name('admin.')->group(function () {
-        
-        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-
-        // User Management
-        Route::resource('/users', UserController::class)->except(['destroy']);
-        Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
-
-        // Produk
-        Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
-        Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
-
-        // Pembayaran
-        Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
-        Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
-
-        // Komplain
-        Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
-
-        // Validasi
-        Route::get('/validasi', [ValidasiController::class, 'index'])->name('validasi');
-    });
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 
             Route::delete('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'destroy'])->name('pengajuan.destroy');
         });
@@ -206,38 +165,22 @@ Route::middleware(['auth'])->group(function () {
     | PENJUAL ROUTES
     |--------------------------------------------------------------------------
     */
-<<<<<<< HEAD
     Route::prefix('penjual')
         ->name('penjual.')
         ->group(function () {
             // masih kosong
         });
-=======
-    Route::prefix('penjual')->name('penjual.')->group(function () {
-        Route::get('/dashboard', fn() => view('penjual.dashboard'))->name('dashboard');
-        // Tambahkan fitur penjual nanti
-    });
-
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 
     /*
     |--------------------------------------------------------------------------
     | PEMBELI ROUTES
     |--------------------------------------------------------------------------
     */
-<<<<<<< HEAD
     Route::prefix('pembeli')
         ->name('pembeli.')
         ->group(function () {
             // masih kosong
         });
-=======
-    Route::prefix('pembeli')->name('pembeli.')->group(function () {
-        Route::get('/dashboard', fn() => view('pembeli.dashboard'))->name('dashboard');
-        // Tambahkan fitur pembeli nanti
-    });
-
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 
     /*
     |--------------------------------------------------------------------------
@@ -245,7 +188,6 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::prefix('kurir')
-<<<<<<< HEAD
         ->name('kurir.')
         ->group(function () {
             Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
@@ -307,41 +249,6 @@ Route::middleware(['auth'])->group(function () {
                 ]);
             })->name('inbox.detail');
         });
-=======
-    ->name('kurir.')
-    ->middleware(['auth'])
-    ->group(function () {
-    Route::get('/dashboard', fn() => view('kurir.dashboard'))->name('dashboard');
-    // PENGIRIMAN 
-     Route::get('/pengiriman', [KurirPengirimanController::class, 'index'])->name('pengiriman');
-     Route::get('/pengiriman/{id}', [KurirPengirimanController::class, 'show'])->name('pengiriman.detail');
-     Route::post('/pengiriman/{id}/update-status', [KurirPengirimanController::class, 'updateStatus'])->name('pengiriman.update');
-    // PEMBAYARAN (Sementara masih manual)
-    Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
-    // Profil Kurir
-    Route::get('/profil', fn() => view('kurir.profil'))->name('profil');
-    Route::put('/profil', function (Request $request) {
-
-        $user = Auth::user();
-
-        $request->validate([
-                'nama' => 'required|string|max:100',
-                'no_telepon' => 'nullable|string|max:20',
-                'alamat' => 'nullable|string|max:255',
-                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            ]);
-
-        $user->update($request->only('nama','no_telepon','alamat'));
-
-        return back()->with('success', 'Profile Kurir berhasil diperbarui');
-        })->name('profil.update');
-
-        // Inbox Kurir
-        Route::get('/inbox', [KurirInboxController::class, 'index'])->name('inbox');
-        Route::get('/inbox/{id}', [KurirInboxController::class, 'detail'])->name('inbox.detail');
-        Route::post('/inbox/{id}/selesai', [KurirInboxController::class, 'selesai'])->name('inbox.selesai');
-    });
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
 });
 
 /*
@@ -352,7 +259,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/files/{id}/{action}', function ($id, $action) {
     return \App\Models\File::findOrFail($id)->handleAction($action);
 })->name('files.action');
-<<<<<<< HEAD
 
 /*
 |--------------------------------------------------------------------------
@@ -364,5 +270,3 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
-=======
->>>>>>> 0f9ae956cdfc1d2493b1293d511b50c10a484095
