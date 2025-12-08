@@ -62,8 +62,8 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('admin.validasi') ? 'active' : '' }}">
-                    <a href="{{ route('admin.validasi') }}" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('admin.pengajuan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengajuan.index') }}" class='sidebar-link'>
                         <i class="bi bi-ui-checks-grid"></i>
                         <span>Antrian Validasi</span>
                     </a>

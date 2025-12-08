@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'admin' => redirect()->route('admin.dashboard'),
                 'penjual' => redirect()->route('penjual.dashboard'),
                 'kurir' => redirect()->route('kurir.dashboard'),
-                default => redirect()->route('pembeli.dashboard'),
+                default => redirect()->route('portal'),
             };
         }
 

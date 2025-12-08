@@ -1,0 +1,212 @@
+:root {
+    --primary: #41a67e;
+    --primary-dark: #318564;
+    --light-bg: #f3f8f5;
+    --border-soft: #cde7dd;
+    --text-dark: #2e6f58;
+}
+
+/* GLOBAL */
+body {
+    background: var(--light-bg);
+    font-family: "Segoe UI", sans-serif;
+    color: #333;
+}
+
+/* FORM WRAPPER */
+.container-form {
+    max-width: 850px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 40px 45px;
+    border-radius: 18px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease;
+}
+
+/* TITLES */
+.title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.7rem;
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--primary-dark);
+    border-left: 4px solid var(--primary);
+    padding-left: 10px;
+    margin-top: 32px;
+    margin-bottom: 10px;
+}
+
+/* PROGRESS BAR */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 35px 0;
+    position: relative;
+}
+
+.progress-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: #d9e5df;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.progress-line-fill {
+    height: 4px;
+    width: 0%;
+    background: var(--primary);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: width 0.4s ease;
+    z-index: 1;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #cfe6dd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: white;
+    transition: 0.3s;
+    position: relative;
+    z-index: 3;
+}
+
+.step-circle.active,
+.step-circle.completed {
+    background: #41A67E !important;
+    box-shadow: 0 0 8px rgba(65, 166, 126, 0.5);
+}
+
+
+/* INPUT GROUP */
+.input-group {
+    margin-bottom: 1.3rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--border-soft);
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 1rem;
+    transition: 0.25s;
+    outline: none;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(65, 166, 126, 0.35);
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #9fb7ad;
+}
+
+/* ===== Styling Input & Textarea ===== */
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #d0d0d0;
+    padding: 12px 14px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.form-control:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25) !important;
+}
+
+/* ===== Styling input file ===== */
+input[type="file"] {
+    padding: 10px;
+    background: #fafafa;
+    border: 1px line #b4b4b4;
+    border-radius: 12px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: #41A67E;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #43a047;
+}
+/* BUTTONS */
+.btn-primary {
+    background: var(--primary) !important;
+    border: none !important;
+    padding: 10px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark) !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #d9e5df;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 10px;
+    color: #36614c;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.btn-secondary:hover {
+    background: #757776;
+    transform: translateY(-2px);
+}
+
+/* STEP ANIMATION */
+.step {
+    animation: fadeIn 0.35s ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}

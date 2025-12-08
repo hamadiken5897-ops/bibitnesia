@@ -5,11 +5,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\MarketplaceController;
 
 // Controller Auth
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-
+//pengajuan auth
+use App\Http\Controllers\PengajuanMitraController;
 /*
 |--------------------------------------------------------------------------
 | CONTROLLER ADMIN
@@ -21,7 +23,6 @@ use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
 
-
 /*
 |--------------------------------------------------------------------------
 | ROUTE LOGIN & AUTH
@@ -29,14 +30,20 @@ use App\Http\Controllers\Admin\ValidasiController;
 */
 
 // Portal/Landing Page Route (root)
+
 Route::get('/', function () {
     return view('portal');
 })->name('portal');
 
 Route::get('/', [PortalController::class, 'index'])->name('portal');
 
+/*
+|--------------------------------------------------------------------------
+| Halaman LOGIN
+|--------------------------------------------------------------------------
+*/
 // Halaman login
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');  
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
 // Proses login
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -52,6 +59,15 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Marketplace User Routes
+Route::prefix('marketplace')
+    ->name('marketplace.')
+    ->group(function () {
+        Route::get('/', [MarketplaceController::class, 'index'])->name('index');
+        Route::get('/kategori/{kategori}', [MarketplaceController::class, 'kategori'])->name('kategori');
+        Route::get('/produk/{id}', [MarketplaceController::class, 'show'])->name('show');
+        Route::get('/search', [MarketplaceController::class, 'search'])->name('search');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +75,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-
     /*
     |--------------------------------------------------------------------------
     | DASHBOARD PER ROLE
@@ -73,6 +88,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
     Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Daftar Pengajuan Kurir, Penjual
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/pengajuan-mitra/store', [PengajuanMitraController::class, 'store'])->name('pengajuan-mitra.store');
+
+    // route daftar penjual
+    Route::get('/daftar-penjual', function () {
+        return view('mitra.daftar', ['role' => 'penjual']);
+    })->name('daftar.penjual');
+
+    // route daftar kurir
+    Route::get('/daftar-kurir', function () {
+        return view('mitra.daftar', ['role' => 'kurir']);
+    })->name('daftar.kurir');
+
+    Route::get('/pengajuan-mitra/success', function () {
+        return view('mitra.succes');
+    })->name('mitra.succes');
 
     /*
     |--------------------------------------------------------------------------
@@ -83,131 +118,134 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
 
-
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTE
     |--------------------------------------------------------------------------
     */
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')
+        ->name('admin.')
+        ->group(function () {
+            // USER
+            Route::get('/users', [UserController::class, 'index'])->name('users.index');
+            Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+            Route::post('/users', [UserController::class, 'store'])->name('users.store');
+            Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+            Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+            Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
-        // USER
-        Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-        Route::post('/users', [UserController::class, 'store'])->name('users.store');
-        Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-        Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+            // PRODUK
+            Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+            Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
 
-        // PRODUK
-        Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
-        Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
+            // PEMBAYARAN
+            Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
+            Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
 
-        // PEMBAYARAN
-        Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
-        Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+            // KOMPLAIN
+            Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
 
-        // KOMPLAIN
-        Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
+            // Pengajuan Mitra
+            Route::get('/pengajuan-mitra', [PengajuanMitraController::class, 'index'])->name('pengajuan.index');
+            Route::get('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'show'])->name('pengajuan.show');
 
-        // VALIDASI
-        Route::get('/validasi', [ValidasiController::class, 'index'])->name('validasi');
-    });
+            Route::post('/pengajuan-mitra/{id}/approve', [PengajuanMitraController::class, 'approve'])->name('pengajuan.approve');
+            Route::post('/pengajuan-mitra/{id}/reject', [PengajuanMitraController::class, 'reject'])->name('pengajuan.reject');
 
+            Route::delete('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'destroy'])->name('pengajuan.destroy');
+        });
 
     /*
     |--------------------------------------------------------------------------
     | PENJUAL ROUTE (KOSONG)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('penjual')->name('penjual.')->group(function () {
-        // masih kosong
-    });
-
+    Route::prefix('penjual')
+        ->name('penjual.')
+        ->group(function () {
+            // masih kosong
+        });
 
     /*
     |--------------------------------------------------------------------------
     | PEMBELI ROUTE (KOSONG)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('pembeli')->name('pembeli.')->group(function () {
-        // masih kosong
-    });
-
+    Route::prefix('pembeli')
+        ->name('pembeli.')
+        ->group(function () {
+            // masih kosong
+        });
 
     /*
     |--------------------------------------------------------------------------
     | KURIR ROUTE
     |--------------------------------------------------------------------------
     */
-    Route::prefix('kurir')->name('kurir.')->group(function () {
+    Route::prefix('kurir')
+        ->name('kurir.')
+        ->group(function () {
+            Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
+            Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
+            Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
 
-        Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
-        Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
-        Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
+            // PROFIL KURIR
+            Route::get('/profil', fn() => view('kurir.profil'))->name('profil');
 
-        // PROFIL KURIR
-        Route::get('/profil', fn() => view('kurir.profil'))->name('profil');
+            Route::put('/profil', function (Request $request) {
+                $user = Auth::user();
 
-        Route::put('/profil', function (Request $request) {
+                $request->validate([
+                    'nama' => 'required|string|max:100',
+                    'no_telepon' => 'nullable|string|max:20',
+                    'alamat' => 'nullable|string|max:255',
+                    'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                ]);
 
-            $user = Auth::user();
+                $user->nama = $request->nama;
+                $user->no_telepon = $request->no_telepon;
+                $user->alamat = $request->alamat;
+                $user->save();
 
-            $request->validate([
-                'nama' => 'required|string|max:100',
-                'no_telepon' => 'nullable|string|max:20',
-                'alamat' => 'nullable|string|max:255',
-                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            ]);
+                return back()->with('success', 'Profile Kurir berhasil diperbarui');
+            })->name('profil.update');
 
-            $user->nama = $request->nama;
-            $user->no_telepon = $request->no_telepon;
-            $user->alamat = $request->alamat;
-            $user->save();
+            // INBOX KURIR
+            Route::get('/inbox/{id}', function ($id) {
+                // Contoh data dummy (karena belum pakai database inbox)
+                $messages = [
+                    1 => [
+                        'pengirim' => 'Admin BibitNesia',
+                        'subjek' => 'Konfirmasi Pembayaran',
+                        'pesan' => 'Mohon cek ulang pembayaran order dengan ID #INV-2025-01.',
+                        'tanggal' => '03 Jan 2025',
+                        'status' => 'Unread',
+                    ],
+                    2 => [
+                        'pengirim' => 'Rina Putri',
+                        'subjek' => 'Alamat Pengiriman',
+                        'pesan' => 'Kak alamat saya sudah saya perbarui, mohon dicek ya.',
+                        'tanggal' => '03 Jan 2025',
+                        'status' => 'Read',
+                    ],
+                    3 => [
+                        'pengirim' => 'Admin',
+                        'subjek' => 'Pengiriman Gagal',
+                        'pesan' => 'Mohon follow up pengiriman ID #SHIP-8891.',
+                        'tanggal' => '02 Jan 2025',
+                        'status' => 'Unread',
+                    ],
+                ];
 
-            return back()->with('success', 'Profile Kurir berhasil diperbarui');
-        })->name('profil.update');
+                abort_if(!isset($messages[$id]), 404);
 
-        // INBOX KURIR
-        Route::get('/inbox/{id}', function ($id) {
-
-            // Contoh data dummy (karena belum pakai database inbox)
-            $messages = [
-                1 => [
-                    'pengirim' => 'Admin BibitNesia',
-                    'subjek' => 'Konfirmasi Pembayaran',
-                    'pesan' => 'Mohon cek ulang pembayaran order dengan ID #INV-2025-01.',
-                    'tanggal' => '03 Jan 2025',
-                    'status' => 'Unread'
-                ],
-                2 => [
-                    'pengirim' => 'Rina Putri',
-                    'subjek' => 'Alamat Pengiriman',
-                    'pesan' => 'Kak alamat saya sudah saya perbarui, mohon dicek ya.',
-                    'tanggal' => '03 Jan 2025',
-                    'status' => 'Read'
-                ],
-                3 => [
-                    'pengirim' => 'Admin',
-                    'subjek' => 'Pengiriman Gagal',
-                    'pesan' => 'Mohon follow up pengiriman ID #SHIP-8891.',
-                    'tanggal' => '02 Jan 2025',
-                    'status' => 'Unread'
-                ],
-            ];
-
-            abort_if(!isset($messages[$id]), 404);
-
-            return view('kurir.inbox-detail', [
-                'message' => $messages[$id]
-            ]);
-
-        })->name('inbox.detail');
-
-    });
+                return view('kurir.inbox-detail', [
+                    'message' => $messages[$id],
+                ]);
+            })->name('inbox.detail');
+        });
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -218,7 +256,6 @@ Route::get('/files/{id}/{action}', function ($id, $action) {
     $file = \App\Models\File::findOrFail($id);
     return $file->handleAction($action);
 })->name('files.action');
-
 
 /*
 |--------------------------------------------------------------------------

@@ -91,4 +91,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Admin::class, 'id_user');
     }
+    public function pengajuanMitra() 
+    {
+        return $this->hasOne(\App\Models\PengajuanMitra::class, 'id_user', 'id_user');
+    }
 }
