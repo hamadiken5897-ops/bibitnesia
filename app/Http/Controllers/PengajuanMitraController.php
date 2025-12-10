@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PengajuanMitra;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\NotifikasiUser;
 
 class PengajuanMitraController extends Controller
 {

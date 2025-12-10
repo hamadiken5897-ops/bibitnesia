@@ -140,29 +140,23 @@ if ("IntersectionObserver" in window) {
 // Console log for debugging (remove in production)
 console.log("Bibitnesia Portal - Initialized ✓");
 
-function showNotif(el) {
-    let status = el.getAttribute("data-status");
-    let note = el.getAttribute("data-note");
-    let id = el.getAttribute("data-id");
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".notif-item").forEach((el) => {
+        el.addEventListener("click", function () {
+            let title = this.dataset.judul;
+            let pesan = this.dataset.pesan;
+            let url = this.dataset.url;
+            let id = this.dataset.id;
 
-    let message = "";
-
-    if (status === "Disetujui") {
-        message = "Pengajuan Anda telah disetujui. Selamat!";
-    } else if (status === "Ditolak") {
-        message =
-            "Pengajuan Anda ditolak.<br><br><strong>Alasan:</strong><br>" +
-            note;
-    }
-
-    Swal.fire({
-        title: "Notifikasi Pengajuan",
-        html: message,
-        icon: status === "Disetujui" ? "success" : "error",
-        confirmButtonText: "Tutup",
-    }).then(() => {
-        // Tandai notifikasi sudah dibaca
-        fetch("/pengajuan-mitra/read/" + id);
-        location.reload();
+            Swal.fire({
+                title: title,
+                html: pesan,
+                icon: "info",
+                confirmButtonText: "Lanjutkan",
+            }).then(() => {
+                // Redirect ke halaman atau tab bersangkutan
+                window.location.href = url;
+            });
+        });
     });
-}
+});

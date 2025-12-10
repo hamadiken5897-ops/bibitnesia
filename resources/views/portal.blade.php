@@ -15,7 +15,7 @@
     <!-- Google Fonts - Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-     <!-- sweetalert3 -->
+    <!-- sweetalert3 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('portal/css/portal.css') }}">
@@ -54,22 +54,44 @@
                     <li class="nav-item ms-lg-3">
                         @auth
                             @php
-                                $notif = \App\Models\PengajuanMitra::where('id_user', auth()->user()->id_user)
-                                    ->where('is_read_user', false)
+                                $notifs = \App\Models\NotifikasiUser::where('id_user', auth()->user()->id_user)
                                     ->orderBy('created_at', 'desc')
-                                    ->first();
+                                    ->limit(10)
+                                    ->get();
                             @endphp
 
-                            @if ($notif)
-                        <li class="nav-item me-3">
-                            <a href="#" class="nav-link-custom text-warning" data-status="{{ $notif->status }}"
-                                data-note="{{ $notif->catatan_admin }}" data-id="{{ $notif->id_pengajuan }}"
-                                onclick="showNotif(this)">
-                                <i class="bi bi-bell-fill"></i> <span class="badge bg-danger">1</span>
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link position-relative" href="#" data-bs-toggle="dropdown">
+                                <i class="bi bi-bell-fill fs-5 text-warning"></i>
+
+                                @if ($notifs->count() > 0)
+                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                        {{ $notifs->count() }}
+                                    </span>
+                                @endif
                             </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end p-2"
+                                style="min-width:300px; max-height:400px; overflow-y:auto;">
+                                @forelse($notifs as $n)
+                                    <li>
+                                        <button class="dropdown-item text-wrap notif-item" data-url="{{ $n->redirect_url }}"
+                                            data-judul="{{ $n->judul }}" data-pesan="{{ $n->pesan }}"
+                                            data-id="{{ $n->id_notif }}">
+                                            🔔 <strong>{{ $n->judul }}</strong><br>
+                                            <small>{{ $n->pesan }}</small>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                @empty
+                                    <li><span class="dropdown-item text-muted">Tidak ada notifikasi</span></li>
+                                @endforelse
+                            </ul>
                         </li>
-                        @endif
                     @endauth
+
                     </li>
                     <li class="nav-item ms-lg-3">
                         @auth
