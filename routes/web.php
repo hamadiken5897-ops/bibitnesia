@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarketplaceController;
+use App\Http\Controllers\KeranjangController;
 
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
@@ -69,6 +70,20 @@ Route::prefix('marketplace')
         Route::get('/search', [MarketplaceController::class, 'search'])->name('search');
     });
 
+//Keranjang Routes
+Route::middleware('auth')->group(function () {
+
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+
+    Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
+
+    Route::post('/keranjang/update/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+
+    Route::delete('/keranjang/delete/{id}', [KeranjangController::class, 'delete'])->name('keranjang.delete');
+
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | PROTECTED ROUTES (SETELAH LOGIN)
@@ -92,7 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/penjual/dashboard', fn() => view('penjual.dashboard'))->name('penjual.dashboard');
     Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
     Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
-    
+
     //notifikasi
     Route::post('/notifikasi/read/{id}', function ($id) {
         $n = \App\Models\NotifikasiUser::find($id);

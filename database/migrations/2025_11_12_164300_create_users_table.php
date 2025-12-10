@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('nama', 25);
             $table->string('email', 255)->unique();
             $table->string('password', 255); // lebih aman, ubah panjang ke 255
-            $table->string('no_telepon', 25);
-            $table->string('alamat', 255);
+            $table->string('no_telepon', 25)-> nullable();
+            $table->string('alamat', 255)-> nullable();
             $table->enum('role', ['pembeli', 'penjual', 'kurir', 'admin']);
             $table->date('tanggal_daftar');
             $table->enum('status_akun', ['AKTIF', 'NONAKTIF', 'BANNED']);

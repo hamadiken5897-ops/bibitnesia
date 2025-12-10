@@ -31,7 +31,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('keranjang.index') }}">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Keranjang</span>
                 </a>
@@ -199,7 +199,7 @@
         <div class="products-section">
             <div class="section-header">
                 <h2 class="section-title">Produk Pilihan</h2>
-                <span style="color: #7f8c8d;">{{ $produk->total() ?? 0 }} Produk Ditemukan</span>
+                <span style="color: #7f8c8d;">{{ isset($produk) ? $produk->total() : 0 }} Produk Ditemukan</span>
             </div>
 
             <div class="products-grid">
