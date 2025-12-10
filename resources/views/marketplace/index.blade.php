@@ -37,7 +37,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('favorit.index') }}">
                     <i class="fas fa-heart"></i>
                     <span>Favorit</span>
                 </a>
@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('riwayat') }}">
                     <i class="fas fa-history"></i>
                     <span>Riwayat</span>
                 </a>

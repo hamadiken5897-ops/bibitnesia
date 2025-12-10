@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\FavoritController;
+use App\Http\Controllers\RiwayatController;
 
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
@@ -84,6 +86,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
 });
 
+//Favorit Routes
+Route::middleware('auth')->group(function () {
+
+    Route::get('/favorit', [FavoritController::class, 'index'])->name('favorit.index');
+    Route::post('/favorit/add', [FavoritController::class, 'add'])->name('favorit.add');
+    Route::delete('/favorit/delete/{id}', [FavoritController::class, 'delete'])->name('favorit.delete');
+
+});
+
+//riwayat route
+Route::middleware('auth')->group(function () {
+
+    Route::get('/riwayat', [RiwayatController::class, 'riwayat'])
+        ->name('riwayat');
+
+});
 
 
 
