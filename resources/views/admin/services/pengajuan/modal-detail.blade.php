@@ -24,6 +24,29 @@
                     <h5>Data Penjual</h5>
                     <p>Alamat Kebun: {{ $data->alamat_kebun }}</p>
                     <p>Deskripsi: {{ $data->deskripsi }}</p>
+
+                    <h6 class="mt-3">Foto Kebun</h6>
+                    @if ($data->foto_kebun)
+                        <div class="mb-2">
+                            <a href="{{ asset('storage/' . $data->foto_kebun) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $data->foto_kebun) }}" class="rounded border"
+                                    style="width:180px; height:120px; object-fit:cover;">
+                            </a>
+                        </div>
+                    @else
+                        <p class="text-muted">Tidak ada foto kebun.</p>
+                    @endif
+
+                    <h6 class="mt-3">Portofolio</h6>
+                    @if ($data->portofolio)
+                        <div class="mb-2">
+                            <a href="{{ asset('storage/' . $data->portofolio) }}" target="_blank">
+                                <i class="bi bi-file-earmark-text"></i> Lihat Portofolio
+                            </a>
+                        </div>
+                    @else
+                        <p class="text-muted">Tidak ada portofolio.</p>
+                    @endif
                 @endif
 
                 @if ($role == 'kurir')
@@ -41,7 +64,7 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-danger" onclick="rejectMitra({{ $data->id_pengajuan }})">
+                <button class="btn btn-danger" onclick="openReject({{ $data->id_pengajuan }})">
                     Tolak
                 </button>
 
@@ -56,68 +79,21 @@
     </div>
 </div>
 
-<div class="modal fade" id="rejectModal{{ $data->id_pengajuan }}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Tolak Pengajuan</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <div id="errorNote{{ $data->id_pengajuan }}" class="alert alert-danger d-none">
-                    Catatan wajib diisi.
-                </div>
-
-                <label>Catatan Admin *</label>
-                <textarea id="note{{ $data->id_pengajuan }}" class="form-control"></textarea>
-
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-                <button class="btn btn-danger" onclick="validateNote({{ $data->id_pengajuan }})">Lanjut</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmReject{{ $data->id_pengajuan }}">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title">Konfirmasi</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body text-center">
-                Yakin ingin menolak pengajuan ini?
-            </div>
-
-            <div class="modal-footer">
-
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-                <form action="{{ route('admin.pengajuan.reject', $data->id_pengajuan) }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="catatan_admin" id="finalNote{{ $data->id_pengajuan }}">
-                    <button class="btn btn-danger">Tolak Sekarang</button>
-                </form>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
 <script>
+    function openReject(id) {
+        // Tutup modal Bootstrap detail
+        const modal = bootstrap.Modal.getInstance(document.getElementById('detailModal' + id));
+        modal.hide();
+
+        // Beri sedikit delay agar backdrop hilang dulu
+        setTimeout(() => {
+            rejectMitra(id);
+        }, 300);
+    }
+
     function rejectMitra(id) {
 
+        // Step 1: Input alasan
         Swal.fire({
             title: "Alasan Penolakan",
             input: "textarea",
@@ -141,8 +117,9 @@
 
             let catatan = result.value;
 
+            // Step 2: Konfirmasi akhir
             Swal.fire({
-                title: "Yakin ingin menolak?",
+                title: "Yakin ingin menolak pengajuan ini?",
                 icon: "warning",
                 showCancelButton: true,
                 cancelButtonText: "Batal",
@@ -150,31 +127,31 @@
                 confirmButtonColor: "#d33"
             }).then((confirmResult) => {
 
-                if (confirmResult.isConfirmed) {
+                if (!confirmResult.isConfirmed) return;
 
-                    // Kirim data via form dinamis
-                    let form = document.createElement("form");
-                    form.method = "POST";
-                    form.action = "/admin/pengajuan-mitra/" + id + "/reject";
+                // Step 3: Submit form (tanpa modal bootstrap)
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/admin/pengajuan-mitra/" + id + "/reject";
 
-                    let csrf = document.createElement("input");
-                    csrf.type = "hidden";
-                    csrf.name = "_token";
-                    csrf.value = "{{ csrf_token() }}";
+                // CSRF
+                let csrf = document.createElement("input");
+                csrf.type = "hidden";
+                csrf.name = "_token";
+                csrf.value = "{{ csrf_token() }}";
 
-                    let note = document.createElement("input");
-                    note.type = "hidden";
-                    note.name = "catatan_admin";
-                    note.value = catatan;
+                // Note
+                let note = document.createElement("input");
+                note.type = "hidden";
+                note.name = "catatan_admin";
+                note.value = catatan;
 
-                    form.appendChild(csrf);
-                    form.appendChild(note);
+                form.appendChild(csrf);
+                form.appendChild(note);
 
-                    document.body.appendChild(form);
-                    form.submit();
-                }
+                document.body.appendChild(form);
+                form.submit();
             });
         });
-
     }
 </script>

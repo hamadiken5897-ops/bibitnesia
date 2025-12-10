@@ -15,6 +15,8 @@
     <!-- Google Fonts - Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+     <!-- sweetalert3 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('portal/css/portal.css') }}">
 </head>
@@ -50,7 +52,26 @@
                         <a class="nav-link-custom" href="{{ route('marketplace.index') }}">Marketplace</a>
                     </li>
                     <li class="nav-item ms-lg-3">
+                        @auth
+                            @php
+                                $notif = \App\Models\PengajuanMitra::where('id_user', auth()->user()->id_user)
+                                    ->where('is_read_user', false)
+                                    ->orderBy('created_at', 'desc')
+                                    ->first();
+                            @endphp
 
+                            @if ($notif)
+                        <li class="nav-item me-3">
+                            <a href="#" class="nav-link-custom text-warning" data-status="{{ $notif->status }}"
+                                data-note="{{ $notif->catatan_admin }}" data-id="{{ $notif->id_pengajuan }}"
+                                onclick="showNotif(this)">
+                                <i class="bi bi-bell-fill"></i> <span class="badge bg-danger">1</span>
+                            </a>
+                        </li>
+                        @endif
+                    @endauth
+                    </li>
+                    <li class="nav-item ms-lg-3">
                         @auth
                             <a href="{{ route('profile.show') }}" class="btn btn-login d-flex align-items-center">
                                 <i class="bi bi-person-circle fs-5 me-1"></i> Profil
@@ -115,7 +136,8 @@
                         <div class="hero-overlay"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">Jual Tanaman Anda<br>dengan Mudah</h1>
-                            <p class="hero-subtitle">Bergabunglah dengan ribuan penjual tanaman di seluruh Indonesia</p>
+                            <p class="hero-subtitle">Bergabunglah dengan ribuan penjual tanaman di seluruh Indonesia
+                            </p>
 
                             @guest
                                 <!-- User belum login -->

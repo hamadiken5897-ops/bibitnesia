@@ -114,6 +114,14 @@ Route::middleware(['auth'])->group(function () {
         return view('mitra.succes');
     })->name('mitra.succes');
 
+    Route::get('/pengajuan-mitra/read/{id}', function ($id) {
+        $p = \App\Models\PengajuanMitra::find($id);
+        if ($p && $p->id_user == auth()->id()) {
+            $p->is_read_user = true;
+            $p->save();
+        }
+    });
+
     /*
     |--------------------------------------------------------------------------
     | PROFILE GLOBAL USER

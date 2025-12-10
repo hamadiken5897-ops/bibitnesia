@@ -28,7 +28,7 @@ class PengajuanMitraController extends Controller
     public function store(Request $request)
     {
         $role = $request->role_pengajuan;
-    
+
         // cek sudah daftar
         $cek = PengajuanMitra::where('id_user', auth()->user()->id_user)
             ->where('status', 'Menunggu')
@@ -108,6 +108,9 @@ class PengajuanMitraController extends Controller
     public function show($id)
     {
         $pengajuan = PengajuanMitra::findOrFail($id);
+        // role yang diajukan user
+        $role = $data->role_pengajuan;
+
         return view('admin.services.pengajuan.show', compact('pengajuan'));
     }
 
@@ -127,7 +130,18 @@ class PengajuanMitraController extends Controller
             'catatan_admin' => null,
         ]);
 
+        $pengajuan->status = 'Disetujui';
+        $pengajuan->is_read_user = false; // 🔥 user akan melihat notifikasi
+        $pengajuan->save();
+
         return back()->with('success', 'Pengajuan mitra berhasil disetujui.');
+
+        NotifikasiUser::create([
+            'id_user' => $pengajuan->id_user,
+            'judul' => 'Pengajuan Mitra Disetujui',
+            'pesan' => "Selamat, pengajuan Anda sebagai {$pengajuan->role_pengajuan} telah disetujui.",
+            'redirect_url' => "/{$pengajuan->role_pengajuan}/dashboard#status",
+        ]);
     }
 
     /**
@@ -146,7 +160,19 @@ class PengajuanMitraController extends Controller
             'catatan_admin' => $request->catatan_admin,
         ]);
 
+        $pengajuan->status = 'Ditolak';
+        $pengajuan->catatan_admin = $request->catatan_admin;
+        $pengajuan->is_read_user = false; // 🔥 user akan melihat notifikasi
+        $pengajuan->save();
+
         return back()->with('success', 'Pengajuan mitra ditolak.');
+
+        NotifikasiUser::create([
+            'id_user' => $pengajuan->id_user,
+            'judul' => 'Pengajuan Mitra Ditolak',
+            'pesan' => "Pengajuan Anda ditolak. Alasan: {$pengajuan->catatan_admin}",
+            'redirect_url' => '/pengajuan/status#detail',
+        ]);
     }
 
     /**
