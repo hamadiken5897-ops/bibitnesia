@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\PesananController;
 
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
@@ -72,16 +73,19 @@ Route::prefix('marketplace')
 
 //Keranjang Routes
 Route::middleware('auth')->group(function () {
-
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
-
     Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
-
     Route::post('/keranjang/update/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
-
     Route::delete('/keranjang/delete/{id}', [KeranjangController::class, 'delete'])->name('keranjang.delete');
-
 });
+
+//pesanan saya route
+Route::middleware('auth')->group(function () {
+    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
+});
+
+
+
 
 
 /*

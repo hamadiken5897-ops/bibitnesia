@@ -43,7 +43,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('pesanan.index') }}">
                     <i class="fas fa-box"></i>
                     <span>Pesanan Saya</span>
                 </a>
@@ -93,6 +93,8 @@
                 </button>
             </div>
         </div>
+
+         @yield('content')
 
         <!-- Search & Filter Section -->
         <div class="search-filter-section">

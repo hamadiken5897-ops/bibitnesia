@@ -33,4 +33,11 @@ class Pesanan extends Model
     {
         return $this->hasOne(Detail_pesanan::class, 'id_detail_pesanan', 'id_detail_pesanan');
     }
+
+    // Relasi ke produk
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id');
+    }
+
 }

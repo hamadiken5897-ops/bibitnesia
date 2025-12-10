@@ -9,33 +9,29 @@ class KeranjangController extends Controller
 {
     public function index()
     {
-        // Ambil semua item keranjang berdasarkan user login
+        // ambil data keranjang untuk user yg login, termasuk relasi produk
         $keranjang = Keranjang::where('user_id', auth()->id())
-            ->with('produk')
+            ->with('produk') // relasi produk harus ada di model Keranjang
             ->get();
 
-        return view('marketplace.keranjang.index', [
-            'keranjang' => $keranjang
-        ]);
+        // pastikan view yang dipanggil sesuai struktur folder
+        return view('marketplace.keranjang', compact('keranjang'));
     }
 
     public function add(Request $request)
     {
-        // Cek apakah produk sudah ada dalam keranjang user
         $item = Keranjang::where('user_id', auth()->id())
             ->where('produk_id', $request->produk_id)
             ->first();
 
         if ($item) {
-            // Jika sudah ada, tambahkan qty
             $item->qty += 1;
             $item->save();
         } else {
-            // Jika belum ada, buat baru
             Keranjang::create([
-                'user_id'   => auth()->id(),
+                'user_id' => auth()->id(),
                 'produk_id' => $request->produk_id,
-                'qty'       => 1,
+                'qty' => 1,
             ]);
         }
 
@@ -44,17 +40,13 @@ class KeranjangController extends Controller
 
     public function update(Request $request, $id)
     {
-        Keranjang::where('id', $id)->update([
-            'qty' => $request->qty
-        ]);
-
+        Keranjang::where('id', $id)->update(['qty' => $request->qty]);
         return back()->with('success', 'Keranjang diperbarui!');
     }
 
     public function delete($id)
     {
         Keranjang::where('id', $id)->delete();
-
-        return back()->with('success', 'Produk dihapus dari keranjang!');
+        return back()->with('success', 'Produk dihapus!');
     }
 }
