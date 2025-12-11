@@ -33,6 +33,9 @@ use App\Http\Controllers\Admin\ValidasiController;
 use App\Http\Controllers\Kurir\KurirInboxController;
 use App\Http\Controllers\Kurir\KurirPengirimanController;
 
+//Penjual Controllers
+use App\Http\Controllers\Penjual\PenjualController;
+
 /*
 |--------------------------------------------------------------------------
 | PUBLIC ROUTES
@@ -126,7 +129,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
     Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
-    Route::get('/penjual/dashboard', fn() => view('penjual.dashboard'))->name('penjual.dashboard');
+    Route::get('/penjual/dashboard', fn() => view('penjual.penjual'))->name('penjual.dashboard');
     Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
     Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
 
@@ -220,11 +223,41 @@ Route::middleware(['auth'])->group(function () {
     | PENJUAL ROUTES
     |--------------------------------------------------------------------------
     */
-    Route::prefix('penjual')
-        ->name('penjual.')
-        ->group(function () {
-            // masih kosong
-        });
+    Route::prefix('penjual')->name('penjual.')->group(function () {
+
+        Route::get('/dashboard', function () {
+            return view('penjual.penjual');
+        })->name('dashboard');
+
+        Route::get('/produk', function () {
+            return view('penjual.produk');
+        })->name('produk');
+
+        Route::get('/produk/tambah', function () {
+            return view('penjual.tambah-produk');
+        })->name('produk.tambah');
+
+        Route::get('/pesanan', function () {
+            return view('penjual.pesanan');
+        })->name('pesanan');
+
+        Route::get('/pembayaran', function () {
+            return view('penjual.pembayaran');
+        })->name('pembayaran');
+
+        Route::get('/pengturan', function () {
+            return view('penjual.pengaturan');
+        })->name('pengaturan');
+
+        Route::get('/dashboard', [PenjualController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/penjual/pesanan', [PesananController::class, 'index'])
+            ->name('penjual.pesanan');
+
+
+    });
+
 
     /*
     |--------------------------------------------------------------------------

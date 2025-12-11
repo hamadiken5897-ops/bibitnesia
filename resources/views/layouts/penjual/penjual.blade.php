@@ -3,19 +3,27 @@
 
 <head>
     @include('layouts.penjual.partials.head')
+
+    <style>
+        #penjualanChart {
+            min-height: 250px !important;
+            max-height: 300px;
+        }
+    </style>
+
 </head>
 
 <body class="page-transition">
     <div id="app">
         @include('layouts.penjual.partials.sidebar')
-        
+
         <div id="main">
             @include('layouts.penjual.partials.navbar')
 
             <div class="page-heading">
                 <h3>@yield('page-title', '')</h3>
             </div>
-            
+
             <div class="page-content" id="ajax-content">
                 @yield('content')
             </div>
@@ -23,7 +31,7 @@
             @include('layouts.penjual.partials.footer')
         </div>
     </div>
-    
+
     @include('layouts.penjual.partials.scripts')
     {{-- ⬇ logout di sini --}}
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
@@ -56,6 +64,9 @@
             document.body.classList.add("loaded");
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @stack('scripts')
+
 </body>
 
 </html>
