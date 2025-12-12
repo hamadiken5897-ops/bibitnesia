@@ -23,6 +23,8 @@ use App\Http\Controllers\PengajuanMitraController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\User\ProfileGeneralController;
+
 // Admin Controllers
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProdukController;
@@ -145,8 +147,18 @@ Route::middleware(['auth'])->group(function () {
     | PROFILE GLOBAL USER
     |--------------------------------------------------------------------------
     */
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
-    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+
+    // profil global 
+    // Lihat profil sendiri
+    Route::get('/my-profile', [ProfileGeneralController::class, 'showOwn'])->name('profile.own');
+    // Update profil
+    Route::put('/my-profile', [ProfileGeneralController::class, 'update'])->name('profile.update.general');
+    // Lihat profil user lain
+    Route::get('/profil/{userId}', [ProfileGeneralController::class, 'show'])->name('profile.show');
+
+    // profil admin
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profileA.show');
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profileA.update');
 
     // Keranjang marketplace
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');

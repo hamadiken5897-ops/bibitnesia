@@ -59,7 +59,7 @@
 
                         <h5 class="fw-bold mb-3">Edit Profil</h5>
 
-                        <form action="{{ route('profile.update') }}"
+                        <form action="{{ route('profileA.update') }}"
                               method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

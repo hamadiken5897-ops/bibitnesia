@@ -24,8 +24,8 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
-                    <a href="{{ route('profile.show') }}" class="sidebar-link">
+                <li class="sidebar-item {{ request()->routeIs('profileA.show') ? 'active' : '' }}">
+                    <a href="{{ route('profileA.show') }}" class="sidebar-link">
                         <i class="iconly-boldProfile"></i>
                         <span>Profile</span>
                     </a>

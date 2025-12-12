@@ -108,7 +108,7 @@
                     {{-- ========================================= --}}
                     <li class="nav-item ms-lg-3">
                         @auth
-                            <a href="{{ route('profile.show') }}" class="btn btn-login d-flex align-items-center">
+                            <a href="{{ route('profile.own') }}" class="btn btn-login d-flex align-items-center">
                                 <i class="bi bi-person-circle fs-5 me-1"></i> Profil
                             </a>
                         @else

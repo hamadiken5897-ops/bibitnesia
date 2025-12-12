@@ -22,6 +22,7 @@ class User extends Authenticatable
         'password',
         'no_telepon',
         'alamat',
+        'deskripsi',
         'role',
         'tanggal_daftar',
         'status_akun',
@@ -59,7 +60,7 @@ class User extends Authenticatable
         // Extract nomor dari ID terakhir
         // Contoh: USR-0001 → 0001 → 1
         preg_match('/USR-(\d+)/', $lastUser->id_user, $matches);
-        
+
         if (isset($matches[1])) {
             $lastNumber = (int) $matches[1];
         } else {
@@ -73,7 +74,17 @@ class User extends Authenticatable
     }
 
     // ---------------------------------------------------------//
-    
+    public function penjual()
+    {
+        return $this->hasOne(\App\Models\Penjual::class, 'id_user', 'id_user');
+    }
+
+    public function kurir()
+    {
+        return $this->hasOne(\App\Models\Kurir::class, 'id_user', 'id_user');
+    }
+
+
     public function getAuthIdentifierName()
     {
         return 'id_user';
@@ -91,7 +102,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Admin::class, 'id_user');
     }
-    public function pengajuanMitra() 
+    public function pengajuanMitra()
     {
         return $this->hasOne(\App\Models\PengajuanMitra::class, 'id_user', 'id_user');
     }
