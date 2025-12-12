@@ -529,3 +529,24 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
+
+.pagination-wrapper .btn {
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+.pagination-wrapper .btn.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.pagination-wrapper .btn-success {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.pagination-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

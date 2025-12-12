@@ -160,3 +160,46 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+console.log("Portal JS Loaded ✓");
+
+// SHOW POPUP
+function toggleNotif() {
+    const popup = document.getElementById("notifPopup");
+    const list = document.getElementById("notifList");
+
+    list.innerHTML = "";
+
+    if (!window.notifs || window.notifs.length === 0) {
+        list.innerHTML = `<div class="p-3 text-muted">Tidak ada notifikasi</div>`;
+    } else {
+        window.notifs.forEach((n) => {
+            list.innerHTML += `
+                <div class="notif-item" onclick="notifRedirect('${n.url}')">
+                    <div class="notif-icon-${n.type} fs-4">${n.icon}</div>
+                    <div>
+                        <div class="fw-semibold">${n.judul}</div>
+                        <div class="text-muted small">${n.pesan}</div>
+                        <div class="text-muted small">${n.time}</div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    popup.classList.toggle("show");
+    popup.classList.toggle("d-none");
+}
+
+// CLOSE
+function hideNotifPopup() {
+    const popup = document.getElementById("notifPopup");
+    popup.classList.remove("show");
+    setTimeout(() => popup.classList.add("d-none"), 200);
+}
+
+// REDIRECT
+function notifRedirect(url) {
+    if (!url || url === "null") return;
+    window.location.href = url;
+}

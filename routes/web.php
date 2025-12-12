@@ -10,6 +10,7 @@ use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\FavoritController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\NotifikasiController;
 
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
@@ -75,39 +76,6 @@ Route::prefix('marketplace')
         Route::get('/produk/{id}', [MarketplaceController::class, 'show'])->name('show');
         Route::get('/search', [MarketplaceController::class, 'search'])->name('search');
     });
-
-//Keranjang Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
-    Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
-    Route::post('/keranjang/update/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
-    Route::delete('/keranjang/delete/{id}', [KeranjangController::class, 'delete'])->name('keranjang.delete');
-});
-
-//pesanan saya route
-Route::middleware('auth')->group(function () {
-    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
-});
-
-//Favorit Routes
-Route::middleware('auth')->group(function () {
-
-    Route::get('/favorit', [FavoritController::class, 'index'])->name('favorit.index');
-    Route::post('/favorit/add', [FavoritController::class, 'add'])->name('favorit.add');
-    Route::delete('/favorit/delete/{id}', [FavoritController::class, 'delete'])->name('favorit.delete');
-
-});
-
-//riwayat route
-Route::middleware('auth')->group(function () {
-
-    Route::get('/riwayat', [RiwayatController::class, 'riwayat'])
-        ->name('riwayat');
-
-});
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -180,6 +148,38 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
 
+    // Keranjang marketplace
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
+    Route::post('/keranjang/update/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+    Route::delete('/keranjang/delete/{id}', [KeranjangController::class, 'delete'])->name('keranjang.delete');
+
+    // pesanan marketplace
+    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
+
+    // favorit marketplace
+    Route::get('/favorit', [FavoritController::class, 'index'])->name('favorit.index');
+    Route::post('/favorit/add', [FavoritController::class, 'add'])->name('favorit.add');
+    Route::delete('/favorit/delete/{id}', [FavoritController::class, 'delete'])->name('favorit.delete');
+
+    // riwayat marketplace
+    Route::get('/riwayat', [RiwayatController::class, 'riwayat'])->name('riwayat');
+
+    // riwayat notifikasi
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+
+    Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
+
+    Route::post('/notifikasi/delete/{id}', [NotifikasiController::class, 'delete'])->name('notifikasi.delete');
+
+    Route::post('/notifikasi/delete-all', [NotifikasiController::class, 'deleteAll'])->name('notifikasi.deleteAll');
+    // tampilan semua notifikasi
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+
+    Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
+    Route::post('/notifikasi/delete/{id}', [NotifikasiController::class, 'delete'])->name('notifikasi.delete');
+    Route::post('/notifikasi/delete-all', [NotifikasiController::class, 'deleteAll'])->name('notifikasi.deleteAll');
+
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTES
@@ -223,41 +223,37 @@ Route::middleware(['auth'])->group(function () {
     | PENJUAL ROUTES
     |--------------------------------------------------------------------------
     */
-    Route::prefix('penjual')->name('penjual.')->group(function () {
+    Route::prefix('penjual')
+        ->name('penjual.')
+        ->group(function () {
+            Route::get('/dashboard', function () {
+                return view('penjual.penjual');
+            })->name('dashboard');
 
-        Route::get('/dashboard', function () {
-            return view('penjual.penjual');
-        })->name('dashboard');
+            Route::get('/produk', function () {
+                return view('penjual.produk');
+            })->name('produk');
 
-        Route::get('/produk', function () {
-            return view('penjual.produk');
-        })->name('produk');
+            Route::get('/produk/tambah', function () {
+                return view('penjual.tambah-produk');
+            })->name('produk.tambah');
 
-        Route::get('/produk/tambah', function () {
-            return view('penjual.tambah-produk');
-        })->name('produk.tambah');
+            Route::get('/pesanan', function () {
+                return view('penjual.pesanan');
+            })->name('pesanan');
 
-        Route::get('/pesanan', function () {
-            return view('penjual.pesanan');
-        })->name('pesanan');
+            Route::get('/pembayaran', function () {
+                return view('penjual.pembayaran');
+            })->name('pembayaran');
 
-        Route::get('/pembayaran', function () {
-            return view('penjual.pembayaran');
-        })->name('pembayaran');
+            Route::get('/pengturan', function () {
+                return view('penjual.pengaturan');
+            })->name('pengaturan');
 
-        Route::get('/pengturan', function () {
-            return view('penjual.pengaturan');
-        })->name('pengaturan');
+            Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
 
-        Route::get('/dashboard', [PenjualController::class, 'index'])
-            ->name('dashboard');
-
-        Route::get('/penjual/pesanan', [PesananController::class, 'index'])
-            ->name('penjual.pesanan');
-
-
-    });
-
+            Route::get('/penjual/pesanan', [PesananController::class, 'index'])->name('penjual.pesanan');
+        });
 
     /*
     |--------------------------------------------------------------------------

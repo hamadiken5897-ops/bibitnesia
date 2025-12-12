@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Penjual;
+use App\Models\Kurir;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use App\Models\PengajuanMitra;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +12,24 @@ use App\Models\NotifikasiUser;
 
 class PengajuanMitraController extends Controller
 {
+    private function generateId($model, $prefix, $column)
+    {
+        // Ambil ID terakhir
+        $last = $model::orderBy($column, 'desc')->first();
+
+        if (!$last) {
+            return $prefix . '-0001';
+        }
+
+        // Ambil angka terakhir
+        $number = intval(substr($last->$column, strlen($prefix) + 1));
+
+        // Increment lalu format 4 digit
+        $newNumber = str_pad($number + 1, 4, '0', STR_PAD_LEFT);
+
+        return $prefix . '-' . $newNumber;
+    }
+
     /**
      * Halaman daftar pengajuan mitra untuk admin
      */
@@ -123,26 +144,67 @@ class PengajuanMitraController extends Controller
         $pengajuan = PengajuanMitra::findOrFail($id);
         $user = User::where('id_user', $pengajuan->id_user)->first();
 
+        if (!$user) {
+            return back()->with('error', 'User tidak ditemukan.');
+        }
+
+        // Update role user
         $user->role = $pengajuan->role_pengajuan;
         $user->save();
 
+        // ============================
+        // PENJUAL
+        // ============================
+        if ($pengajuan->role_pengajuan === 'penjual') {
+            $newId = $this->generateId(Penjual::class, 'PJL', 'id_penjual');
+
+            Penjual::create([
+                'id_penjual' => $newId,
+                'id_user' => $user->id_user,
+                'nama_penjual' => $user->nama,
+                'no_teleponPJ' => $pengajuan->no_hp,
+                'alamatPJ' => $pengajuan->alamat,
+                'tanggal_daftar' => now(),
+                'status_verifikasi' => 'Disetujui',
+                'tgl_verifikasi' => now(),
+                'deskripsi_pj' => $pengajuan->deskripsi ?? null,
+                'rating' => 0,
+            ]);
+        }
+
+        // ============================
+        // KURIR
+        // ============================
+        if ($pengajuan->role_pengajuan === 'kurir') {
+            $newId = $this->generateId(Kurir::class, 'KUR', 'id_kurir');
+
+            Kurir::create([
+                'id_kurir' => $newId,
+                'id_user' => $user->id_user,
+                'nama_pt' => $user->nama,
+                'tipe_kendaraan' => $pengajuan->tipe_kendaraan,
+                'status_kurir' => 'Aktif',
+                'daerah' => $pengajuan->alamat,
+            ]);
+        }
+
+        // Update status pengajuan
         $pengajuan->update([
             'status' => 'Disetujui',
             'catatan_admin' => null,
         ]);
 
-        $pengajuan->status = 'Disetujui';
-        $pengajuan->is_read_user = false; // 🔥 user akan melihat notifikasi
-        $pengajuan->save();
-
-        return back()->with('success', 'Pengajuan mitra berhasil disetujui.');
-
+        // ============================
+        // NOTIFIKASI UNTUK APPROVE
+        // ============================
         NotifikasiUser::create([
             'id_user' => $pengajuan->id_user,
             'judul' => 'Pengajuan Mitra Disetujui',
-            'pesan' => "Selamat, pengajuan Anda sebagai {$pengajuan->role_pengajuan} telah disetujui.",
-            'redirect_url' => "/{$pengajuan->role_pengajuan}/dashboard#status",
+            'pesan' => 'Selamat! Pengajuan Anda telah disetujui dan akun mitra sudah aktif.',
+            'redirect_url' => '/dashboard',
         ]);
+
+        return back()->with('success', 'Pengajuan mitra berhasil disetujui dan akun mitra telah dibuat.');
     }
 
     /**
@@ -163,10 +225,7 @@ class PengajuanMitraController extends Controller
 
         $pengajuan->status = 'Ditolak';
         $pengajuan->catatan_admin = $request->catatan_admin;
-        $pengajuan->is_read_user = false; // 🔥 user akan melihat notifikasi
         $pengajuan->save();
-
-        return back()->with('success', 'Pengajuan mitra ditolak.');
 
         NotifikasiUser::create([
             'id_user' => $pengajuan->id_user,
@@ -174,6 +233,8 @@ class PengajuanMitraController extends Controller
             'pesan' => "Pengajuan Anda ditolak. Alasan: {$pengajuan->catatan_admin}",
             'redirect_url' => '/pengajuan/status#detail',
         ]);
+
+        return back()->with('success', 'Pengajuan mitra ditolak.');
     }
 
     /**

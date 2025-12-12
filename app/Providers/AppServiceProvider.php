@@ -3,22 +3,21 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\NotifikasiUser;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function boot()
     {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        //
+        View::composer('*', function ($view) {
+            $notifCount = 0;
+            if (auth()->check()) {
+                $notifCount = NotifikasiUser::where('id_user', auth()->user()->id_user)
+                    ->where('is_read', false) // atur sesuai kolom unread kamu
+                    ->count();
+            }
+            $view->with('notifCount', $notifCount);
+        });
     }
 }

@@ -26,73 +26,86 @@
 
     {{-- <img src="{{ asset('portal/images/logo/LogoBibitnesia-White.png') }}" alt="Bibitnesia"> --}}
 
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
         <div class="container">
+
+            {{-- Logo --}}
             <div class="header-logo" href="/">
                 <img src="{{ asset('portal/images/logo/LogoBibitnesia-White.png') }}" alt="Bibitnesia">
             </div>
-            <div class ="navbar-brand" href="/">
-                Bibitnesia
-            </div>
+
+            <div class="navbar-brand" href="/">Bibitnesia</div>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
+
                 <ul class="navbar-nav ms-auto align-items-center">
+
                     <li class="nav-item">
                         <a class="nav-link-custom" href="#beranda">Beranda</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link-custom" href="#tentang">Tentang</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link-custom" href="#produk">Produk</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link-custom" href="{{ route('marketplace.index') }}">Marketplace</a>
                     </li>
-                    <li class="nav-item ms-lg-3">
-                        @auth
-                            @php
-                                $notifs = \App\Models\NotifikasiUser::where('id_user', auth()->user()->id_user)
-                                    ->orderBy('created_at', 'desc')
-                                    ->limit(10)
-                                    ->get();
-                            @endphp
 
-                        <li class="nav-item dropdown me-3">
-                            <a class="nav-link position-relative" href="#" data-bs-toggle="dropdown">
-                                <i class="bi bi-bell-fill fs-5 text-warning"></i>
+                    <li class="nav-item dropdown ms-lg-3 position-relative">
 
-                                @if ($notifs->count() > 0)
-                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                                        {{ $notifs->count() }}
-                                    </span>
-                                @endif
-                            </a>
+                        <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            <i class="bi bi-bell-fill fs-5 text-white"></i>
 
-                            <ul class="dropdown-menu dropdown-menu-end p-2"
-                                style="min-width:300px; max-height:400px; overflow-y:auto;">
-                                @forelse($notifs as $n)
-                                    <li>
-                                        <button class="dropdown-item text-wrap notif-item" data-url="{{ $n->redirect_url }}"
-                                            data-judul="{{ $n->judul }}" data-pesan="{{ $n->pesan }}"
-                                            data-id="{{ $n->id_notif }}">
-                                            🔔 <strong>{{ $n->judul }}</strong><br>
-                                            <small>{{ $n->pesan }}</small>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                @empty
-                                    <li><span class="dropdown-item text-muted">Tidak ada notifikasi</span></li>
-                                @endforelse
-                            </ul>
-                        </li>
-                    @endauth
+                            @if ($notifCount > 0)
+                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                    {{ $notifCount }}
+                                </span>
+                            @endif
+                        </a>
 
+                        <ul class="dropdown-menu dropdown-menu-end shadow"
+                            style="width: 350px; max-height: 400px; overflow-y: auto;">
+
+                            <li class="dropdown-header fw-bold">Notifikasi Terbaru</li>
+
+                            @forelse($notifLatest as $n)
+                                <li>
+                                    <a class="dropdown-item small {{ $n->is_read ? '' : 'fw-bold' }}"
+                                        href="{{ $n->redirect_url ?? '#' }}">
+                                        <div>{{ $n->judul }}</div>
+                                        <small class="text-muted">{{ $n->created_at->diffForHumans() }}</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            @empty
+                                <li class="dropdown-item text-muted text-center">Tidak ada notifikasi</li>
+                            @endforelse
+
+                            <li>
+                                <a href="{{ route('notifikasi.index') }}"
+                                    class="dropdown-item text-center text-primary fw-bold">
+                                    Lihat Semua
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
+                    {{-- ========================================= --}}
+                    {{-- BUTTON PROFIL / LOGIN --}}
+                    {{-- ========================================= --}}
                     <li class="nav-item ms-lg-3">
                         @auth
                             <a href="{{ route('profile.show') }}" class="btn btn-login d-flex align-items-center">
@@ -103,9 +116,9 @@
                                 <i class="bi bi-box-arrow-in-right"></i> LOGIN
                             </a>
                         @endauth
-
                     </li>
 
+                </ul>
             </div>
         </div>
     </nav>
@@ -492,11 +505,28 @@
         </div>
     </footer>
 
+    <!-- Notification Popup -->
+    <div id="notifPopup" class="notif-popup d-none">
+        <div class="notif-header">
+            <strong>Notifikasi</strong>
+            <button class="close-btn" onclick="hideNotifPopup()">✕</button>
+        </div>
+
+        <div id="notifList" class="notif-list">
+            <!-- akan diisi JS -->
+        </div>
+
+        <div class="notif-footer">
+            <a href="/notifikasi/semua" class="notif-see-all">Lihat Semua</a>
+        </div>
+    </div>
+
     <!-- Bootstrap 5.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom JS -->
     <script src="{{ asset('portal/js/portal.js') }}"></script>
+
 </body>
 
 </html>
