@@ -234,7 +234,7 @@
                         </li>
 
                         {{-- Tab Ulasan (bukan kurir) --}}
-                        @if($user->role !== 'kurir')
+                        @if($user->role === 'kurir')
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="ulasan-tab" data-bs-toggle="tab" 
                                     data-bs-target="#ulasan" type="button" role="tab">
@@ -261,7 +261,6 @@
                         </div>
 
                         {{-- Content: Ulasan --}}
-                        @if($user->role !== 'kurir')
                         <div class="tab-pane fade" id="ulasan" role="tabpanel">
                             @include('profile.components.tab-ulasan')
                         </div>

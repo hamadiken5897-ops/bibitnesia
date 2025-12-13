@@ -1,4 +1,4 @@
-@extends('marketplace.layouts')
+@extends('layouts.marketplace.main')
 
 @section('content')
 <div class="container mt-4">

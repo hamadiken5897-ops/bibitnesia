@@ -9,7 +9,7 @@
         </h5>
         
         @if($isOwner)
-        <a href="{{ route('produk.create') }}" class="btn btn-success btn-sm">
+        <a href="#" class="btn btn-success btn-sm">
             <i class="bi bi-plus-circle me-1"></i>Tambah Produk
         </a>
         @endif
@@ -53,7 +53,7 @@
                     <p class="produk-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
                     <p class="produk-stok">Stok: {{ $produk->stok }}</p>
                     
-                    <a href="{{ route('produk.detail', $produk->id_produk) }}" 
+                    <a href="#" 
                        class="btn btn-sm btn-outline-primary w-100">
                         <i class="bi bi-eye me-1"></i>Lihat Detail
                     </a>
@@ -75,7 +75,7 @@
         <h5>Belum Ada Produk</h5>
         @if($isOwner)
         <p class="text-muted">Mulai jual produk Anda sekarang!</p>
-        <a href="{{ route('produk.create') }}" class="btn btn-success">
+        <a href="#" class="btn btn-success">
             <i class="bi bi-plus-circle me-1"></i>Tambah Produk Pertama
         </a>
         @else

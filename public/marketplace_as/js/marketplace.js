@@ -421,3 +421,16 @@ window.buyNow = buyNow;
 window.performSearch = performSearch;
 window.filterByCategory = filterByCategory;
 window.closeNotificationDropdown = closeNotificationDropdown;
+
+const avatarToggle = document.getElementById("avatarToggle");
+const avatarMenu = document.getElementById("avatarMenu");
+
+avatarToggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    avatarMenu.classList.toggle("show");
+});
+
+// Klik di luar menutup menu
+document.addEventListener("click", function () {
+    avatarMenu.classList.remove("show");
+});

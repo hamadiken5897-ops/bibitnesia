@@ -41,9 +41,42 @@
 
         @endauth
         @auth
-            <button class="profile-btn">
-                {{ auth()->user()->name }}
-            </button>
+            @php
+                $authUser = auth()->user()->load('file');
+            @endphp
+
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="avatarToggle">
+                    @if ($authUser->file)
+                        <img src="{{ Storage::url($authUser->file->path) }}" class="profile-avatars" alt="Avatar">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($authUser->nama) }}&size=200&background=41A67E&color=fff"
+                            class="profile-avatars" alt="Avatar">
+                    @endif
+                </button>
+
+                <div class="dropdown-menu" id="avatarMenu">
+                    <div class="dropdown-header">
+                        <strong>{{ $authUser->nama }}</strong><br>
+                        <small>{{ $authUser->email }}</small>
+                    </div>
+
+                    <a href="{{ route('profile.own') }}" class="dropdown-item">
+                        <i class="bi bi-person"></i> Profil Saya
+                    </a>
+
+                    <a href="#" class="dropdown-item">
+                        <i class="bi bi-gear"></i> Pengaturan Akun
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="dropdown-item text-danger w-100 text-start">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
         @else
             <a href="{{ route('login') }}" class="profile-btn">
                 Login
