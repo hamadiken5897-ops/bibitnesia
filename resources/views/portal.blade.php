@@ -155,10 +155,10 @@
                         style="background-image: url('{{ asset('portal/images/hero/hero-2.jpg') }}');">
                         <div class="hero-overlay"></div>
                         <div class="hero-content">
-                            <h1 class="hero-title">Ribuan Pilihan Tanaman<br>untuk Taman Impian Anda</h1>
-                            <p class="hero-subtitle">Dari tanaman hias, buah, hingga sayuran segar</p>
+                            <h1 class="hero-title">Bergabung dengan <br> komunitas petani</h1>
+                            <p class="hero-subtitle">Kembangkan perkebunan anda bersama ribuan petani di seluruh indonesia</p>
                             <a href="{{ route('marketplace.index') }}" class="btn-marketplace">
-                                <i class="bi bi-search"></i> Jelajahi Produk
+                                <i class="bi bi-people"></i> Gabung Komunitas
                             </a>
                         </div>
                     </div>
