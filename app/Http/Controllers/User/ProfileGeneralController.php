@@ -58,25 +58,23 @@ class ProfileGeneralController extends Controller
 
         // Upload foto profil jika ada
         if ($request->hasFile('profile_image')) {
-            // Hapus file lama jika ada
             if ($user->file) {
-                Storage::delete($user->file->path);
+                Storage::disk('public_web')->delete($user->file->path);
                 $user->file->delete();
             }
 
             $file = $request->file('profile_image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = $user->id_user . '_' . time() . '.' . $extension;
-            $folder = 'profiles/' . $user->id_user;
+            $filename = $user->id_user . '_' . time() . '.' . $file->getClientOriginalExtension();
+
             $path = $file->storeAs('profiles/' . $user->id_user, $filename, 'public_web');
 
             $user->file()->create([
                 'alias' => 'foto-profil',
                 'filename' => $filename,
-                'path' => $path, //perbaiki
+                'path' => $path,
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
-                'fileable_type' => 'App\Models\User',
+                'fileable_type' => User::class,
                 'fileable_id' => $user->id_user,
             ]);
         }
