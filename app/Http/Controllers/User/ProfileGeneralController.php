@@ -71,7 +71,7 @@ class ProfileGeneralController extends Controller
             $user->file()->create([
                 'alias' => 'foto-profil',
                 'filename' => $filename,
-                'path' => 'public/' . $path,
+                'path' => $path, //perbaiki
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
                 'fileable_type' => 'App\Models\User',
