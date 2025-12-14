@@ -14,7 +14,9 @@ class ProfileGeneralController extends Controller
      */
     public function showOwn()
     {
-        $user = auth()->user()->load(['penjual', 'kurir', 'file']);
+        $user = auth()
+            ->user()
+            ->load(['penjual', 'kurir', 'file']);
         $isOwner = true;
 
         return view('profile.show', compact('user', 'isOwner'));
@@ -66,7 +68,7 @@ class ProfileGeneralController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = $user->id_user . '_' . time() . '.' . $extension;
             $folder = 'profiles/' . $user->id_user;
-            $path = $file->storeAs($folder, $filename, 'public');
+            $path = $file->storeAs('profiles/' . $user->id_user, $filename, 'public_web');
 
             $user->file()->create([
                 'alias' => 'foto-profil',
