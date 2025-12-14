@@ -62,10 +62,11 @@ return [
 
         'public_web' => [
             'driver' => 'local',
-            'root' => dirname(__DIR__, 3) . '/public_html/bibitnesia.inovasia.site/storage',
+            'root' => env('PUBLIC_STORAGE_PATH', public_path('storage')),
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
+
 
     ],
 
