@@ -11,15 +11,11 @@ class PortalController extends Controller
     public function index()
     {
         // Ambil produk populer
-        $produkPopuler = Produk::with(['user', 'kategori'])
-            ->where('status', 'tersedia')
-            ->orderBy('created_at', 'desc')
-            ->take(8)
-            ->get();
+        $produkPopuler = Produk::with('penjual')->where('status', 'tersedia')->latest()->take(8)->get();
 
         // ==== Notifikasi hanya jika user login ====
         $notifCount = 0;
-        $notifLatest = [];
+        $notifLatest = collect();
 
         if (auth()->check()) {
             $notifCount = NotifikasiUser::where('id_user', auth()->user()->id_user)

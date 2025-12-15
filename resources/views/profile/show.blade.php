@@ -26,14 +26,18 @@
 
                             {{-- Foto Profil --}}
                             <div class="col-md-3 text-center mb-3 mb-md-0">
-                                @if ($user->file)
-                                    <img src="{{ asset('storage/' . $user->file->path) }}" alt="{{ $user->nama }}"
-                                        class="profile-avatar">
-                                @else
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama) }}&size=200&background=27ae60&color=fff"
-                                        alt="{{ $user->nama }}" class="profile-avatar">
-                                @endif
+                                @php
+                                    $fotoProfil = $user->profile_image
+                                        ? asset('storage/' . $user->profile_image)
+                                        : 'https://ui-avatars.com/api/?name=' .
+                                            urlencode($user->nama) .
+                                            '&size=200&background=27ae60&color=fff';
+                                @endphp
+
+                                <img src="{{ $fotoProfil }}" alt="{{ $user->nama }}" class="profile-avatar">
                             </div>
+
+
 
                             {{-- Info Profile --}}
                             <div class="col-md-9">

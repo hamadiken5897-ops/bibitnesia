@@ -16,19 +16,19 @@ class ProfileGeneralController extends Controller
     {
         $user = auth()
             ->user()
-            ->load(['penjual', 'kurir', 'file']);
+            ->load(['penjual', 'kurir']);
         $isOwner = true;
 
         return view('profile.show', compact('user', 'isOwner'));
     }
 
     /**
-     * Tampilkan profil user lain berdasarkan ID
+     * Tampilkan profil user lain
      */
     public function show($userId)
     {
-        $user = User::with(['penjual', 'kurir', 'file'])->findOrFail($userId);
-        $isOwner = auth()->check() && auth()->id() == $userId;
+        $user = User::with(['penjual', 'kurir'])->findOrFail($userId);
+        $isOwner = auth()->check() && auth()->id() === $user->id_user;
 
         return view('profile.show', compact('user', 'isOwner'));
     }
@@ -40,15 +40,12 @@ class ProfileGeneralController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:100',
-            'no_telepon' => 'nullable|string|max:25',
-            'alamat' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string|max:500',
-            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'profile_image' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $user = auth()->user();
 
-        // Update data user
         $user->update([
             'nama' => $request->nama,
             'no_telepon' => $request->no_telepon,
@@ -56,29 +53,26 @@ class ProfileGeneralController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        // Upload foto profil jika ada
         if ($request->hasFile('profile_image')) {
-            if ($user->file) {
-                Storage::disk('public_web')->delete($user->file->path);
-                $user->file->delete();
+            $userCode = $user->id_user;
+
+            // Pastikan folder user ada
+            Storage::disk('public')->makeDirectory("profiles/{$userCode}");
+
+            // Hapus avatar lama
+            if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+                Storage::disk('public')->delete($user->profile_image);
             }
 
-            $file = $request->file('profile_image');
-            $filename = $user->id_user . '_' . time() . '.' . $file->getClientOriginalExtension();
+            // Simpan avatar
+            $path = $request->file('profile_image')->storeAs("profiles/{$userCode}", 'avatar.jpg', 'public');
 
-            $path = $file->storeAs('profiles/' . $user->id_user, $filename, 'public_web');
-
-            $user->file()->create([
-                'alias' => 'foto-profil',
-                'filename' => $filename,
-                'path' => $path,
-                'mime_type' => $file->getClientMimeType(),
-                'size' => $file->getSize(),
-                'fileable_type' => User::class,
-                'fileable_id' => $user->id_user,
+            // Simpan path ke DB
+            $user->update([
+                'profile_image' => $path,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+        return back()->with('success', 'Profil berhasil diperbarui');
     }
 }

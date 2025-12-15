@@ -23,6 +23,7 @@ class User extends Authenticatable
         'no_telepon',
         'alamat',
         'deskripsi',
+        'profile_image',
         'role',
         'tanggal_daftar',
         'status_akun',

@@ -156,7 +156,8 @@
                         <div class="hero-overlay"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">Bergabung dengan <br> komunitas petani</h1>
-                            <p class="hero-subtitle">Kembangkan perkebunan anda bersama ribuan petani di seluruh indonesia</p>
+                            <p class="hero-subtitle">Kembangkan perkebunan anda bersama ribuan petani di seluruh
+                                indonesia</p>
                             <a href="{{ route('marketplace.index') }}" class="btn-marketplace">
                                 <i class="bi bi-people"></i> Gabung Komunitas
                             </a>
@@ -291,34 +292,63 @@
     <section id="produk" class="products-section">
         <div class="container">
             <h2 class="section-title">Produk Populer</h2>
-            <p class="section-subtitle">Tanaman pilihan yang paling banyak diminati pelanggan kami</p>
+            <p class="section-subtitle">
+                Tanaman pilihan yang paling banyak diminati pelanggan kami
+            </p>
 
             <div class="row g-4">
-                {{-- Loop untuk data dari database (jika tersedia) --}}
+
+                {{-- ========================= --}}
+                {{-- DATA ASLI DARI DATABASE --}}
+                {{-- ========================= --}}
                 @if (isset($produkPopuler) && $produkPopuler->count() > 0)
+
                     @foreach ($produkPopuler as $produk)
                         <div class="col-lg-3 col-md-6">
                             <div class="product-card">
-                                <img src="{{ asset('storage/' . $produk->foto_produk) }}"
+
+                                {{-- FOTO --}}
+                                <img src="{{ asset('storage/' . $produk->foto_produk1) }}"
                                     alt="{{ $produk->nama_produk }}" class="product-image">
+
                                 <div class="product-body">
-                                    <span
-                                        class="product-category">{{ $produk->kategori->nama_kategori ?? 'Lainnya' }}</span>
-                                    <h3 class="product-title">{{ $produk->nama_produk }}</h3>
+
+                                    {{-- KATEGORI (ENUM / STRING) --}}
+                                    <span class="product-category">
+                                        {{ str_replace('_', ' ', ucfirst($produk->kategori)) }}
+                                    </span>
+
+                                    {{-- NAMA --}}
+                                    <h3 class="product-title">
+                                        {{ $produk->nama_produk }}
+                                    </h3>
+
+                                    {{-- PENJUAL --}}
                                     <p class="product-seller">
-                                        <i class="bi bi-shop"></i> {{ $produk->user->name }}
+                                        <i class="bi bi-shop"></i>
+                                        {{ $produk->penjual->nama_penjual ?? 'Penjual' }}
                                     </p>
-                                    <div class="product-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}
+
+                                    {{-- HARGA --}}
+                                    <div class="product-price">
+                                        Rp {{ number_format($produk->harga, 0, ',', '.') }}
                                     </div>
+
+                                    {{-- LOKASI (OPTIONAL) --}}
                                     <p class="product-location">
-                                        <i class="bi bi-geo-alt-fill"></i> {{ $produk->lokasi ?? 'Indonesia' }}
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        {{ $produk->lokasi ?? 'Indonesia' }}
                                     </p>
+
                                 </div>
                             </div>
                         </div>
                     @endforeach
+
+                    {{-- ========================= --}}
+                    {{-- DUMMY (JIKA DB KOSONG) --}}
+                    {{-- ========================= --}}
                 @else
-                    {{-- Dummy Products jika tidak ada data dari database --}}
                     @php
                         $dummyProducts = [
                             [
@@ -394,33 +424,44 @@
                                 <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}"
                                     class="product-image">
                                 <div class="product-body">
-                                    <span class="product-category">{{ $product['category'] }}</span>
-                                    <h3 class="product-title">{{ $product['name'] }}</h3>
+                                    <span class="product-category">
+                                        {{ $product['category'] }}
+                                    </span>
+                                    <h3 class="product-title">
+                                        {{ $product['name'] }}
+                                    </h3>
                                     <p class="product-seller">
                                         <i class="bi bi-shop"></i> {{ $product['seller'] }}
                                     </p>
-                                    <div class="product-price">{{ $product['price'] }}</div>
+                                    <div class="product-price">
+                                        {{ $product['price'] }}
+                                    </div>
                                     <p class="product-location">
-                                        <i class="bi bi-geo-alt-fill"></i> {{ $product['location'] }}
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        {{ $product['location'] }}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 @endif
-            </div>
 
-            <!-- CTA Banner -->
-            <div class="cta-banner">
-                <div class="container">
-                    <h2>Temukan Ribuan Tanaman Lainnya</h2>
-                    <p>Jelajahi koleksi lengkap tanaman hias, buah, sayur, dan herbal dari seluruh Indonesia</p>
-                    <a href="{{ route('marketplace.index') }}" class="btn-explore">
-                        <i class="bi bi-arrow-right-circle"></i> Jelajahi Peta Pelayanan
-                    </a>
-                </div>
             </div>
         </div>
+    </section>
+
+
+    <!-- CTA Banner -->
+    <div class="cta-banner">
+        <div class="container">
+            <h2>Temukan Ribuan Tanaman Lainnya</h2>
+            <p>Jelajahi koleksi lengkap tanaman hias, buah, sayur, dan herbal dari seluruh Indonesia</p>
+            <a href="{{ route('marketplace.index') }}" class="btn-explore">
+                <i class="bi bi-arrow-right-circle"></i> Jelajahi Peta Pelayanan
+            </a>
+        </div>
+    </div>
+    </div>
     </section>
 
     <!-- Footer -->
