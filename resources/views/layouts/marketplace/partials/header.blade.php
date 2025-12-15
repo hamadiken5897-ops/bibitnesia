@@ -56,11 +56,10 @@
                     <img src="{{ $avatar }}" class="profile-avatars" alt="Avatar">
                 </button>
 
-
                 <div class="dropdown-menu" id="avatarMenu">
                     <div class="dropdown-header">
-                        <strong>{{ $user->nama }}</strong><br>
-                        <small>{{ $user->email }}</small>
+                        <strong>{{ $authUser->nama }}</strong><br>
+                        <small>{{ $authUser->email }}</small>
                     </div>
 
                     <a href="{{ route('profile.own') }}" class="dropdown-item">
@@ -76,6 +75,7 @@
                 </div>
             </div>
         @endauth
+
 
     </div>
 </div>
