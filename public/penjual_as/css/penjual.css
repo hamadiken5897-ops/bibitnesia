@@ -1,0 +1,278 @@
+/* Body */
+
+.product-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* ===== Tambah Produk Card ===== */
+.add-product-card {
+    display: block;
+    height: 100%;
+    border-radius: 14px;
+    border: 2px dashed #4caf50;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.add-product-card:hover {
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.add-product-inner {
+    height: 100%;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #4caf50;
+    font-weight: 600;
+}
+
+.add-product-inner i {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.product-card .carousel {
+    height: 180px;
+    overflow: hidden;
+}
+
+.product-card img {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-body {
+    padding: 12px;
+}
+
+.product-card .carousel-inner,
+.product-card .carousel-item,
+.product-card img {
+    height: 180px;
+}
+
+.add-product-card {
+    border: 2px dashed #4caf50;
+    border-radius: 14px;
+    height: 100%;
+    text-decoration: none;
+}
+
+.add-product-inner {
+    height: 100%;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #4caf50;
+    font-weight: 600;
+}
+
+/*.carousel-inner img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+}*/
+/* ===== PRODUK CAROUSEL ===== */
+.product-carousel {
+    height: 180px;
+    width: 280px;
+    overflow: hidden;
+    border-radius: 14px;
+    position: relative;
+}
+
+.product-carousel .carousel-inner,
+.product-carousel .carousel-item {
+    height: 180px;
+    
+}
+
+.product-carousel img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* ===== CONTROL DISAMARKAN ===== */
+.product-carousel .carousel-control-prev,
+.product-carousel .carousel-control-next {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+/* MUNCUL SAAT HOVER */
+.product-card:hover .carousel-control-prev,
+.product-card:hover .carousel-control-next {
+    opacity: 0.25;
+}
+
+/* PERKECIL ICON */
+.product-carousel .carousel-control-prev-icon,
+.product-carousel .carousel-control-next-icon {
+    width: 22px;
+    height: 22px;
+    background-size: 100%;
+}
+
+/* ===== SINGLE IMAGE ===== */
+.product-image-single {
+    height: 180px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.product-image-single img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+
+/* ===== PREVIEW FIX ===== */
+
+/* ===== PREVIEW FINAL ===== */
+.preview-card {
+    width: 100%;
+}
+
+.preview-box {
+    width: 100%;
+    height: 360px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 2px line #cfe3d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+/* Inner content */
+.preview-empty {
+    text-align: center;
+    color: #6b7280;
+}
+
+.preview-empty i {
+    font-size: 48px;
+    color: #4caf50;
+    margin-bottom: 12px;
+}
+
+.preview-empty p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.preview-empty span {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.preview-thumb {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    flex: 0 0 auto;
+
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+.preview-thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+
+    flex-wrap: nowrap; /* ⬅️ PENTING: JANGAN BOLEH WRAP */
+    overflow-x: auto; /* ⬅️ SCROLL KE SAMPING */
+    padding-bottom: 6px;
+}
+
+/* Hilangkan scrollbar jelek (opsional) */
+.preview-thumbs::-webkit-scrollbar {
+    height: 6px;
+}
+
+.preview-thumbs::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.preview-thumb .remove-thumb {
+    position: absolute;
+    top: -6px; /* ⬅️ naik sedikit */
+    right: -6px; /* ⬅️ ke kanan sedikit */
+
+    width: 18px;
+    height: 18px;
+
+    background: #ef4444;
+    color: #fff;
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: center;
+
+    cursor: pointer;
+    z-index: 5;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.preview-thumbs div {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.preview-thumbs div.active {
+    border-color: #198754;
+}
+
+/* Badge */
+.badge-status {
+    background: #198754;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.badge-kategori {
+    background: #6c757d;
+    padding: 6px 14px;
+    border-radius: 20px;
+}

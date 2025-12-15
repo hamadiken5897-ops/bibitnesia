@@ -27,18 +27,10 @@
                 </li>
 
                 {{-- Produk Saya --}}
-                <li class="sidebar-item {{ request()->routeIs('penjual.produk') ? 'active' : '' }}">
+                <li class="sidebar-item {{ request()->routeIs('penjual.produk*') ? 'active' : '' }}">
                     <a href="{{ route('penjual.produk') }}" class="sidebar-link">
                         <i class="bi bi-box-seam"></i>
                         <span>Produk Saya</span>
-                    </a>
-                </li>
-
-                {{-- Tambah Produk --}}
-                <li class="sidebar-item {{ request()->routeIs('penjual.produk.tambah') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.produk.tambah') }}" class='sidebar-link'>
-                        <i class="bi bi-plus-circle"></i>
-                        <span>Tambah Produk</span>
                     </a>
                 </li>
 
@@ -87,7 +79,7 @@
             const btn = document.getElementById("user-menu-btn");
             const dropdown = document.getElementById("user-dropdown");
 
-            if(btn){
+            if (btn) {
                 btn.addEventListener("click", (e) => {
                     e.stopPropagation();
                     dropdown.classList.toggle("opacity-0");

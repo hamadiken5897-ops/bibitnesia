@@ -27,7 +27,6 @@ use App\Http\Controllers\User\ProfileGeneralController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
@@ -148,7 +147,7 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    // profil global 
+    // profil global
     // Lihat profil sendiri
     Route::get('/my-profile', [ProfileGeneralController::class, 'showOwn'])->name('profile.own');
     // Update profil
@@ -210,8 +209,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
             // PRODUK
-            Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
-            Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
+            Route::resource('produk', App\Http\Controllers\Admin\ProdukController::class)->except(['create', 'store']);
 
             // PEMBAYARAN
             Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
@@ -242,13 +240,13 @@ Route::middleware(['auth'])->group(function () {
                 return view('penjual.penjual');
             })->name('dashboard');
 
-            Route::get('/produk', function () {
-                return view('penjual.produk');
-            })->name('produk');
-
-            Route::get('/produk/tambah', function () {
-                return view('penjual.tambah-produk');
-            })->name('produk.tambah');
+            // Crud Produk
+            Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
+            Route::get('/produk/tambah', [App\Http\Controllers\Penjual\ProdukController::class, 'create'])->name('produk.create');
+            Route::post('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'store'])->name('produk.store');
+            Route::get('/produk/{produk}/edit', [App\Http\Controllers\Penjual\ProdukController::class, 'edit'])->name('produk.edit');
+            Route::put('/produk/{produk}', [App\Http\Controllers\Penjual\ProdukController::class, 'update'])->name('produk.update');
+            Route::delete('/produk/{produk}', [App\Http\Controllers\Penjual\ProdukController::class, 'destroy'])->name('produk.destroy');
 
             Route::get('/pesanan', function () {
                 return view('penjual.pesanan');

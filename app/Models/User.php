@@ -76,7 +76,7 @@ class User extends Authenticatable
     // ---------------------------------------------------------//
     public function penjual()
     {
-        return $this->hasOne(\App\Models\Penjual::class, 'id_user', 'id_user');
+        return $this->hasOne(Penjual::class, 'id_user', 'id_user');
     }
 
     public function kurir()

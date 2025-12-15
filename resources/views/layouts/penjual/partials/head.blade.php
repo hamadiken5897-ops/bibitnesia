@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="{{ asset('dist/assets/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
 <link rel="stylesheet" href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
 <link rel="stylesheet" href="{{ asset('dist/assets/css/app.css') }}">
+<link rel="stylesheet" href="{{ asset('penjual_as/css/penjual.css') }}">
 <link rel="shortcut icon" href="{{ asset('dist/assets/images/favicon.svg') }}" type="image/x-icon">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('styles')
