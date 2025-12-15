@@ -236,9 +236,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('penjual')
         ->name('penjual.')
         ->group(function () {
-            Route::get('/dashboard', function () {
-                return view('penjual.penjual');
-            })->name('dashboard');
+            Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
 
             // Crud Produk
             Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
