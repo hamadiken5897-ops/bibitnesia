@@ -26,6 +26,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\ProfileGeneralController;
 
 // Admin Controllers
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
@@ -91,13 +92,11 @@ Route::middleware(['auth'])->group(function () {
     */
     /*
 |--------------------------------------------------------------------------
-| DASHBOARD PER ROLE (VERSI LAMA )
+| DASHBOARD PER ROLE
 |--------------------------------------------------------------------------
 */
 
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
+    // Dashboard routes akan dihandle di masing-masing prefix controller
     Route::get('/penjual/dashboard', fn() => view('penjual.penjual'))->name('penjual.dashboard');
     Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
     Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
@@ -210,7 +209,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')
         ->name('admin.')
         ->group(function () {
-            Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+            // ✅ DASHBOARD - Menggunakan AdminDashboardController
+            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
             // USER
             Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -222,7 +222,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
             // PRODUK
-
             Route::prefix('produk')
                 ->name('produk.')
                 ->group(function () {
@@ -382,5 +381,3 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
-
-
