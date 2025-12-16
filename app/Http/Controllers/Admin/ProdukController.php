@@ -60,7 +60,7 @@ class ProdukController extends Controller
         
         Log::info('Show Produk', ['id' => $produk->id_produk]);
         
-        return view('admin.produk.show', compact('produk'));
+        return view('admin.manajemen.Produk.show', compact('produk'));
     }
 
     /**

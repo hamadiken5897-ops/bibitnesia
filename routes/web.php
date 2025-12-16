@@ -222,6 +222,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')
         ->name('admin.')
         ->group(function () {
+            Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
             // USER
             Route::get('/users', [UserController::class, 'index'])->name('users.index');
             Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
