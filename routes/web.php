@@ -202,6 +202,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/marketplace/invoice/{id_pesanan}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('marketplace.invoice');
     Route::get('/marketplace/pesanan-saya', [App\Http\Controllers\PesananController::class, 'index'])->name('marketplace.pesanan.saya');
+    Route::get('/pembayaran/{id}/proses', function ($id) {
+        $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
+
+        if ($pesanan->status_pesanan === 'Menunggu Pembayaran') {
+            $pesanan->update([
+                'status_pesanan' => 'Pesanan sedang diproses',
+            ]);
+        }
+
+        return redirect()->route('marketplace.pesanan.saya')->with('success', 'Pembayaran berhasil (simulasi)');
+    })->name('pembayaran.proses');
+
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTES
@@ -380,5 +392,3 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
-
-
