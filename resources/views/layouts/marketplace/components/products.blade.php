@@ -10,8 +10,8 @@
                     <img src="{{ asset('storage/' . $item->foto_produk1) }}" alt="{{ $item->nama_produk }}"
                         onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
 
-                    <span class="product-badge">
-                        {{ $item->status === 'aktif' ? 'TERSEDIA' : 'HABIS' }}
+                    <span class="product-badge {{ $item->stok > 0 ? 'badge-success' : 'badge-danger' }}">
+                        {{ $item->stok > 0 ? 'TERSEDIA' : 'HABIS' }}
                     </span>
                 </div>
 

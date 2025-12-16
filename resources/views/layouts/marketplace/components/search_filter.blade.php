@@ -2,7 +2,7 @@
     <form action="{{ route('marketplace.index') }}" method="GET">
         <div class="search-bar">
             <input type="text" name="search" placeholder="Cari tanaman, bibit, atau lainnya..."
-                   value="{{ request('search') }}">
+                value="{{ request('search') }}">
             <button type="submit"><i class="fas fa-search"></i> Cari</button>
         </div>
 
@@ -22,9 +22,12 @@
                 <label>Lokasi</label>
                 <select name="lokasi">
                     <option value="">Semua Lokasi</option>
-                    <option value="jakarta">Jakarta</option>
-                    <option value="bandung">Bandung</option>
-                    <option value="surabaya">Surabaya</option>
+                    @foreach (\App\Models\Provinsi::orderBy('nama_provinsi')->get() as $prov)
+                        <option value="{{ $prov->nama_provinsi }}"
+                            {{ request('lokasi') == $prov->nama_provinsi ? 'selected' : '' }}>
+                            {{ $prov->nama_provinsi }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 
@@ -35,6 +38,13 @@
                     <option value="termurah">Termurah</option>
                     <option value="termahal">Termahal</option>
                 </select>
+            </div>
+            <div class="filter-row">g
+                <div class="filter-item d-flex align-items-end">
+                    <a href="{{ route('marketplace.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset Filter
+                    </a>
+                </div>
             </div>
 
         </div>

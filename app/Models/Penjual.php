@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Provinsi;
 use Illuminate\Database\Eloquent\Model;
 
 class Penjual extends Model
 {
-    protected $table = 'penjuals';
+    protected $table = 'penjuals'; // 
     protected $primaryKey = 'id_penjual';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -31,8 +30,16 @@ class Penjual extends Model
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
+
+    // Relasi ke Provinsi
     public function provinsi()
     {
-        return $this->belongsTo(Provinsi::class, 'id_provinsi');
+        return $this->belongsTo(Provinsi::class, 'id_provinsi', 'id_provinsi');
+    }
+
+    // ✅ TAMBAHKAN INI - Relasi ke Produk
+    public function produk()
+    {
+        return $this->hasMany(Produk::class, 'id_penjual', 'id_penjual');
     }
 }

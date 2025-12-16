@@ -1,0 +1,156 @@
+@extends('layouts.admin.admin')
+
+@section('page-title', 'Product Management')
+
+@section('content')
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Product Management</h3>
+                <p class="text-subtitle text-muted">Kelola semua produk dari penjual</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                {{-- Filter --}}
+                <form action="{{ route('admin.produk.index') }}" method="GET" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" name="search" class="form-control" 
+                                   placeholder="Cari produk..." 
+                                   value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="status" class="form-select">
+                                <option value="">Semua Status</option>
+                                <option value="tersedia" {{ request('status') == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
+                                <option value="tidak_tersedia" {{ request('status') == 'tidak_tersedia' ? 'selected' : '' }}>Tidak Tersedia</option>
+                                <option value="habis" {{ request('status') == 'habis' ? 'selected' : '' }}>Habis</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="kategori" class="form-select">
+                                <option value="">Semua Kategori</option>
+                                <option value="tanaman_hias" {{ request('kategori') == 'tanaman_hias' ? 'selected' : '' }}>Tanaman Hias</option>
+                                <option value="buah" {{ request('kategori') == 'buah' ? 'selected' : '' }}>Buah-buahan</option>
+                                <option value="sayuran" {{ request('kategori') == 'sayuran' ? 'selected' : '' }}>Sayuran</option>
+                                <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                {{-- Alert --}}
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                {{-- Table --}}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nama Produk</th>
+                                <th>Penjual</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($produk as $item)
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset('storage/' . $item->foto_produk1) }}" 
+                                             alt="{{ $item->nama_produk }}"
+                                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                                             onerror="this.src='https://via.placeholder.com/60'">
+                                    </td>
+                                    <td>
+                                        <strong>{{ $item->nama_produk }}</strong><br>
+                                        <small class="text-muted">{{ Str::limit($item->deskripsi, 50) }}</small>
+                                    </td>
+                                    <td>
+                                        {{ $item->penjual->user->nama ?? '-' }}<br>
+                                        <small class="text-muted">{{ $item->penjual->provinsi->nama_provinsi ?? '-' }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ ucfirst(str_replace('_', ' ', $item->kategori)) }}</span>
+                                    </td>
+                                    <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
+                                    <td>{{ $item->stok }}</td>
+                                    <td>
+                                        @if($item->status == 'tersedia')
+                                            <span class="badge bg-success">Tersedia</span>
+                                        @else
+                                            <span class="badge bg-danger">{{ ucfirst($item->status) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('admin.produk.show', $item->id_produk) }}" 
+                                               class="btn btn-sm btn-info" title="Detail">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-danger" 
+                                                    onclick="confirmDelete('{{ $item->id_produk }}')"
+                                                    title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <form id="delete-form-{{ $item->id_produk }}" 
+                                              action="{{ route('admin.produk.destroy', $item->id_produk) }}" 
+                                              method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="bi bi-inbox" style="font-size: 48px; opacity: 0.5;"></i>
+                                        <p class="text-muted mt-2">Tidak ada produk</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div class="mt-3">
+                    {{ $produk->appends(request()->query())->links() }}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+function confirmDelete(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
+        document.getElementById('delete-form-' + id).submit();
+    }
+}
+</script>
+@endsection
