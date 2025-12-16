@@ -200,6 +200,8 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('auth')
         ->name('checkout.store');
 
+    Route::get('/marketplace/invoice/{id_pesanan}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('marketplace.invoice');
+    Route::get('/marketplace/pesanan-saya', [App\Http\Controllers\PesananController::class, 'index'])->name('marketplace.pesanan.saya');
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTES
@@ -246,7 +248,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('penjual.')
         ->group(function () {
             Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
-
+            Route::get('/penjual/saldo', [App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('penjual.saldo');
             // Crud Produk
             Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
             Route::get('/produk/tambah', [App\Http\Controllers\Penjual\ProdukController::class, 'create'])->name('produk.create');
@@ -370,3 +372,5 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
+
+

@@ -61,7 +61,6 @@ class CheckoutController extends Controller
 
         $totalProduk = 0;
 
-        // 🔐 HITUNG TOTAL PRODUK DI SERVER
         foreach ($request->items as $item) {
             $produk = Produk::where('id_produk', $item['id_produk'])->firstOrFail();
             $totalProduk += $produk->harga * $item['jumlah'];
@@ -69,12 +68,28 @@ class CheckoutController extends Controller
 
         $totalHarga = $totalProduk + $request->ongkir;
 
-        DB::transaction(function () use ($request, $totalHarga) {
-            $idPesanan = 'ORD-' . strtoupper(Str::random(10));
+        $pesananId = null;
 
-            // 1️⃣ PESANAN
+        DB::transaction(function () use ($request, $totalHarga, &$pesananId) {
+            // ===============================
+            // 1️⃣ GENERATE ID & INVOICE
+            // ===============================
+            $pesananId = 'ORD-' . strtoupper(Str::random(10));
+
+            $today = now()->format('Ymd');
+
+            $lastInvoice = DB::table('pesanans')->whereDate('created_at', today())->orderBy('created_at', 'desc')->value('kode_invoice');
+
+            $urutan = $lastInvoice ? str_pad((int) substr($lastInvoice, -6) + 1, 6, '0', STR_PAD_LEFT) : '000001';
+
+            $kodeInvoice = "INV-{$today}-{$urutan}";
+
+            // ===============================
+            // 2️⃣ INSERT PESANAN
+            // ===============================
             DB::table('pesanans')->insert([
-                'id_pesanan' => $idPesanan,
+                'id_pesanan' => $pesananId,
+                'kode_invoice' => $kodeInvoice,
                 'id_user' => auth()->user()->id_user,
                 'tanggal_pesanan' => now(),
                 'total_harga' => $totalHarga,
@@ -83,13 +98,15 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // 2️⃣ DETAIL PESANAN (MULTI PRODUK)
+            // ===============================
+            // 3️⃣ DETAIL PESANAN
+            // ===============================
             foreach ($request->items as $item) {
                 $produk = Produk::where('id_produk', $item['id_produk'])->firstOrFail();
 
                 DB::table('detail_pesanans')->insert([
                     'id_detail_pesanan' => 'DTL-' . strtoupper(Str::random(10)),
-                    'id_pesanan' => $idPesanan,
+                    'id_pesanan' => $pesananId,
                     'id_produk' => $produk->id_produk,
                     'harga_satuan' => $produk->harga,
                     'jumlah' => $item['jumlah'],
@@ -99,19 +116,34 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // 3️⃣ PEMBAYARAN
+            // ===============================
+            // 4️⃣ GENERATE VA
+            // ===============================
+            $vaNomor = '8801' . str_pad(preg_replace('/\D/', '', $pesananId), 8, '0', STR_PAD_LEFT);
+
+            // ===============================
+            // 5️⃣ INSERT PEMBAYARAN (PENDING)
+            // ===============================
             DB::table('pembayarans')->insert([
                 'id_pembayaran' => 'PAY-' . strtoupper(Str::random(10)),
-                'id_pesanan' => $idPesanan,
-                'metode_pembayaran' => $request->metode,
+                'id_pesanan' => $pesananId,
+                'metode_pembayaran' => 'VA BANK',
+                'va_bank' => 'BCA',
+                'va_nomor' => $vaNomor,
                 'total_bayar' => $totalHarga,
+                'status_validasi' => 'pending',
+                'expired_at' => now()->addHours(24),
                 'tanggal_pembayaran' => null,
-                'status_validasi' => 'Pending',
+                'bukti_pembayaran' => null,
+                'tgl_validasi' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         });
 
-        return redirect()->route('marketplace.index')->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');
+        // ===============================
+        // 6️⃣ REDIRECT KE INVOICE
+        // ===============================
+        return redirect()->route('marketplace.invoice', $pesananId);
     }
 }

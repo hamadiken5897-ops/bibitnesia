@@ -141,14 +141,14 @@
                             <label>Metode Pembayaran *</label>
                             <select name="metode" required>
                                 <option value="">-- Pilih Metode --</option>
-                                <option value="VA BANK">VA BANK</option>
+                                <option value="VA BANK">VA BANK BCA</option>
                                 <option value="E-Wallet">E-Wallet</option>
                                 <option value="QRIS">QRIS</option>
                             </select>
                         </div>
 
                         {{-- hidden untuk backend --}}
-                        <input type="hidden" name="ongkir" id="ongkirValue">
+                        <input type="hidden" name="ongkir" value="{{ $ongkirTetap }}">
 
                         <button class="btn btn-success w-100 mt-3">
                             Konfirmasi Pesanan

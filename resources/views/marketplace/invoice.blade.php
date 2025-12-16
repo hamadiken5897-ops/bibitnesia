@@ -14,21 +14,28 @@
             <hr>
 
             <p class="mb-1">Metode Pembayaran</p>
-            <strong>Virtual Account {{ $pesanan->pembayaran->va_bank }}</strong>
+            <strong>Virtual Account {{ $pembayaran->va_bank }}</strong>
 
-            <div class="alert alert-light mt-3">
+            <div class="alert alert-light mt-3 text-center">
                 <small>Nomor Virtual Account</small>
-                <h5 class="fw-bold">{{ $pesanan->pembayaran->va_nomor }}</h5>
+                <h4 class="fw-bold mt-2">{{ $pembayaran->va_nomor }}</h4>
             </div>
 
             <p>Total Pembayaran</p>
             <h4 class="fw-bold text-success">
-                Rp {{ number_format($pesanan->total_bayar, 0, ',', '.') }}
+                Rp {{ number_format($pembayaran->total_bayar, 0, ',', '.') }}
             </h4>
 
-            <small class="text-muted">
-                Silakan lakukan pembayaran sebelum batas waktu.
-            </small>
+            @if ($pembayaran->status_validasi == 'pending')
+                <small class="text-danger d-block mt-2">
+                    Bayar sebelum:
+                    {{ \Carbon\Carbon::parse($pembayaran->expired_at)->format('d M Y H:i') }}
+                </small>
+            @elseif ($pembayaran->status_validasi == 'expired')
+                <div class="alert alert-danger mt-3">
+                    Pembayaran telah kedaluwarsa.
+                </div>
+            @endif
 
             <hr>
 
