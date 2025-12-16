@@ -123,9 +123,19 @@
                         <h5 class="section-title">Pengiriman & Pembayaran</h5>
 
                         <div class="shipping-box">
-                            <p><strong>Estimasi Ongkir</strong></p>
-                            <p id="ongkirText">Pilih provinsi terlebih dahulu</p>
+                            <p><strong>Ongkir</strong></p>
+                            <p>
+                                Rp {{ number_format($ongkirTetap, 0, ',', '.') }}
+                                <br>
+                                <small>
+                                    Total Bayar:
+                                    <strong>
+                                        Rp {{ number_format($totalProduk + $ongkirTetap, 0, ',', '.') }}
+                                    </strong>
+                                </small>
+                            </p>
                         </div>
+
 
                         <div class="input-group">
                             <label>Metode Pembayaran *</label>
@@ -172,9 +182,34 @@
                         }
                     }
 
-                    // progress bar
                     const progress = ((step - 1) / (totalSteps - 1)) * 100;
                     document.getElementById('progressLine').style.width = progress + '%';
+
+                    // 🔥 INI PENTING
+                    if (step === 3) {
+                        document.getElementById('ongkirValue').value = ongkirTetap;
+                    }
+                }
+
+                function hitungOngkir() {
+                    const provinsiSelect = document.getElementById('provinsi');
+                    const selected = provinsiSelect.options[provinsiSelect.selectedIndex];
+
+                    if (!selected || !selected.dataset.ongkir) {
+                        document.getElementById('ongkirText').innerText = 'Pilih provinsi terlebih dahulu';
+                        return;
+                    }
+
+                    const ongkir = parseInt(selected.dataset.ongkir);
+                    document.getElementById('ongkirValue').value = ongkir;
+
+                    document.getElementById('ongkirText').innerHTML = `Rp ${ongkir.toLocaleString('id-ID')}<br>
+        <small>Total Bayar:
+            <strong>
+                Rp ${(totalProduk + ongkir).toLocaleString('id-ID')}
+            </strong>
+        </small>
+    `;
                 }
 
                 function nextStep() {

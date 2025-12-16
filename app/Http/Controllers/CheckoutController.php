@@ -12,7 +12,11 @@ class CheckoutController extends Controller
 {
     /**
      * TAMPIL HALAMAN CHECKOUT
+     *
      */
+
+    private const ONGKIR_TETAP = 15000;
+
     public function create(Request $request)
     {
         $produk = Produk::where('id_produk', $request->id_produk)->firstOrFail();
@@ -21,10 +25,10 @@ class CheckoutController extends Controller
         $items = [
             [
                 'id_produk' => $produk->id_produk,
-                'nama'      => $produk->nama_produk,
-                'harga'     => $produk->harga,
-                'jumlah'    => $jumlah,
-                'subtotal'  => $produk->harga * $jumlah,
+                'nama' => $produk->nama_produk,
+                'harga' => $produk->harga,
+                'jumlah' => $jumlah,
+                'subtotal' => $produk->harga * $jumlah,
             ],
         ];
 
@@ -32,11 +36,12 @@ class CheckoutController extends Controller
 
         $provinsi = Provinsi::orderBy('nama_provinsi')->get();
 
-        return view('marketplace.checkout', compact(
-            'items',
-            'totalProduk',
-            'provinsi'
-        ));
+        return view('marketplace.checkout', [
+            'items' => $items,
+            'totalProduk' => $totalProduk,
+            'provinsi' => $provinsi,
+            'ongkirTetap' => self::ONGKIR_TETAP, // 🔥 INI WAJIB
+        ]);
     }
 
     /**
@@ -45,13 +50,13 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'items'                 => 'required|array|min:1',
-            'items.*.id_produk'     => 'required',
-            'items.*.jumlah'        => 'required|integer|min:1',
-            'provinsi'              => 'required',
-            'ongkir'                => 'required|integer|min:0',
-            'metode'                => 'required',
-            'alamat'                => 'required|string',
+            'items' => 'required|array|min:1',
+            'items.*.id_produk' => 'required',
+            'items.*.jumlah' => 'required|integer|min:1',
+            'provinsi' => 'required',
+            'ongkir' => 'required|integer|min:0',
+            'metode' => 'required',
+            'alamat' => 'required|string',
         ]);
 
         $totalProduk = 0;
@@ -65,52 +70,48 @@ class CheckoutController extends Controller
         $totalHarga = $totalProduk + $request->ongkir;
 
         DB::transaction(function () use ($request, $totalHarga) {
-
             $idPesanan = 'ORD-' . strtoupper(Str::random(10));
 
             // 1️⃣ PESANAN
             DB::table('pesanans')->insert([
-                'id_pesanan'      => $idPesanan,
-                'id_user'         => auth()->user()->id_user,
+                'id_pesanan' => $idPesanan,
+                'id_user' => auth()->user()->id_user,
                 'tanggal_pesanan' => now(),
-                'total_harga'     => $totalHarga,
-                'status_pesanan'  => 'Menunggu Pembayaran',
-                'created_at'      => now(),
-                'updated_at'      => now(),
+                'total_harga' => $totalHarga,
+                'status_pesanan' => 'Menunggu Pembayaran',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             // 2️⃣ DETAIL PESANAN (MULTI PRODUK)
             foreach ($request->items as $item) {
-
                 $produk = Produk::where('id_produk', $item['id_produk'])->firstOrFail();
 
                 DB::table('detail_pesanans')->insert([
                     'id_detail_pesanan' => 'DTL-' . strtoupper(Str::random(10)),
-                    'id_pesanan'        => $idPesanan,
-                    'id_produk'         => $produk->id_produk,
-                    'harga_satuan'      => $produk->harga,
-                    'jumlah'            => $item['jumlah'],
-                    'ongkir'            => $request->ongkir,
-                    'created_at'        => now(),
-                    'updated_at'        => now(),
+                    'id_pesanan' => $idPesanan,
+                    'id_produk' => $produk->id_produk,
+                    'harga_satuan' => $produk->harga,
+                    'jumlah' => $item['jumlah'],
+                    'ongkir' => $request->ongkir,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
 
             // 3️⃣ PEMBAYARAN
             DB::table('pembayarans')->insert([
-                'id_pembayaran'      => 'PAY-' . strtoupper(Str::random(10)),
-                'id_pesanan'         => $idPesanan,
-                'metode_pembayaran'  => $request->metode,
-                'total_bayar'        => $totalHarga,
+                'id_pembayaran' => 'PAY-' . strtoupper(Str::random(10)),
+                'id_pesanan' => $idPesanan,
+                'metode_pembayaran' => $request->metode,
+                'total_bayar' => $totalHarga,
                 'tanggal_pembayaran' => null,
-                'status_validasi'    => 'Pending',
-                'created_at'         => now(),
-                'updated_at'         => now(),
+                'status_validasi' => 'Pending',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         });
 
-        return redirect()
-            ->route('marketplace.index')
-            ->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');
+        return redirect()->route('marketplace.index')->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');
     }
 }

@@ -193,8 +193,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/marketplace/produk/{id}', [MarketplaceController::class, 'show'])->name('marketplace.produk.show');
 
-    Route::post('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
-    Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
+
+    // SIMPAN PESANAN (WAJIB LOGIN)
+    Route::post('/checkout/store', [CheckoutController::class, 'store'])
+        ->middleware('auth')
+        ->name('checkout.store');
 
     /*
     |--------------------------------------------------------------------------
