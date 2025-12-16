@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\NotifikasiUser;
+
 class MarketplaceController extends Controller
 {
     public function index(Request $request)
@@ -12,25 +13,37 @@ class MarketplaceController extends Controller
         $query = Produk::with(['penjual', 'penjual.provinsi']);
 
         // Filter berdasarkan search
-        if ($request->has('search') && $request->search != '') {
-            $query->where('nama_produk', 'like', '%' . $request->search . '%')->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_produk', 'like', '%' . $search . '%')->orWhere('deskripsi', 'like', '%' . $search . '%');
+            });
         }
 
         // Filter berdasarkan kategori
-        if ($request->has('kategori') && $request->kategori != '') {
+        if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
 
-        // Filter berdasarkan harga
-        if ($request->has('harga_min') && $request->harga_min != '') {
+        // Filter berdasarkan harga minimum
+        if ($request->filled('harga_min')) {
             $query->where('harga', '>=', $request->harga_min);
         }
-        if ($request->has('harga_max') && $request->harga_max != '') {
+
+        // Filter berdasarkan harga maximum
+        if ($request->filled('harga_max')) {
             $query->where('harga', '<=', $request->harga_max);
         }
 
+        // Filter berdasarkan lokasi (provinsi)
+        if ($request->filled('lokasi')) {
+            $query->whereHas('penjual.provinsi', function ($q) use ($request) {
+                $q->where('nama_provinsi', 'like', '%' . $request->lokasi . '%');
+            });
+        }
+
         // Sorting
-        if ($request->has('sort')) {
+        if ($request->filled('sort')) {
             switch ($request->sort) {
                 case 'termurah':
                     $query->orderBy('harga', 'asc');
@@ -39,8 +52,6 @@ class MarketplaceController extends Controller
                     $query->orderBy('harga', 'desc');
                     break;
                 case 'terbaru':
-                    $query->orderBy('created_at', 'desc');
-                    break;
                 default:
                     $query->orderBy('created_at', 'desc');
             }
@@ -48,8 +59,10 @@ class MarketplaceController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
+        // Filter produk tersedia saja
         $produk = $query->where('status', 'tersedia')->paginate(12);
 
+        // Notifikasi
         $notifCount = 0;
         $notifLatest = [];
 
@@ -69,9 +82,9 @@ class MarketplaceController extends Controller
 
     public function kategori($kategori)
     {
-        $produk = Produk::with('penjual')->where('kategori', $kategori)->where('status', 'aktif')->orderBy('created_at', 'desc')->paginate(12);
+        $produk = Produk::with('penjual')->where('kategori', $kategori)->where('status', 'tersedia')->orderBy('created_at', 'desc')->paginate(12);
 
-        // ========== Notifikasi ==========
+        // Notifikasi
         $notifCount = 0;
         $notifLatest = [];
 
@@ -91,18 +104,14 @@ class MarketplaceController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with([
-            'penjual',
-            'penjual.provinsi',
-            'penjual.user', // opsional, tapi future-proof
-        ])
+        $produk = Produk::with(['penjual', 'penjual.provinsi', 'penjual.user'])
             ->where('id_produk', $id)
             ->where('status', 'tersedia')
             ->firstOrFail();
-            
-        $produkTerkait = Produk::with('penjual')->where('kategori', $produk->kategori)->where('id_produk', '!=', $id)->where('status', 'aktif')->limit(4)->get();
 
-        // ========== Notifikasi ==========
+        $produkTerkait = Produk::with('penjual')->where('kategori', $produk->kategori)->where('id_produk', '!=', $id)->where('status', 'tersedia')->limit(4)->get();
+
+        // Notifikasi
         $notifCount = 0;
         $notifLatest = [];
 

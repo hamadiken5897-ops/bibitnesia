@@ -218,8 +218,16 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
             // PRODUK
-            Route::resource('produk', App\Http\Controllers\Admin\ProdukController::class)->except(['create', 'store']);
 
+            Route::prefix('produk')
+                ->name('produk.')
+                ->group(function () {
+                    Route::get('/', [App\Http\Controllers\Admin\ProdukController::class, 'index'])->name('index');
+                    Route::get('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'show'])->name('show');
+                    Route::get('/{produk}/edit', [App\Http\Controllers\Admin\ProdukController::class, 'edit'])->name('edit');
+                    Route::put('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'update'])->name('update');
+                    Route::delete('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'destroy'])->name('destroy');
+                });
             // PEMBAYARAN
             Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
             Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');

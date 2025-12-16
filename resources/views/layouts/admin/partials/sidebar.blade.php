@@ -40,9 +40,9 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('admin.produk') ? 'active' : '' }}">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-file-earmark-medical-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('admin.produk*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.produk.index') }}" class="sidebar-link">
+                        <i class="bi bi-box-seam"></i>
                         <span>Product Management</span>
                     </a>
                 </li>
@@ -100,17 +100,17 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-                    const btn = document.getElementById("user-menu-btn");
-                    const dropdown = document.getElementById("user-dropdown");
-                    btn.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        dropdown.classList.toggle("opacity-0");
-                        dropdown.classList.toggle("scale-95");
-                        dropdown.classList.toggle("pointer-events-none");
-                    });
-                    document.addEventListener("click", () => {
-                            dropdown.classList.add("opacity-0", "scale-95", "pointer-events - none ");
-                            });
-                    });
+            const btn = document.getElementById("user-menu-btn");
+            const dropdown = document.getElementById("user-dropdown");
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle("opacity-0");
+                dropdown.classList.toggle("scale-95");
+                dropdown.classList.toggle("pointer-events-none");
+            });
+            document.addEventListener("click", () => {
+                dropdown.classList.add("opacity-0", "scale-95", "pointer-events - none ");
+            });
+        });
     </script>
-    </div>
+</div>

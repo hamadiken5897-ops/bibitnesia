@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Produk extends Model
 {
-    protected $table = 'produks';
+    protected $table = 'produks'; // 
     protected $primaryKey = 'id_produk';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -26,10 +26,12 @@ class Produk extends Model
         'foto_produk3',
     ];
 
-    public function user()
+    // PENTING untuk route model binding
+    public function getRouteKeyName()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return 'id_produk';
     }
+
     // Relasi ke tabel Penjual
     public function penjual()
     {
@@ -42,7 +44,7 @@ class Produk extends Model
 
         static::creating(function ($model) {
             if (!$model->id_produk) {
-                $model->id_produk = 'PRD-' . Str::random(10);
+                $model->id_produk = 'PRD-' . strtoupper(Str::random(10));
             }
         });
     }
