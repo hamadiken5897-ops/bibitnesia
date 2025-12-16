@@ -191,6 +191,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifikasi/delete/{id}', [NotifikasiController::class, 'delete'])->name('notifikasi.delete');
     Route::post('/notifikasi/delete-all', [NotifikasiController::class, 'deleteAll'])->name('notifikasi.deleteAll');
 
+    Route::get('/marketplace/produk/{id}', [MarketplaceController::class, 'show'])->name('marketplace.produk.show');
+
     /*
     |--------------------------------------------------------------------------
     | ADMIN ROUTES

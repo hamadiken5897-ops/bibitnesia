@@ -9,7 +9,7 @@ class MarketplaceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Produk::with('user');
+        $query = Produk::with(['penjual', 'penjual.provinsi']);
 
         // Filter berdasarkan search
         if ($request->has('search') && $request->search != '') {
@@ -48,7 +48,7 @@ class MarketplaceController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $produk = $query->where('status', 'aktif')->paginate(12);
+        $produk = $query->where('status', 'tersedia')->paginate(12);
 
         $notifCount = 0;
         $notifLatest = [];
@@ -69,7 +69,7 @@ class MarketplaceController extends Controller
 
     public function kategori($kategori)
     {
-        $produk = Produk::with('user')->where('kategori', $kategori)->where('status', 'aktif')->orderBy('created_at', 'desc')->paginate(12);
+        $produk = Produk::with('penjual')->where('kategori', $kategori)->where('status', 'aktif')->orderBy('created_at', 'desc')->paginate(12);
 
         // ========== Notifikasi ==========
         $notifCount = 0;
@@ -91,9 +91,16 @@ class MarketplaceController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with('user')->findOrFail($id);
-
-        $produkTerkait = Produk::where('kategori', $produk->kategori)->where('id_produk', '!=', $id)->where('status', 'aktif')->limit(4)->get();
+        $produk = Produk::with([
+            'penjual',
+            'penjual.provinsi',
+            'penjual.user', // opsional, tapi future-proof
+        ])
+            ->where('id_produk', $id)
+            ->where('status', 'tersedia')
+            ->firstOrFail();
+            
+        $produkTerkait = Produk::with('penjual')->where('kategori', $produk->kategori)->where('id_produk', '!=', $id)->where('status', 'aktif')->limit(4)->get();
 
         // ========== Notifikasi ==========
         $notifCount = 0;

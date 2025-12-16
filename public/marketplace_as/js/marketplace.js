@@ -434,3 +434,12 @@ avatarToggle.addEventListener("click", function (e) {
 document.addEventListener("click", function () {
     avatarMenu.classList.remove("show");
 });
+
+document.querySelectorAll(".thumbnail").forEach((thumb) => {
+    thumb.addEventListener("click", function () {
+        document
+            .querySelectorAll(".thumbnail")
+            .forEach((t) => t.classList.remove("active"));
+        this.classList.add("active");
+    });
+});
