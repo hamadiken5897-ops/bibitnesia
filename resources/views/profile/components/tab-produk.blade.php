@@ -7,19 +7,13 @@
         <h5 class="fw-bold mb-0">
             <i class="bi bi-box-seam me-2"></i>Produk Dijual
         </h5>
-<<<<<<< Updated upstream
+
 
         @if ($isOwner)
             <a href="#" class="btn btn-success btn-sm">
                 <i class="bi bi-plus-circle me-1"></i>Tambah Produk
             </a>
-=======
-        
-        @if($isOwner)
-        <a href="#" class="btn btn-success btn-sm">
-            <i class="bi bi-plus-circle me-1"></i>Tambah Produk
-        </a>
->>>>>>> Stashed changes
+
         @endif
     </div>
 
@@ -76,7 +70,7 @@
             <p class="text-muted text-center">Menampilkan {{ $produks->count() }} produk</p>
         </div>
     @else
-<<<<<<< Updated upstream
+    
         {{-- Tidak ada produk --}}
         <div class="empty-state">
             <i class="bi bi-box-seam"></i>
@@ -90,21 +84,7 @@
                 <p class="text-muted">Penjual ini belum menambahkan produk.</p>
             @endif
         </div>
-=======
-    {{-- Tidak ada produk --}}
-    <div class="empty-state">
-        <i class="bi bi-box-seam"></i>
-        <h5>Belum Ada Produk</h5>
-        @if($isOwner)
-        <p class="text-muted">Mulai jual produk Anda sekarang!</p>
-        <a href="#" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i>Tambah Produk Pertama
-        </a>
-        @else
-        <p class="text-muted">Penjual ini belum menambahkan produk.</p>
-        @endif
-    </div>
->>>>>>> Stashed changes
+
     @endif
 
 </div>

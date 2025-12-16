@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Provinsi extends Model
 {
-    protected $table = 'provinsis';
-    protected $primaryKey = 'id_provinsi';
+    use HasFactory;
 
+    protected $table = 'provinsis'; // Nama tabel di database
+    
+    protected $primaryKey = 'id_provinsi'; // PRIMARY KEY harus sesuai dengan foreign key di PengajuanMitra
+    
     public $incrementing = true;
+    
     protected $keyType = 'int';
-
+    
     protected $fillable = [
-        'kode_provinsi',
         'nama_provinsi',
     ];
 }

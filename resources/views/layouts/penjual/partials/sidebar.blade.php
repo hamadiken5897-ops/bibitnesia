@@ -58,6 +58,14 @@
                     </a>
                 </li>
 
+                {{-- MENU MARKETPLACE --}}
+                <li class="sidebar-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
+                    <a href="{{ route('marketplace.index') }}" class='sidebar-link'>
+                        <i class="bi bi-shop"></i>
+                        <span>Marketplace</span>
+                    </a>
+                </li>
+
                 {{-- Logout --}}
                 <li class="sidebar-item">
                     <button type="button" class="sidebar-link"
@@ -79,7 +87,7 @@
             const btn = document.getElementById("user-menu-btn");
             const dropdown = document.getElementById("user-dropdown");
 
-            if (btn) {
+            if (btn && dropdown) {
                 btn.addEventListener("click", (e) => {
                     e.stopPropagation();
                     dropdown.classList.toggle("opacity-0");

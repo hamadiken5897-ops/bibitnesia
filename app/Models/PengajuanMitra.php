@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\Provinsi;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,7 +52,7 @@ class PengajuanMitra extends Model
     }
     public function provinsi()
     {
+
         return $this->belongsTo(Provinsi::class, 'id_provinsi');
     }
 }
-
