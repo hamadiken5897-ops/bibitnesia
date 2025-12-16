@@ -443,3 +443,8 @@ document.querySelectorAll(".thumbnail").forEach((thumb) => {
         this.classList.add("active");
     });
 });
+function confirmCheckout() {
+    const qty = document.getElementById('qty').value;
+
+    window.location.href = `/checkout?id_produk={{ $produk->id_produk }}&jumlah=${qty}`;
+}

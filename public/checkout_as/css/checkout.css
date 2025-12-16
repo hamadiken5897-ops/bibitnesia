@@ -1,0 +1,195 @@
+.checkout-card {
+    max-width: 720px;
+    margin: auto;
+    background: #fff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.step.hidden {
+    display: none;
+}
+
+/* ===============================
+   PROGRESS STEP (FINAL)
+   =============================== */
+
+.checkout-page .progress-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0 40px;
+}
+
+.checkout-page .progress-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.checkout-page .progress-line-fill {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    background: #27ae60;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.checkout-page .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    z-index: 3;
+}
+
+.checkout-page .step-circle.active {
+    background: #27ae60;
+    color: #fff;
+}
+.checkout-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.checkout-main {
+    background: #fff;
+    padding: 35px;
+    border-radius: 16px;
+}
+
+.checkout-summary {
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.checkout-summary h5 {
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 700;
+    color: #27ae60;
+}
+.checkout-page .summary-box {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.checkout-page .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.checkout-page .summary-row.total {
+    border-top: 1px dashed #ddd;
+    padding-top: 12px;
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #27ae60;
+}
+.checkout-page .order-list {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.checkout-page .order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.checkout-page .order-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-page .order-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.checkout-page .order-info small {
+    color: #6c757d;
+}
+
+.checkout-page .order-subtotal {
+    font-weight: 600;
+}
+
+.checkout-page .order-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #ccc;
+    font-size: 16px;
+    font-weight: 700;
+    color: #27ae60;
+}

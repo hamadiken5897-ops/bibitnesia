@@ -760,3 +760,193 @@ body {
     height: 100%;
     object-fit: cover;
 }
+
+.product-purchase-box {
+    margin-bottom: 25px;
+}
+
+.qty-wrapper {
+    margin-bottom: 15px;
+}
+
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid #27ae60;
+    background: white;
+    color: #27ae60;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.qty-btn:hover {
+    background: #e8f5e9;
+}
+
+.qty-control input {
+    width: 60px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    height: 36px;
+}
+
+.total-wrapper {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-wrapper strong {
+    font-size: 22px;
+    color: #27ae60;
+}
+
+/* WRAPPER SAJA YANG DIBENAHI */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    position: relative;
+    z-index: 20; /* angkat ke atas overlay */
+}
+
+/* TOMBOL TETAP ASLI, JANGAN DIUBAH FEEL-NYA */
+.btn-add-cart,
+.btn-buy-now {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s ease; /* hover smooth seperti lama */
+}
+
+/* === HOVER LAMA (BIARKAN / SESUAIKAN PUNYA KAMU) === */
+.btn-buy-now {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+}
+
+.btn-buy-now:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(39, 174, 96, 0.35);
+}
+
+.btn-add-cart {
+    background: #fff;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.btn-add-cart:hover {
+    background: #e8f5e9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(39, 174, 96, 0.2);
+}
+
+/* === FIX KLIK TANPA RUSAK HOVER === */
+.action-buttons * {
+    pointer-events: auto;
+}
+
+/* JIKA ADA OVERLAY DI ATAS */
+.product-detail-wrapper::before,
+.product-detail-wrapper::after {
+    pointer-events: none;
+}
+
+/* === SECTION UMUM DI DETAIL PRODUK === */
+.product-section {
+    background: #ffffff;
+    border: 1px solid #eef1f4;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.section-text {
+    font-size: 14px;
+    color: #6c757d;
+    line-height: 1.7;
+}
+
+/* === PURCHASE BOX (JUMLAH + TOTAL) === */
+.product-purchase-box {
+    background: #ffffff;
+    border: 1px solid #eef1f4;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+}
+
+.qty-wrapper label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.qty-control input {
+    width: 70px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.qty-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+}
+
+/* === TOTAL HARGA === */
+.total-wrapper {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-wrapper span {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.total-wrapper strong {
+    font-size: 20px;
+    font-weight: 700;
+    color: #27ae60;
+}
+
+/* sdadadsdsaaaaaaaaaaaaaaaaaaaaaa  */

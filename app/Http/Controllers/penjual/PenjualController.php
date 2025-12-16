@@ -10,20 +10,29 @@ class PenjualController extends Controller
 {
     public function index()
     {
-        // Ambil data dari database (contoh: tabel pesanan per bulan)
-        $data = DB::table('pesanans')
-            ->select(DB::raw('MONTH(created_at) as bulan'), DB::raw('COUNT(*) as total'))
+        // 📊 DATA CHART (KHUSUS PESANAN PENJUAL)
+        $chartDataRaw = DB::table('pesanans')
+            ->join('detail_pesanans', 'pesanans.id_pesanan', '=', 'detail_pesanans.id_pesanan')
+            ->join('produks', 'detail_pesanans.id_produk', '=', 'produks.id_produk')
+            ->where('produks.id_penjual', auth()->user()->id_user)
+            ->select(DB::raw('MONTH(pesanans.created_at) as bulan'), DB::raw('COUNT(DISTINCT pesanans.id_pesanan) as total'))
             ->groupBy('bulan')
             ->get();
 
-        // Label bulan
-        $chartLabels = $data->pluck('bulan');
-        // Data total
-        $chartData = $data->pluck('total');
+        $chartLabels = $chartDataRaw->pluck('bulan');
+        $chartData = $chartDataRaw->pluck('total');
 
-        return view('penjual.penjual', [
-            'chartLabels' => $chartLabels,
-            'chartData' => $chartData
-        ]);
+        // 📦 DATA PESANAN UNTUK TABEL
+        $pesanan = DB::table('pesanans')
+            ->join('detail_pesanans', 'pesanans.id_pesanan', '=', 'detail_pesanans.id_pesanan')
+            ->join('produks', 'detail_pesanans.id_produk', '=', 'produks.id_produk')
+            ->join('users', 'pesanans.id_user', '=', 'users.id_user')
+            ->where('produks.id_penjual', auth()->user()->id_user)
+            ->select('pesanans.*', 'users.nama as nama_pembeli')
+            ->groupBy('pesanans.id_pesanan')
+            ->orderBy('pesanans.created_at', 'desc')
+            ->get();
+
+        return view('penjual.penjual', compact('chartLabels', 'chartData', 'pesanan'));
     }
 }

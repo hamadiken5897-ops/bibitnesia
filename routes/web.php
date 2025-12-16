@@ -11,7 +11,7 @@ use App\Http\Controllers\PesananController;
 use App\Http\Controllers\FavoritController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\NotifikasiController;
-
+use App\Http\Controllers\CheckoutController;
 //pengajuan auth
 use App\Http\Controllers\PengajuanMitraController;
 /*
@@ -192,6 +192,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifikasi/delete-all', [NotifikasiController::class, 'deleteAll'])->name('notifikasi.deleteAll');
 
     Route::get('/marketplace/produk/{id}', [MarketplaceController::class, 'show'])->name('marketplace.produk.show');
+
+    Route::post('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
+    Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
     /*
     |--------------------------------------------------------------------------

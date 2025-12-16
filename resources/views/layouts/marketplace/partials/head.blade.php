@@ -16,3 +16,5 @@
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{ asset('marketplace_as/css/marketplace.css') }}"?v={{ filemtime(public_path('marketplace_as/css/marketplace.css')) }}">
 
+
+<link rel="stylesheet" href="{{ asset('checkout_as/css/checkout.css') }}">
