@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Provinsi;
 use Illuminate\Database\Eloquent\Model;
 
 class Penjual extends Model
@@ -14,6 +15,7 @@ class Penjual extends Model
     protected $fillable = [
         'id_penjual',
         'id_user',
+        'id_provinsi',
         'nama_penjual',
         'no_teleponPJ',
         'alamatPJ',
@@ -28,5 +30,9 @@ class Penjual extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'id_provinsi');
     }
 }

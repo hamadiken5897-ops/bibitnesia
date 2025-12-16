@@ -95,12 +95,14 @@
                                             </div>
                                         @endif
 
-                                        @if ($user->alamat)
+                                        {{-- Asal Daerah --}}
+                                        @if ($user->asal_daerah)
                                             <div class="contact-item">
                                                 <i class="bi bi-geo-alt-fill"></i>
-                                                <span>{{ $user->alamat }}</span>
+                                                <span>{{ $user->asal_daerah }}</span>
                                             </div>
                                         @endif
+
                                     </div>
 
                                     {{-- Deskripsi/Bio --}}

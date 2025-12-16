@@ -9,6 +9,7 @@ use App\Models\PengajuanMitra;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\NotifikasiUser;
+use App\Models\Provinsi;
 
 class PengajuanMitraController extends Controller
 {
@@ -33,7 +34,17 @@ class PengajuanMitraController extends Controller
     /**
      * Halaman daftar pengajuan mitra untuk admin
      */
-    public function index()
+    public function index(Request $request)
+    {
+        $provinsi = Provinsi::orderBy('nama_provinsi')->get();
+
+        // deteksi role dari URL
+        $role = str_contains($request->path(), 'kurir') ? 'kurir' : 'penjual';
+
+        return view('mitra.daftar', compact('provinsi', 'role'));
+    }
+
+    public function adminIndex()
     {
         $penjual = PengajuanMitra::where('role_pengajuan', 'penjual')->where('status', 'Menunggu')->latest()->get();
 
@@ -66,6 +77,7 @@ class PengajuanMitraController extends Controller
             'ktp' => 'required|image|max:2048',
             'foto_selfie' => 'required|image|max:2048',
             'no_rekening' => 'required|string',
+            'id_provinsi' => 'required|exists:provinsis,id_provinsi',
             'alamat' => 'required|string',
             'no_hp' => 'required|string',
         ];
@@ -118,6 +130,8 @@ class PengajuanMitraController extends Controller
         // SET ID USER PENGAJU
         $validated['id_user'] = auth()->user()->id_user;
 
+
+
         // SIMPAN KE DATABASE
         PengajuanMitra::create($validated);
 
@@ -131,7 +145,7 @@ class PengajuanMitraController extends Controller
     {
         $pengajuan = PengajuanMitra::findOrFail($id);
         // role yang diajukan user
-        $role = $data->role_pengajuan;
+        $role = $pengajuan->role_pengajuan;
 
         return view('admin.services.pengajuan.show', compact('pengajuan'));
     }
@@ -163,6 +177,7 @@ class PengajuanMitraController extends Controller
                 'id_user' => $user->id_user,
                 'nama_penjual' => $user->nama,
                 'no_teleponPJ' => $pengajuan->no_hp,
+                'id_provinsi' => $pengajuan->id_provinsi,
                 'alamatPJ' => $pengajuan->alamat,
                 'tanggal_daftar' => now(),
                 'status_verifikasi' => 'Disetujui',
@@ -181,7 +196,7 @@ class PengajuanMitraController extends Controller
             Kurir::create([
                 'id_kurir' => $newId,
                 'id_user' => $user->id_user,
-                'nama_pt' => $user->nama,
+                'id_provinsi' => $pengajuan->id_provinsi,
                 'tipe_kendaraan' => $pengajuan->tipe_kendaraan,
                 'status_kurir' => 'Aktif',
                 'daerah' => $pengajuan->alamat,

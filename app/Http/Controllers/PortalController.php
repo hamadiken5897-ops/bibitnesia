@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use App\Models\NotifikasiUser;
+use App\Models\Provinsi;
 
 class PortalController extends Controller
 {

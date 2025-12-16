@@ -11,6 +11,7 @@
                 <h5>Informasi User</h5>
                 <p><strong>Nama:</strong> {{ $data->user->nama }}</p>
                 <p><strong>No HP:</strong> {{ $data->no_hp }}</p>
+                <p><strong>Provinsi:</strong> {{ $data->provinsi->nama_provinsi ?? '-' }}</p>
                 <p><strong>Alamat:</strong> {{ $data->alamat }}</p>
 
                 <hr>

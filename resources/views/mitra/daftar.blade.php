@@ -76,6 +76,17 @@
                 @endunless
 
                 <h5 class="section-title mt-4">Data Umum</h5>
+                <div class="input-group">
+                    <label>Provinsi *</label>
+                    <select name="id_provinsi" required>
+                        <option value="">-- Pilih Provinsi --</option>
+                        @foreach ($provinsi as $p)
+                            <option value="{{ $p->id_provinsi }}">
+                                {{ $p->nama_provinsi }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <div class="input-group">
                     <label>Alamat *</label>
@@ -227,4 +238,5 @@
     <script src="{{ asset('form/js/form.js') }}"></script>
 
 </body>
+
 </html>

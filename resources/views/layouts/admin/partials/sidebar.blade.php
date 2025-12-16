@@ -41,7 +41,7 @@
                 </li>
 
                 <li class="sidebar-item {{ request()->routeIs('admin.produk') ? 'active' : '' }}">
-                    <a href="{{ route('admin.produk') }}" class='sidebar-link'>
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-file-earmark-medical-fill"></i>
                         <span>Product Management</span>
                     </a>

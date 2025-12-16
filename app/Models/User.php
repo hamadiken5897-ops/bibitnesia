@@ -74,6 +74,20 @@ class User extends Authenticatable
         return 'USR-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 
+    public function getAsalDaerahAttribute()
+    {
+        if ($this->role === 'penjual' && $this->penjual && $this->penjual->provinsi) {
+            return $this->penjual->provinsi->nama_provinsi;
+        }
+
+        if ($this->role === 'kurir' && $this->kurir && $this->kurir->provinsi) {
+            return $this->kurir->provinsi->nama_provinsi;
+        }
+
+        return null;
+    }
+
+
     // ---------------------------------------------------------//
     public function penjual()
     {

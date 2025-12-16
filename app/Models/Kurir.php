@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Provinsi;
 use Illuminate\Database\Eloquent\Model;
 
 class Kurir extends Model
@@ -14,7 +15,7 @@ class Kurir extends Model
     protected $fillable = [
         'id_kurir',
         'id_user',
-        'nama_pt',
+        'id_provinsi',
         'tipe_kendaraan',
         'status_kurir',
         'daerah',
@@ -24,5 +25,9 @@ class Kurir extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'id_provinsi');
     }
 }

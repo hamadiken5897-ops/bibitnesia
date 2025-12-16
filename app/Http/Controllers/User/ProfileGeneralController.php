@@ -16,7 +16,7 @@ class ProfileGeneralController extends Controller
     {
         $user = auth()
             ->user()
-            ->load(['penjual', 'kurir']);
+            ->load(['penjual.provinsi', 'kurir.provinsi']);
         $isOwner = true;
 
         return view('profile.show', compact('user', 'isOwner'));
@@ -27,7 +27,7 @@ class ProfileGeneralController extends Controller
      */
     public function show($userId)
     {
-        $user = User::with(['penjual', 'kurir'])->findOrFail($userId);
+        $user = User::with(['penjual.provinsi', 'kurir.provinsi'])->findOrFail($userId);
         $isOwner = auth()->check() && auth()->id() === $user->id_user;
 
         return view('profile.show', compact('user', 'isOwner'));
@@ -49,7 +49,6 @@ class ProfileGeneralController extends Controller
         $user->update([
             'nama' => $request->nama,
             'no_telepon' => $request->no_telepon,
-            'alamat' => $request->alamat,
             'deskripsi' => $request->deskripsi,
         ]);
 

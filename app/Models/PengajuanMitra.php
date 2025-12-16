@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Provinsi;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ class PengajuanMitra extends Model
 
     protected $fillable = [
         'id_user',
+        'id_provinsi',
         'role_pengajuan',
         'ktp',
         'foto_selfie',
@@ -46,6 +48,10 @@ class PengajuanMitra extends Model
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class, 'id_user', 'id_user');
+    }
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'id_provinsi');
     }
 }
 

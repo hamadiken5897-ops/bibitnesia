@@ -119,15 +119,15 @@ Route::middleware(['auth'])->group(function () {
     */
     Route::post('/pengajuan-mitra/store', [PengajuanMitraController::class, 'store'])->name('pengajuan-mitra.store');
 
-    // route daftar penjual
-    Route::get('/daftar-penjual', function () {
-        return view('mitra.daftar', ['role' => 'penjual']);
-    })->name('daftar.penjual');
+    // daftar penjual
+    Route::get('/daftar-penjual', [PengajuanMitraController::class, 'index'])
+        ->middleware('auth')
+        ->name('daftar.penjual');
 
-    // route daftar kurir
-    Route::get('/daftar-kurir', function () {
-        return view('mitra.daftar', ['role' => 'kurir']);
-    })->name('daftar.kurir');
+    // daftar kurir
+    Route::get('/daftar-kurir', [PengajuanMitraController::class, 'index'])
+        ->middleware('auth')
+        ->name('daftar.kurir');
 
     Route::get('/pengajuan-mitra/success', function () {
         return view('mitra.succes');
@@ -219,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
 
             // Pengajuan Mitra
-            Route::get('/pengajuan-mitra', [PengajuanMitraController::class, 'index'])->name('pengajuan.index');
+            Route::get('/pengajuan-mitra', [PengajuanMitraController::class, 'adminIndex'])->name('pengajuan.index');
             Route::get('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'show'])->name('pengajuan.show');
 
             Route::post('/pengajuan-mitra/{id}/approve', [PengajuanMitraController::class, 'approve'])->name('pengajuan.approve');
