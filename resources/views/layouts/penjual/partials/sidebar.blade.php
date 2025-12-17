@@ -36,11 +36,12 @@
 
                 {{-- Pesanan Masuk --}}
                 <li class="sidebar-item {{ request()->routeIs('penjual.pesanan') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.pesanan') }}" class='sidebar-link'>
+                    <a href="{{ route('penjual.pesanan') }}" class="sidebar-link">
                         <i class="bi bi-bag-check-fill"></i>
                         <span>Pesanan Masuk</span>
                     </a>
                 </li>
+
 
                 {{-- Pembayaran / Keuangan --}}
                 <li class="sidebar-item {{ request()->routeIs('penjual.pembayaran') ? 'active' : '' }}">

@@ -10,10 +10,10 @@ class PesananController extends Controller
 {
     public function index()
     {
-        // Ambil semua pesanan urut terbaru
-        $pesanan = Pesanan::orderBy('created_at', 'DESC')->get();
+        $pesanan = \App\Models\Pesanan::where('status_pesanan', 'Pesanan sedang diproses')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        // Kirim ke view
         return view('penjual.pesanan', compact('pesanan'));
     }
 }

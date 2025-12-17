@@ -269,9 +269,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('penjual')
         ->name('penjual.')
         ->group(function () {
+            // DASHBOARD
             Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
-            Route::get('/penjual/saldo', [App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('penjual.saldo');
-            // Crud Produk
+
+            // SALDO
+            Route::get('/saldo', [App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('saldo');
+
+            // PRODUK
             Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
             Route::get('/produk/tambah', [App\Http\Controllers\Penjual\ProdukController::class, 'create'])->name('produk.create');
             Route::post('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'store'])->name('produk.store');
@@ -279,21 +283,41 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/produk/{produk}', [App\Http\Controllers\Penjual\ProdukController::class, 'update'])->name('produk.update');
             Route::delete('/produk/{produk}', [App\Http\Controllers\Penjual\ProdukController::class, 'destroy'])->name('produk.destroy');
 
-            Route::get('/pesanan', function () {
-                return view('penjual.pesanan');
-            })->name('pesanan');
+            // PESANAN MASUK (PENJUAL)
+            Route::get('/pesanan', [App\Http\Controllers\Penjual\PesananController::class, 'index'])->name('pesanan');
 
-            Route::get('/pembayaran', function () {
-                return view('penjual.pembayaran');
-            })->name('pembayaran');
+            Route::post('/pesanan/{id}/accept', function ($id) {
+                $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
+                $pesanan->update([
+                    'status_pesanan' => 'Pesanan dalam pengiriman',
+                ]);
+                return back()->with('success', 'Pesanan diterima');
+            })->name('pesanan.accept');
 
-            Route::get('/pengturan', function () {
-                return view('penjual.pengaturan');
-            })->name('pengaturan');
+            Route::post('/pesanan/{id}/reject', function (\Illuminate\Http\Request $request, $id) {
+                $request->validate([
+                    'alasan' => 'required|string',
+                ]);
 
-            Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
+                $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
+                $pesanan->update([
+                    'status_pesanan' => 'Pesanan ditolak',
+                    'catatan' => $request->alasan,
+                ]);
 
-            Route::get('/penjual/pesanan', [PesananController::class, 'index'])->name('penjual.pesanan');
+                \App\Models\NotifikasiUser::create([
+                    'id_user' => $pesanan->id_user,
+                    'judul' => 'Pesanan Ditolak',
+                    'pesan' => $request->alasan,
+                    'type' => 'danger',
+                ]);
+
+                return back()->with('success', 'Pesanan ditolak');
+            })->name('pesanan.reject');
+
+            // VIEW STATIS
+            Route::get('/pembayaran', fn() => view('penjual.pembayaran'))->name('pembayaran');
+            Route::get('/pengaturan', fn() => view('penjual.pengaturan'))->name('pengaturan');
         });
 
     /*
