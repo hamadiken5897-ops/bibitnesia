@@ -35,8 +35,8 @@
                 </li>
 
                 {{-- Pesanan Masuk --}}
-                <li class="sidebar-item {{ request()->routeIs('penjual.pesanan') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.pesanan') }}" class="sidebar-link">
+                <li class="sidebar-item {{ request()->routeIs('penjual.pesanan.*') ? 'active' : '' }}">
+                    <a href="{{ route('penjual.pesanan.index') }}" class="sidebar-link">
                         <i class="bi bi-bag-check-fill"></i>
                         <span>Pesanan Masuk</span>
                     </a>

@@ -14,12 +14,13 @@ class Pesanan extends Model
     protected $fillable = [
         'id_pesanan',
         'id_user',
+        'kode_invoice',  // ← Tambahkan ini jika ada
         'tanggal_pesanan',
         'total_harga',
         'status_pesanan',
         'catatan',
-        'id_detail_pesanan',
         'tgl_konfirmasi',
+        // 'id_detail_pesanan', // ← HAPUS INI! Tidak perlu ada di tabel pesanans
     ];
 
     // Relasi ke user (pembeli)
@@ -28,16 +29,11 @@ class Pesanan extends Model
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    // Relasi ke detail pesanan (nanti bisa dibuat tabel detail_pesanans)
+    // Relasi ke detail pesanan (ONE TO MANY, bukan hasOne!)
     public function detailPesanan()
     {
-        return $this->hasOne(Detail_pesanan::class, 'id_detail_pesanan', 'id_detail_pesanan');
+        return $this->hasMany(DetailPesanan::class, 'id_pesanan', 'id_pesanan');
+        // ↑ hasMany karena 1 pesanan bisa punya banyak item
+        // ↑ Gunakan 'id_pesanan' sebagai foreign key
     }
-
-    // Relasi ke produk
-    public function produk()
-    {
-        return $this->belongsTo(Produk::class, 'produk_id');
-    }
-
 }

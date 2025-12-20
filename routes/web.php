@@ -283,8 +283,9 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/produk/{produk}', [App\Http\Controllers\Penjual\ProdukController::class, 'destroy'])->name('produk.destroy');
 
             // PESANAN MASUK (PENJUAL)
-            Route::get('/pesanan', [App\Http\Controllers\Penjual\PesananController::class, 'index'])->name('pesanan');
+            Route::get('/pesanan', [App\Http\Controllers\Penjual\PesananController::class, 'index'])->name('pesanan.index'); // ← Tambahkan .index
 
+            Route::get('/pesanan/{id}', [App\Http\Controllers\Penjual\PesananController::class, 'show'])->name('pesanan.show');
             Route::post('/pesanan/{id}/accept', function ($id) {
                 $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
                 $pesanan->update([
