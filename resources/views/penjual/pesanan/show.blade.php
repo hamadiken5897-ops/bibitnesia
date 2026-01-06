@@ -97,9 +97,16 @@
                         <div class="info-row">
                             <span class="info-label">
                                 <i class="fas fa-map-marker-alt"></i>
+                                Provinsi
+                            </span>
+                            <span class="info-value text-wrap">{{$pesanan->alamat}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">
+                                <i class="fas fa-map-marker-alt"></i>
                                 Alamat Pengiriman
                             </span>
-                            <span class="info-value text-wrap">{{ $pesanan->user->alamat ?? '-' }}</span>
+                            <span class="info-value text-wrap">{{ $pesanan->provinsiRelasi->nama_provinsi ?? '-' }}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">
@@ -117,14 +124,11 @@
                 <!-- Action Buttons -->
                 @if ($pesanan->status_pesanan === 'Pesanan sedang diproses')
                     <div class="action-card mt-4">
-                        <form action="{{ route('penjual.pesanan.accept', $pesanan->id_pesanan) }}" method="POST"
-                            class="mb-3" onsubmit="return confirm('Apakah Anda yakin ingin menerima pesanan ini?')">
-                            @csrf
-                            <button type="submit" class="btn btn-accept w-100">
-                                <i class="fas fa-check-circle me-2"></i>
-                                Terima Pesanan
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-accept w-100 mb-3" data-bs-toggle="modal"
+                            data-bs-target="#acceptModal">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Terima Pesanan
+                        </button>
 
                         <button type="button" class="btn btn-reject w-100" data-bs-toggle="modal"
                             data-bs-target="#rejectModal">
@@ -222,6 +226,42 @@
 
     </div>
 
+    <!-- Accept Modal -->
+    <div class="modal fade" id="acceptModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" action="{{ route('penjual.pesanan.accept', $pesanan->id_pesanan) }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Terima Pesanan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Terima pesanan <strong>#{{ $pesanan->kode_invoice }}</strong>?
+                        </div>
+
+                        <p class="text-muted mb-0">
+                            Pesanan akan masuk ke proses pengiriman setelah diterima.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check me-1"></i>
+                            Terima Pesanan
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Reject Modal -->
     <div class="modal fade" id="rejectModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -314,7 +354,7 @@
         .action-card {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
             margin-bottom: 20px;
             border: 1px solid #f1f5f9;
         }

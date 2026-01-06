@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="main-content">
-        
+
         <!-- Header -->
         <div class="header">
             <div class="header-title">
@@ -55,7 +55,8 @@
                         </div>
                         <div class="detail-box">
                             <span class="detail-label">Total Harga</span>
-                            <span class="detail-value text-success">Rp {{ number_format($p->total_harga, 0, ',', '.') }}</span>
+                            <span class="detail-value text-success">Rp
+                                {{ number_format($p->total_harga, 0, ',', '.') }}</span>
                         </div>
                         <div class="detail-box">
                             <span class="detail-label">Pembeli</span>
@@ -69,20 +70,16 @@
                             <i class="fas fa-eye"></i>
                             Lihat Detail
                         </a>
-                        
-                        <form action="{{ route('penjual.pesanan.accept', $p->id_pesanan) }}" method="POST" 
-                              style="display: inline-block;"
-                              onsubmit="return confirm('Terima pesanan ini?')">
-                            @csrf
-                            <button type="submit" class="btn-action btn-accept">
-                                <i class="fas fa-check"></i>
-                                Terima Pesanan
-                            </button>
-                        </form>
 
-                        <button type="button" class="btn-action btn-reject" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#rejectModal{{ $p->id_pesanan }}">
+                        <button type="button" class="btn-action btn-accept" data-bs-toggle="modal"
+                            data-bs-target="#acceptModal{{ $p->id_pesanan }}">
+                            <i class="fas fa-check"></i>
+                            Terima Pesanan
+                        </button>
+
+
+                        <button type="button" class="btn-action btn-reject" data-bs-toggle="modal"
+                            data-bs-target="#rejectModal{{ $p->id_pesanan }}">
                             <i class="fas fa-times"></i>
                             Tolak Pesanan
                         </button>
@@ -92,16 +89,17 @@
                     <div class="order-expand-detail" id="orderDetail{{ $p->id_pesanan }}" style="display: none;">
                         <div class="expand-inner">
                             <h5 class="expand-title">Item Pesanan</h5>
-                            @if($p->keranjang && $p->keranjang->isNotEmpty())
+                            @if ($p->keranjang && $p->keranjang->isNotEmpty())
                                 <div class="items-list">
-                                    @foreach($p->keranjang as $item)
+                                    @foreach ($p->keranjang as $item)
                                         <div class="item-row">
-                                            <img src="{{ asset('storage/' . $item->produk->foto_produk1) }}" 
-                                                 alt="{{ $item->produk->nama_produk }}"
-                                                 onerror="this.src='https://via.placeholder.com/50?text=No+Image'">
+                                            <img src="{{ asset('storage/' . $item->produk->foto_produk1) }}"
+                                                alt="{{ $item->produk->nama_produk }}"
+                                                onerror="this.src='https://via.placeholder.com/50?text=No+Image'">
                                             <div class="item-details">
                                                 <strong>{{ $item->produk->nama_produk }}</strong>
-                                                <small>{{ $item->qty }} x Rp {{ number_format($item->produk->harga, 0, ',', '.') }}</small>
+                                                <small>{{ $item->qty }} x Rp
+                                                    {{ number_format($item->produk->harga, 0, ',', '.') }}</small>
                                             </div>
                                             <div class="item-subtotal">
                                                 Rp {{ number_format($item->qty * $item->produk->harga, 0, ',', '.') }}
@@ -113,6 +111,43 @@
                                 <p class="text-muted">Tidak ada item</p>
                             @endif
                         </div>
+                    </div>
+                </div>
+
+                <!-- Accept Modal -->
+                <div class="modal fade" id="acceptModal{{ $p->id_pesanan }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <form method="POST" action="{{ route('penjual.pesanan.accept', $p->id_pesanan) }}">
+                            @csrf
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Terima Pesanan</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Anda yakin ingin <strong>menerima</strong> pesanan
+                                        <strong>#{{ $p->kode_invoice }}</strong>?
+                                    </div>
+
+                                    <p class="mb-0 text-muted">
+                                        Setelah diterima, pesanan akan diproses dan tidak dapat dibatalkan.
+                                    </p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Batal
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check me-1"></i>
+                                        Ya, Terima Pesanan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -134,11 +169,8 @@
                                     <label class="form-label fw-bold">
                                         Alasan Penolakan <span class="text-danger">*</span>
                                     </label>
-                                    <textarea name="alasan" 
-                                              class="form-control" 
-                                              rows="4" 
-                                              placeholder="Jelaskan alasan penolakan pesanan..."
-                                              required></textarea>
+                                    <textarea name="alasan" class="form-control" rows="4" placeholder="Jelaskan alasan penolakan pesanan..."
+                                        required></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

@@ -93,6 +93,11 @@ class CheckoutController extends Controller
                 'id_user' => auth()->user()->id_user,
                 'tanggal_pesanan' => now(),
                 'total_harga' => $totalHarga,
+
+                // 🔥 SNAPSHOT DARI CHECKOUT
+                'alamat' => $request->alamat,
+                'provinsi' => $request->provinsi,
+
                 'status_pesanan' => 'Menunggu Pembayaran',
                 'created_at' => now(),
                 'updated_at' => now(),

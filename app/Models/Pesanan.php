@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Provinsi;
 
 class Pesanan extends Model
 {
@@ -14,10 +15,12 @@ class Pesanan extends Model
     protected $fillable = [
         'id_pesanan',
         'id_user',
-        'kode_invoice',  // ← Tambahkan ini jika ada
+        'kode_invoice', // ← Tambahkan ini jika ada
         'tanggal_pesanan',
         'total_harga',
         'status_pesanan',
+        'alamat', // 🔥
+        'provinsi',
         'catatan',
         'tgl_konfirmasi',
         // 'id_detail_pesanan', // ← HAPUS INI! Tidak perlu ada di tabel pesanans
@@ -35,5 +38,10 @@ class Pesanan extends Model
         return $this->hasMany(DetailPesanan::class, 'id_pesanan', 'id_pesanan');
         // ↑ hasMany karena 1 pesanan bisa punya banyak item
         // ↑ Gunakan 'id_pesanan' sebagai foreign key
+    }
+
+    public function provinsiRelasi()
+    {
+        return $this->belongsTo(Provinsi::class, 'provinsi', 'id_provinsi');
     }
 }
