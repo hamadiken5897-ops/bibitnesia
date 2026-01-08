@@ -319,6 +319,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/pengiriman/{pesanan}/buat', [App\Http\Controllers\Penjual\PengirimanController::class, 'create'])->name('pengiriman.create');
             Route::post('/pengiriman', [App\Http\Controllers\Penjual\PengirimanController::class, 'store'])->name('pengiriman.store');
 
+            Route::get('/status-pesanan', [App\Http\Controllers\Penjual\StatusPesananController::class, 'index'])->name('status-pesanan.index');
+
+            Route::get('/pesanan/{id}/kurir', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'pilihKurir'])->name('pesanan.kurir');
+
+            Route::post('/pesanan/{id}/kurir', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'simpanKurir'])->name('pesanan.kurir.simpan');
+
             // VIEW STATIS
             Route::get('/pembayaran', fn() => view('penjual.pembayaran'))->name('pembayaran');
             Route::get('/pengaturan', fn() => view('penjual.pengaturan'))->name('pengaturan');

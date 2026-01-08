@@ -48,7 +48,15 @@
                         <i class="bi bi-bag-check-fill"></i>
                         <span>Pengiriman</span>
                     </a>
-                </li>  --}}              
+                </li>  --}}
+                
+                <li class="sidebar-item">
+                    <a href="{{ route('penjual.status-pesanan.index') }}"
+                       class="sidebar-link">
+                        <i class="bi bi-truck"></i>
+                        <span>Status Pesanan</span>
+                    </a>
+                </li>  
 
                 {{-- Pembayaran / Keuangan --}}
                 <li class="sidebar-item {{ request()->routeIs('penjual.pembayaran') ? 'active' : '' }}">

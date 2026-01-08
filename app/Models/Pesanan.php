@@ -44,4 +44,13 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Provinsi::class, 'provinsi', 'id_provinsi');
     }
+
+    public function pengiriman()
+    {
+        return $this->hasOne(
+            \App\Models\Pengiriman::class,
+            'id_pesanan',
+            'id_pesanan'
+        );
+    }
 }

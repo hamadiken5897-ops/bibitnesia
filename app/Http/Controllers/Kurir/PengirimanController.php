@@ -11,9 +11,9 @@ class PengirimanController extends Controller
     // 📥 INBOX KURIR
     public function index()
     {
-        $kurir = auth()->user()->nama; // sesuaikan field kurir kamu
+        $kurirId = auth()->user()->kurir->id_kurir;
 
-        $pengiriman = Pengiriman::where('kurir', $kurir)
+        $pengiriman = Pengiriman::where('id_kurir', $kurirId)
             ->whereIn('status_pengiriman', ['dikemas', 'dikirim'])
             ->orderBy('created_at', 'asc')
             ->get();
@@ -53,4 +53,3 @@ class PengirimanController extends Controller
         return back()->with('success', 'Pengiriman selesai');
     }
 }
-
