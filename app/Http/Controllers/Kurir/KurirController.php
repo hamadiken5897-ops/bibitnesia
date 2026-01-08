@@ -1,11 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Kurir;
 
+use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KurirController extends Controller
 {
+    public function dashboard()
+    {
+        return view('kurir.dashboard');
+    }
+
     public function index()
     {
         $pesanan = Pesanan::orderBy('created_at', 'desc')->get();

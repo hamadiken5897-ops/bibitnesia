@@ -315,6 +315,10 @@ Route::middleware(['auth'])->group(function () {
                 return back()->with('success', 'Pesanan ditolak');
             })->name('pesanan.reject');
 
+            // pengiriman - penjual
+            Route::get('/pengiriman/{pesanan}/buat', [App\Http\Controllers\Penjual\PengirimanController::class, 'create'])->name('pengiriman.create');
+            Route::post('/pengiriman', [App\Http\Controllers\Penjual\PengirimanController::class, 'store'])->name('pengiriman.store');
+
             // VIEW STATIS
             Route::get('/pembayaran', fn() => view('penjual.pembayaran'))->name('pembayaran');
             Route::get('/pengaturan', fn() => view('penjual.pengaturan'))->name('pengaturan');
@@ -339,6 +343,20 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('kurir')
         ->name('kurir.')
         ->group(function () {
+            Route::get('/dashboard', [App\Http\Controllers\Kurir\KurirController::class, 'dashboard'])->name('dashboard');
+
+            Route::get('/inbox', [App\Http\Controllers\Kurir\KurirController::class, 'index'])->name('inbox');
+
+            Route::get('/inbox/{id}', [App\Http\Controllers\Kurir\KurirController::class, 'detail'])->name('inbox.detail');
+
+            Route::post('/inbox/{id}/selesai', [App\Http\Controllers\Kurir\KurirController::class, 'selesai'])->name('inbox.selesai');
+
+            Route::get('/pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'index'])->name('pengiriman.index');
+
+            Route::post('/pengiriman/{pengiriman}/terima', [App\Http\Controllers\Kurir\PengirimanController::class, 'accept'])->name('pengiriman.accept');
+
+            Route::post('/pengiriman/{pengiriman}/selesai', [App\Http\Controllers\Kurir\PengirimanController::class, 'selesai'])->name('pengiriman.selesai');
+
             Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
             Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
             Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
@@ -397,6 +415,12 @@ Route::middleware(['auth'])->group(function () {
                     'message' => $messages[$id],
                 ]);
             })->name('inbox.detail');
+
+            Route::get('/pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'index'])->name('pengiriman.index');
+
+            Route::post('/pengiriman/{pengiriman}/terima', [App\Http\Controllers\Kurir\PengirimanController::class, 'accept'])->name('pengiriman.accept');
+
+            Route::post('/pengiriman/{pengiriman}/selesai', [App\Http\Controllers\Kurir\PengirimanController::class, 'selesai'])->name('pengiriman.selesai');
         });
 });
 

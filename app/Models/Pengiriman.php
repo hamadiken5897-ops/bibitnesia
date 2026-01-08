@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pengiriman extends Model
 {
-    protected $table = 'pengirimen'; // atau 'pengiriman' kalau kamu ubah di migration
+    protected $table = 'pengiriman'; // atau 'pengiriman' kalau kamu ubah di migration
     protected $primaryKey = 'id_pengiriman';
     public $incrementing = false;
     protected $keyType = 'string';
