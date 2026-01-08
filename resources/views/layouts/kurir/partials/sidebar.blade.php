@@ -42,8 +42,15 @@
 
                 <li class="sidebar-item {{ request()->routeIs('kurir.pengiriman') ? 'active' : '' }}">
                     <a href="{{ route('kurir.pengiriman.index') }}" class="sidebar-link">
+                        <i class="bi bi-box"></i>
+                        <span>Pengiriman Masuk</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->routeIs('status-pengiriman.index') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.status-pengiriman.index') }}" class="sidebar-link">
                         <i class="bi bi-truck"></i>
-                        <span>Pengiriman</span>
+                        <span>Status Pengiriman</span>
                     </a>
                 </li>
 

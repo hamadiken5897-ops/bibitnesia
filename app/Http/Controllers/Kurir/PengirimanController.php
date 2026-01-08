@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Kurir;
-
+use App\Models\Kurir;
 use App\Http\Controllers\Controller;
 use App\Models\Pengiriman;
 use Illuminate\Http\Request;
@@ -27,14 +27,15 @@ class PengirimanController extends Controller
         $pengiriman = Pengiriman::findOrFail($id);
 
         $pengiriman->update([
-            'status_pengiriman' => 'dikirim',
+            'status_pengiriman' => 'diproses',
+            'tanggal_pengiriman' => now(),
         ]);
 
         $pengiriman->pesanan->update([
-            'status_pesanan' => 'dikirim',
+            'status_pesanan' => 'Pesanan dalam pengiriman',
         ]);
 
-        return back()->with('success', 'Pengiriman diterima');
+        return redirect()->route('kurir.status-pengiriman.index')->with('success', 'Pengiriman diterima');
     }
 
     // 📦 KONFIRMASI SELESAI
@@ -51,5 +52,41 @@ class PengirimanController extends Controller
         ]);
 
         return back()->with('success', 'Pengiriman selesai');
+    }
+
+    public function statusIndex()
+    {
+        $kurirId = auth()->user()->kurir->id_kurir;
+
+        $pengiriman = Pengiriman::where('id_kurir', $kurirId)
+            ->whereIn('status_pengiriman', ['diproses', 'dikirim'])
+            ->orderBy('created_at')
+            ->get();
+
+        return view('kurir.status-pengiriman.index', compact('pengiriman'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status_pengiriman' => 'required|in:diproses,dikirim,selesai',
+        ]);
+
+        $kurirId = auth()->user()->kurir->id_kurir;
+
+        $pengiriman = Pengiriman::where('id_pengiriman', $id)->where('id_kurir', $kurirId)->firstOrFail();
+
+        $pengiriman->update([
+            'status_pengiriman' => $request->status_pengiriman,
+        ]);
+
+        // Sinkron ke pesanan
+        if ($request->status_pengiriman === 'selesai') {
+            $pengiriman->pesanan->update([
+                'status_pesanan' => 'Pesanan Selesai',
+            ]);
+        }
+
+        return back()->with('success', 'Status pengiriman diperbarui');
     }
 }

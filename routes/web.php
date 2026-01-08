@@ -363,8 +363,15 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/pengiriman/{pengiriman}/selesai', [App\Http\Controllers\Kurir\PengirimanController::class, 'selesai'])->name('pengiriman.selesai');
 
+            // 🚚 STATUS PENGIRIMAN
+            Route::get('/status-pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'statusIndex'])->name('status-pengiriman.index');
+
+       //     Route::get('/pengiriman/{id}/status', [App\Http\Controllers\Kurir\PengirimanController::class, 'status'])->name('pengiriman.status');
+
+            Route::put('/pengiriman/{id}/status', [App\Http\Controllers\Kurir\PengirimanController::class, 'updateStatus'])->name('pengiriman.status.update');
+
             Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
-            Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
+      //      Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
             Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
 
             // PROFIL KURIR
