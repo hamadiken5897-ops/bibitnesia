@@ -7,6 +7,13 @@
 
     {{-- CSS Shadow --}}
     <style>
+        .chart-container {
+            position: relative;
+            height: 280px;
+            /* ← atur sesuai selera */
+            width: 180%;
+        }
+
         .card {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-radius: 12px;
@@ -135,10 +142,13 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Kunjungan Pengguna</h4>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="chart-profile-visit"></canvas>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <canvas id="chart-profile-visit" height="100"></canvas>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -155,7 +165,7 @@
                                 class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
                         @else
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nama) }}&size=80&background=27ae60&color=fff"
-                                alt="{{ auth()->user()->nama }}" class="rounded-circle border" 
+                                alt="{{ auth()->user()->nama }}" class="rounded-circle border"
                                 style="width: 80px; height: 80px; object-fit: cover;">
                         @endif
 
@@ -215,24 +225,25 @@
                             <h4>Kunjungan Regional</h4>
                         </div>
                         <div class="card-body">
-                            @foreach(['Sumatera' => 'blue', 'Kalimantan' => 'success', 'Jawa' => 'danger'] as $region => $color)
-                            <div class="row {{ $loop->first ? '' : 'mt-3' }}">
-                                <div class="col-7">
-                                    <div class="d-flex align-items-center">
-                                        <svg class="bi text-{{ $color }}" width="32" height="32" fill="blue"
-                                            style="width:10px">
-                                            <use xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                        </svg>
-                                        <h5 class="mb-0 ms-3">{{ $region }}</h5>
+                            @foreach (['Sumatera' => 'blue', 'Kalimantan' => 'success', 'Jawa' => 'danger'] as $region => $color)
+                                <div class="row {{ $loop->first ? '' : 'mt-3' }}">
+                                    <div class="col-7">
+                                        <div class="d-flex align-items-center">
+                                            <svg class="bi text-{{ $color }}" width="32" height="32"
+                                                fill="blue" style="width:10px">
+                                                <use
+                                                    xlink:href="{{ asset('dist/assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
+                                            </svg>
+                                            <h5 class="mb-0 ms-3">{{ $region }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <h5 class="mb-0">{{ $kunjunganRegional[$region] ?? 0 }}</h5>
+                                    </div>
+                                    <div class="col-12">
+                                        <div id="chart-{{ strtolower($region) }}"></div>
                                     </div>
                                 </div>
-                                <div class="col-5">
-                                    <h5 class="mb-0">{{ $kunjunganRegional[$region] ?? 0 }}</h5>
-                                </div>
-                                <div class="col-12">
-                                    <div id="chart-{{ strtolower($region) }}"></div>
-                                </div>
-                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -252,7 +263,8 @@
                                 <h5 id="incomeValue" class="fw-semibold text-success">
                                     Rp {{ number_format(array_sum($chartKeuangan)) }}
                                 </h5>
-                                <p class="text-secondary" style="font-size: 12px;">Januari - Desember {{ date('Y') }}</p>
+                                <p class="text-secondary" style="font-size: 12px;">Januari - Desember {{ date('Y') }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -263,102 +275,102 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// Data dari Backend
-const chartKunjunganData = @json($chartKunjungan);
-const chartKeuanganData = @json($chartKeuangan);
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data dari Backend
+        const chartKunjunganData = @json($chartKunjungan);
+        const chartKeuanganData = @json($chartKeuangan);
 
-// Chart Kunjungan Pengguna
-const ctxVisit = document.getElementById('chart-profile-visit').getContext('2d');
-new Chart(ctxVisit, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-        datasets: [{
-            label: 'Kunjungan',
-            data: chartKunjunganData,
-            borderColor: '#435ebe',
-            backgroundColor: 'rgba(67, 94, 190, 0.1)',
-            borderWidth: 3,
-            tension: 0.4,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-    }
-});
-
-// Chart Keuangan
-const ctxFinance = document.getElementById('financeChart').getContext('2d');
-const gradient = ctxFinance.createLinearGradient(0, 0, 0, 250);
-gradient.addColorStop(0, 'rgba(13, 167, 96, 0.35)');
-gradient.addColorStop(1, 'rgba(13, 167, 96, 0)');
-
-new Chart(ctxFinance, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-        datasets: [{
-            label: 'Pendapatan',
-            data: chartKeuanganData,
-            borderColor: '#0da760',
-            backgroundColor: gradient,
-            borderWidth: 3,
-            tension: 0.35,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#0da760',
-            pointHoverRadius: 6,
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: '#666',
-                    font: {
-                        size: 11
-                    }
-                },
-                grid: {
-                    color: 'rgba(0,0,0,0.05)'
-                },
+        // Chart Kunjungan Pengguna
+        const ctxVisit = document.getElementById('chart-profile-visit').getContext('2d');
+        new Chart(ctxVisit, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Kunjungan',
+                    data: chartKunjunganData,
+                    borderColor: '#435ebe',
+                    backgroundColor: 'rgba(67, 94, 190, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
             },
-            y: {
-                ticks: {
-                    color: '#999',
-                    font: {
-                        size: 11
-                    },
-                    callback: function(value) {
-                        return 'Rp ' + (value / 1000000).toFixed(0) + 'jt';
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Chart Keuangan
+        const ctxFinance = document.getElementById('financeChart').getContext('2d');
+        const gradient = ctxFinance.createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, 'rgba(13, 167, 96, 0.35)');
+        gradient.addColorStop(1, 'rgba(13, 167, 96, 0)');
+
+        new Chart(ctxFinance, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: chartKeuanganData,
+                    borderColor: '#0da760',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0da760',
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 },
-                grid: {
-                    color: 'rgba(0,0,0,0.04)'
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#666',
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: '#999',
+                            font: {
+                                size: 11
+                            },
+                            callback: function(value) {
+                                return 'Rp ' + (value / 1000000).toFixed(0) + 'jt';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.04)'
+                        },
+                    }
                 },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                }
             }
-        },
-        animation: {
-            duration: 1000,
-            easing: 'easeInOutQuart'
-        }
-    }
-});
+        });
 
-// Mini charts untuk regional (optional, bisa pakai ApexCharts)
-</script>
+        // Mini charts untuk regional (optional, bisa pakai ApexCharts)
+    </script>
 @endsection
