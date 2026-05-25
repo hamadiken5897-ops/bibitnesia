@@ -43,27 +43,27 @@
                         @forelse ($pembayarans as $index => $p)
                             <tr>
                                 <td>{{ $pembayarans->firstItem() + $index }}</td>
-                                <td>{{ $p->id }}</td>
-                                <td>{{ $p->order_id }}</td>
-                                <td>{{ ucfirst($p->metode) }}</td>
-                                <td>Rp {{ number_format($p->jumlah, 0, ',', '.') }}</td>
+                                <td>{{ $p->id_pembayaran }}</td>
+                                <td>{{ $p->id_pesanan }}</td>
+                                <td>{{ ucfirst($p->metode_pembayaran) }}</td>
+                                <td>Rp {{ number_format($p->total_bayar, 0, ',', '.') }}</td>
 
                                 <td>
-                                    @if ($p->status === 'paid')
+                                    @if ($p->status_validasi === 'paid' || strtolower($p->status_validasi ?? '') === 'valid' || $p->status_validasi === 'sudah_bayar')
                                         <span class="badge bg-success">Paid</span>
-                                    @elseif ($p->status === 'pending')
+                                    @elseif ($p->status_validasi === 'pending' || $p->status_validasi === 'belum_bayar')
                                         <span class="badge bg-warning text-dark">Pending</span>
                                     @else
                                         <span class="badge bg-danger">Failed</span>
                                     @endif
                                 </td>
 
-                                <td>{{ $p->tanggal_bayar ?? '-' }}</td>
+                                <td>{{ $p->tanggal_pembayaran ?? '-' }}</td>
                                 <td>{{ $p->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ $p->updated_at->format('d-m-Y H:i') }}</td>
 
                                 <td>
-                                    <a href="{{ route('admin.pembayaran.show', $p->id) }}" 
+                                    <a href="{{ route('admin.pembayaran.show', $p->id_pembayaran) }}" 
                                        class="btn btn-sm btn-info">
                                         <i class="bi bi-eye"></i>
                                     </a>

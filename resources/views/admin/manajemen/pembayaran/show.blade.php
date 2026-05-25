@@ -24,12 +24,12 @@
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">ID Pembayaran</div>
-                <div class="col-md-8">{{ $pembayaran->id }}</div>
+                <div class="col-md-8">{{ $pembayaran->id_pembayaran }}</div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">ID Pesanan</div>
-                <div class="col-md-8">{{ $pembayaran->order_id }}</div>
+                <div class="col-md-8">{{ $pembayaran->id_pesanan }}</div>
             </div>
 
             @if ($pembayaran->user)
@@ -41,20 +41,20 @@
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Metode Pembayaran</div>
-                <div class="col-md-8">{{ ucfirst($pembayaran->metode) }}</div>
+                <div class="col-md-8">{{ ucfirst($pembayaran->metode_pembayaran) }}</div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Total Bayar</div>
-                <div class="col-md-8">Rp {{ number_format($pembayaran->jumlah, 0, ',', '.') }}</div>
+                <div class="col-md-8">Rp {{ number_format($pembayaran->total_bayar, 0, ',', '.') }}</div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Status</div>
                 <div class="col-md-8">
-                    @if ($pembayaran->status === 'paid')
+                    @if ($pembayaran->status_validasi === 'paid' || strtolower($pembayaran->status_validasi ?? '') === 'valid' || $pembayaran->status_validasi === 'sudah_bayar')
                         <span class="badge bg-success">Paid</span>
-                    @elseif ($pembayaran->status === 'pending')
+                    @elseif ($pembayaran->status_validasi === 'pending' || $pembayaran->status_validasi === 'belum_bayar')
                         <span class="badge bg-warning text-dark">Pending</span>
                     @else
                         <span class="badge bg-danger">Failed</span>
@@ -65,7 +65,7 @@
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Tanggal Pembayaran</div>
                 <div class="col-md-8">
-                    {{ $pembayaran->tanggal_bayar ?? '-' }}
+                    {{ $pembayaran->tanggal_pembayaran ?? '-' }}
                 </div>
             </div>
 
@@ -73,4 +73,16 @@
 
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Dibuat</div>
-                <div class="col-md-
+                <div class="col-md-8">{{ $pembayaran->created_at ? $pembayaran->created_at->format('d-m-Y H:i') : '-' }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Diupdate</div>
+                <div class="col-md-8">{{ $pembayaran->updated_at ? $pembayaran->updated_at->format('d-m-Y H:i') : '-' }}</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@endsection

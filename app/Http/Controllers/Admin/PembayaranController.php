@@ -22,6 +22,6 @@ class PembayaranController extends Controller
     {
         $pembayaran = Pembayaran::with(['user', 'pesanan'])->findOrFail($id);
 
-        return view('admin.manajemen.pembayaran.show', compact('pembayarans'));
+        return view('admin.manajemen.pembayaran.show', compact('pembayaran'));
     }
 }

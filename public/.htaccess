@@ -1,6 +1,6 @@
 Options +FollowSymlinks
 Options -Indexes
-AllowOverride All
+
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
 </IfModule>
