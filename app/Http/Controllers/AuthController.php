@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\Banned;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -28,10 +29,46 @@ class AuthController extends Controller
         ]);
         //dd(Auth::attempt($credentials)); // ⬅ TEST 1
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            
-            //dd(Auth::id(), Auth::user()); // ⬅ TEST 3
             $user = Auth::user();
+
+            // Cek apakah akun di-banned
+            if ($user->status_akun === 'BANNED') {
+                $ban = Banned::where('id_user', $user->id_user)
+                    ->orderBy('tgl_banned', 'desc')
+                    ->first();
+
+                if ($ban) {
+                    if ($ban->status === 'SEMENTARA' && $ban->tgl_berakhir && Carbon::parse($ban->tgl_berakhir)->isPast()) {
+                        // Masa banned berakhir, pulihkan status akun dan hapus data banned
+                        $user->update(['status_akun' => 'AKTIF']);
+                        $ban->delete();
+                    } else {
+                        // Banned masih aktif, keluarkan user
+                        Auth::logout();
+                        $request->session()->invalidate();
+                        $request->session()->regenerateToken();
+
+                        $alasan = $ban->alasan;
+                        $waktuBanned = $ban->status === 'PERMANEN' 
+                            ? 'Permanen' 
+                            : 'sampai ' . Carbon::parse($ban->tgl_berakhir)->format('d M Y H:i');
+
+                        throw ValidationException::withMessages([
+                            'email' => "Akun Anda diblokir ($waktuBanned). Alasan: $alasan",
+                        ]);
+                    }
+                } else {
+                    // Default fallback jika data banned tidak ditemukan di tabel banneds
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    throw ValidationException::withMessages([
+                        'email' => 'Akun Anda telah ditangguhkan (Banned).',
+                    ]);
+                }
+            }
+
+            $request->session()->regenerate();
             \App\Models\User::where('id_user', $user->id_user)
                 ->update(['terakhir_login' => now()]);
 

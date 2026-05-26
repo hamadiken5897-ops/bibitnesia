@@ -249,6 +249,9 @@ Route::middleware(['auth'])->group(function () {
 
             // KOMPLAIN
             Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
+            Route::put('/komplain/{id}/status', [KomplainController::class, 'updateStatus'])->name('komplain.status');
+            Route::post('/komplain/{id}/ban', [KomplainController::class, 'banUser'])->name('komplain.ban');
+            Route::post('/banned/{id_user}/unban', [KomplainController::class, 'unbanUser'])->name('banned.unban');
 
             // Pengajuan Mitra
             Route::get('/pengajuan-mitra', [PengajuanMitraController::class, 'adminIndex'])->name('pengajuan.index');
