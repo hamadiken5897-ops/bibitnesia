@@ -48,4 +48,14 @@ class Produk extends Model
             }
         });
     }
+
+    public function ulasans()
+    {
+        return $this->hasMany(Ulasan::class, 'id_produk', 'id_produk');
+    }
+
+    public function pesans()
+    {
+        return $this->hasMany(Pesan::class, 'id_produk', 'id_produk');
+    }
 }

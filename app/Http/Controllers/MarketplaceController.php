@@ -104,7 +104,7 @@ class MarketplaceController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with(['penjual', 'penjual.provinsi', 'penjual.user'])
+        $produk = Produk::with(['penjual', 'penjual.provinsi', 'penjual.user', 'ulasans', 'ulasans.user'])
             ->where('id_produk', $id)
             ->where('status', 'tersedia')
             ->firstOrFail();
@@ -115,6 +115,11 @@ class MarketplaceController extends Controller
         $notifCount = 0;
         $notifLatest = [];
         $isFavorit = false;
+
+        // Ulasan
+        $rataRataRating = $produk->ulasans->avg('rating') ?? 0;
+        $jumlahUlasan = $produk->ulasans->count();
+        $bisaUlas = false;
 
         if (auth()->check()) {
             $notifCount = NotifikasiUser::where('id_user', auth()->user()->id_user)
@@ -129,8 +134,13 @@ class MarketplaceController extends Controller
             $isFavorit = \App\Models\Favorit::where('id_user', auth()->user()->id_user)
                 ->where('produk_id', $id)
                 ->exists();
+
+            $bisaUlas = \App\Models\Pesanan::where('id_user', auth()->user()->id_user)
+                ->whereHas('detailPesanan', function ($q) use ($id) {
+                    $q->where('id_produk', $id);
+                })->exists();
         }
 
-        return view('marketplace.detail', compact('produk', 'produkTerkait', 'notifCount', 'notifLatest', 'isFavorit'));
+        return view('marketplace.detail', compact('produk', 'produkTerkait', 'notifCount', 'notifLatest', 'isFavorit', 'rataRataRating', 'jumlahUlasan', 'bisaUlas'));
     }
 }

@@ -16,7 +16,7 @@ class ProfileGeneralController extends Controller
     {
         $user = auth()
             ->user()
-            ->load(['penjual.provinsi', 'kurir.provinsi']);
+            ->load(['penjual.provinsi', 'kurir.provinsi', 'ulasans', 'ulasans.produk']);
         $isOwner = true;
 
         return view('profile.show', compact('user', 'isOwner'));
@@ -27,7 +27,7 @@ class ProfileGeneralController extends Controller
      */
     public function show($userId)
     {
-        $user = User::with(['penjual.provinsi', 'kurir.provinsi'])->findOrFail($userId);
+        $user = User::with(['penjual.provinsi', 'kurir.provinsi', 'ulasans', 'ulasans.produk'])->findOrFail($userId);
         $isOwner = auth()->check() && auth()->id() === $user->id_user;
 
         return view('profile.show', compact('user', 'isOwner'));

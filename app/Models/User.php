@@ -121,4 +121,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\PengajuanMitra::class, 'id_user', 'id_user');
     }
+
+    public function ulasans()
+    {
+        return $this->hasMany(Ulasan::class, 'id_user', 'id_user');
+    }
+
+    public function pesanTerkirim()
+    {
+        return $this->hasMany(Pesan::class, 'id_pengirim', 'id_user');
+    }
+
+    public function pesanDiterima()
+    {
+        return $this->hasMany(Pesan::class, 'id_penerima', 'id_user');
+    }
 }

@@ -8,3 +8,32 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @stack('scripts')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function fetchAdminUnreadChat() {
+            fetch("{{ route('pesan.unread') }}", {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const badge = document.getElementById('sidebarChatBadge');
+                if (badge) {
+                    if (data.unread > 0) {
+                        badge.style.display = 'inline-block';
+                        badge.innerText = data.unread > 99 ? '99+' : data.unread;
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            })
+            .catch(err => console.log('Error fetching unread chat count'));
+        }
+
+        // Fetch on load
+        fetchAdminUnreadChat();
+
+        // Polling every 15 seconds
+        setInterval(fetchAdminUnreadChat, 15000);
+    });
+</script>

@@ -66,6 +66,17 @@
                     </a>
                 </li>
 
+                {{-- Pesan / Chat --}}
+                <li class="sidebar-item {{ request()->routeIs('pesan.*') ? 'active' : '' }}">
+                    <a href="{{ route('pesan.index') }}" class='sidebar-link d-flex align-items-center justify-content-between'>
+                        <div>
+                            <i class="bi bi-chat-dots-fill"></i>
+                            <span>Pesan / Chat</span>
+                        </div>
+                        <span class="badge bg-danger rounded-pill" id="sidebarChatBadge" style="display:none;">0</span>
+                    </a>
+                </li>
+
                 {{-- Pengaturan Toko --}}
                 <li class="sidebar-item {{ request()->routeIs('penjual.pengaturan') ? 'active' : '' }}">
                     <a href="{{ route('penjual.pengaturan') }}" class='sidebar-link'>

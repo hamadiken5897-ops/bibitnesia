@@ -176,6 +176,16 @@ Route::middleware(['auth'])->group(function () {
     // riwayat marketplace
     Route::get('/riwayat', [RiwayatController::class, 'riwayat'])->name('riwayat');
 
+    // ulasan
+    Route::post('/ulasan/store', [App\Http\Controllers\UlasanController::class, 'store'])->name('ulasan.store');
+
+    // pesan / chat
+    Route::get('/pesan', [App\Http\Controllers\PesanController::class, 'index'])->name('pesan.index');
+    Route::get('/pesan/unread', [App\Http\Controllers\PesanController::class, 'getUnreadCount'])->name('pesan.unread');
+    Route::get('/pesan/tanya/{id_produk}', [App\Http\Controllers\PesanController::class, 'tanyaPenjual'])->name('pesan.tanya');
+    Route::get('/pesan/{id}', [App\Http\Controllers\PesanController::class, 'show'])->name('pesan.show');
+    Route::post('/pesan/store', [App\Http\Controllers\PesanController::class, 'store'])->name('pesan.store');
+
     // riwayat notifikasi
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
 

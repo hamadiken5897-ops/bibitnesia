@@ -52,11 +52,13 @@
 
                         {{-- Info Produk --}}
                         <div class="produk-body">
-                            <h6 class="produk-name">{{ $produk->nama_produk }}</h6>
+                            <a href="{{ route('marketplace.show', $produk->id_produk) }}" class="text-decoration-none text-dark">
+                                <h6 class="produk-name">{{ $produk->nama_produk }}</h6>
+                            </a>
                             <p class="produk-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
                             <p class="produk-stok">Stok: {{ $produk->stok }}</p>
 
-                            <a href="#" class="btn btn-sm btn-outline-primary w-100">
+                            <a href="{{ route('marketplace.show', $produk->id_produk) }}" class="btn btn-sm btn-outline-primary w-100">
                                 <i class="bi bi-eye me-1"></i>Lihat Detail
                             </a>
                         </div>
