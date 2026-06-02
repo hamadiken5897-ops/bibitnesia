@@ -112,20 +112,37 @@
 
 
                     <div class="action-buttons">
-                        <form id="checkoutForm" action="{{ route('checkout.create') }}" method="POST"
+                        <form id="checkoutForm" action="{{ route('checkout.create') }}" method="GET"
                             style="display:none;">
-                            @csrf
                             <input type="hidden" name="id_produk" value="{{ $produk->id_produk }}">
                             <input type="hidden" name="jumlah" id="checkoutJumlah">
                         </form>
 
-                        <button class="btn-add-cart">
-                            <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
-                        </button>
+                        @auth
+                            <button class="btn btn-outline-danger btn-add-favorit" onclick="toggleFavorit()" title="Tambahkan ke Favorit">
+                                <i id="favoritIcon" class="{{ $isFavorit ? 'fas' : 'far' }} fa-heart"></i>
+                            </button>
 
-                        <button class="btn-buy-now" onclick="confirmCheckout()">
-                            <i class="fas fa-bolt"></i> Beli Sekarang
-                        </button>
+                            <button class="btn-add-cart" onclick="addToCart()">
+                                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                            </button>
+
+                            <button class="btn-buy-now" onclick="confirmCheckout()">
+                                <i class="fas fa-bolt"></i> Beli Sekarang
+                            </button>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-outline-danger btn-add-favorit text-center" style="text-decoration:none; padding: 12px;" title="Tambahkan ke Favorit">
+                                <i class="fas fa-heart"></i>
+                            </a>
+
+                            <a href="{{ route('login') }}" class="btn-add-cart text-center" style="text-decoration:none;">
+                                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                            </a>
+
+                            <a href="{{ route('login') }}" class="btn-buy-now text-center" style="text-decoration:none;">
+                                <i class="fas fa-bolt"></i> Beli Sekarang
+                            </a>
+                        @endauth
                     </div>
 
 
@@ -135,12 +152,15 @@
         </div>
     </div>
     <script>
-        const hargaSatuan = {{ $produk->harga }};
-        const stokMaks = {{ $produk->stok }};
-        const qtyInput = document.getElementById('qty');
-        const totalHarga = document.getElementById('totalHarga');
+        var hargaSatuan = {{ $produk->harga }};
+        var stokMaks = {{ $produk->stok }};
 
         function updateTotal() {
+            var qtyInput = document.getElementById('qty');
+            var totalHarga = document.getElementById('totalHarga');
+            
+            if(!qtyInput || !totalHarga) return;
+
             let qty = parseInt(qtyInput.value);
 
             if (qty < 1) qty = 1;
@@ -151,13 +171,83 @@
         }
 
         function changeQty(amount) {
+            var qtyInput = document.getElementById('qty');
+            if(!qtyInput) return;
             qtyInput.value = parseInt(qtyInput.value) + amount;
             updateTotal();
         }
 
-        qtyInput.addEventListener('input', updateTotal);
+        document.addEventListener('input', function(e) {
+            if(e.target && e.target.id === 'qty') {
+                updateTotal();
+            }
+        });
+
+        function addToCart() {
+            const qty = document.getElementById('qty').value;
+            const produk_id = '{{ $produk->id_produk }}';
+            
+            fetch("{{ route('keranjang.add') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    produk_id: produk_id,
+                    qty: qty
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Berhasil',
+                          text: data.message,
+                          timer: 1500,
+                          showConfirmButton: false
+                      });
+                  } else {
+                      Swal.fire({icon: 'error', title: 'Oops', text: 'Terjadi kesalahan'});
+                  }
+              }).catch(err => {
+                  Swal.fire({icon: 'error', title: 'Oops', text: 'Gagal menghubungi server'});
+              });
+        }
+
+        function toggleFavorit() {
+            const produk_id = '{{ $produk->id_produk }}';
+            fetch("{{ route('favorit.toggle') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    produk_id: produk_id
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  const icon = document.getElementById('favoritIcon');
+                  if (data.status === 'added') {
+                      icon.classList.remove('far');
+                      icon.classList.add('fas');
+                      Swal.fire({icon: 'success', title: 'Berhasil', text: data.message, timer: 1500, showConfirmButton: false});
+                  } else if (data.status === 'removed') {
+                      icon.classList.remove('fas');
+                      icon.classList.add('far');
+                      Swal.fire({icon: 'info', title: 'Berhasil', text: data.message, timer: 1500, showConfirmButton: false});
+                  }
+              }).catch(err => {
+                  Swal.fire({icon: 'error', title: 'Oops', text: 'Gagal menghubungi server'});
+              });
+        }
 
         function confirmCheckout() {
+            const qtyInput = document.getElementById('qty');
+            if(!qtyInput) return;
             const qty = qtyInput.value;
 
             Swal.fire({
@@ -178,12 +268,6 @@
                     document.getElementById('checkoutForm').submit();
                 }
             });
-        }
-
-        function confirmCheckout() {
-            const qty = document.getElementById('qty').value;
-
-            window.location.href = `/checkout?id_produk={{ $produk->id_produk }}&jumlah=${qty}`;
         }
     </script>
 @endsection

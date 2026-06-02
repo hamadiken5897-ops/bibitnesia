@@ -170,6 +170,7 @@ Route::middleware(['auth'])->group(function () {
     // favorit marketplace
     Route::get('/favorit', [FavoritController::class, 'index'])->name('favorit.index');
     Route::post('/favorit/add', [FavoritController::class, 'add'])->name('favorit.add');
+    Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('favorit.toggle');
     Route::delete('/favorit/delete/{id}', [FavoritController::class, 'delete'])->name('favorit.delete');
 
     // riwayat marketplace
@@ -189,8 +190,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
     Route::post('/notifikasi/delete/{id}', [NotifikasiController::class, 'delete'])->name('notifikasi.delete');
     Route::post('/notifikasi/delete-all', [NotifikasiController::class, 'deleteAll'])->name('notifikasi.deleteAll');
-
-    Route::get('/marketplace/produk/{id}', [MarketplaceController::class, 'show'])->name('marketplace.produk.show');
 
     Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
 

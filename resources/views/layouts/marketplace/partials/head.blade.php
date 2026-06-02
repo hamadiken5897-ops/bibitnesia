@@ -14,7 +14,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Custom CSS -->
-<link rel="stylesheet" href="{{ asset('marketplace_as/css/marketplace.css') }}"?v={{ filemtime(public_path('marketplace_as/css/marketplace.css')) }}">
-
-
+<link rel="stylesheet" href="{{ asset('marketplace_as/css/marketplace.css') }}?v={{ filemtime(public_path('marketplace_as/css/marketplace.css')) }}">
 <link rel="stylesheet" href="{{ asset('checkout_as/css/checkout.css') }}">
+
+<!-- Turbo.js for SPA-like transitions -->
+<script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>

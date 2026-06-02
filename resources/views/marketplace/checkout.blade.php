@@ -44,6 +44,9 @@
 
                     {{-- STEP 1 --}}
                     <div class="step" id="step1">
+                        @if ($is_from_cart)
+                            <input type="hidden" name="is_from_cart" value="1">
+                        @endif
 
                         <h5 class="section-title">Ringkasan Pesanan</h5>
 

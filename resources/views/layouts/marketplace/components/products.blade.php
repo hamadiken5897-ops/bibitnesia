@@ -1,7 +1,7 @@
 <div class="products-grid">
 
     @forelse ($produk as $item)
-        <a href="{{ route('marketplace.produk.show', $item->id_produk) }}" class="product-card-link">
+        <a href="{{ route('marketplace.show', $item->id_produk) }}" class="product-card-link">
 
             <div class="product-card">
 

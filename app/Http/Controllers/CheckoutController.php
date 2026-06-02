@@ -19,18 +19,36 @@ class CheckoutController extends Controller
 
     public function create(Request $request)
     {
-        $produk = Produk::where('id_produk', $request->id_produk)->firstOrFail();
-        $jumlah = max(1, (int) $request->jumlah);
+        $items = [];
+        $isFromCart = false;
 
-        $items = [
-            [
+        if ($request->has('from_cart') && $request->from_cart == '1') {
+            $keranjang = \App\Models\Keranjang::where('user_id', auth()->user()->id_user)->with('produk')->get();
+            if ($keranjang->isEmpty()) {
+                return redirect()->route('keranjang.index')->with('error', 'Keranjang Anda kosong.');
+            }
+            foreach ($keranjang as $k) {
+                $items[] = [
+                    'id_produk' => $k->produk->id_produk,
+                    'nama' => $k->produk->nama_produk,
+                    'harga' => $k->produk->harga,
+                    'jumlah' => $k->qty,
+                    'subtotal' => $k->produk->harga * $k->qty,
+                ];
+            }
+            $isFromCart = true;
+        } else {
+            $produk = Produk::where('id_produk', $request->id_produk)->firstOrFail();
+            $jumlah = max(1, (int) $request->jumlah);
+
+            $items[] = [
                 'id_produk' => $produk->id_produk,
                 'nama' => $produk->nama_produk,
                 'harga' => $produk->harga,
                 'jumlah' => $jumlah,
                 'subtotal' => $produk->harga * $jumlah,
-            ],
-        ];
+            ];
+        }
 
         $totalProduk = collect($items)->sum('subtotal');
 
@@ -41,6 +59,7 @@ class CheckoutController extends Controller
             'totalProduk' => $totalProduk,
             'provinsi' => $provinsi,
             'ongkirTetap' => self::ONGKIR_TETAP, // 🔥 INI WAJIB
+            'is_from_cart' => $isFromCart ? 1 : 0,
         ]);
     }
 
@@ -145,6 +164,10 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
         });
+
+        if ($request->has('is_from_cart') && $request->is_from_cart == '1') {
+            \App\Models\Keranjang::where('user_id', auth()->user()->id_user)->delete();
+        }
 
         // ===============================
         // 6️⃣ REDIRECT KE INVOICE

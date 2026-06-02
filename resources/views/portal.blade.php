@@ -305,41 +305,41 @@
 
                     @foreach ($produkPopuler as $produk)
                         <div class="col-lg-3 col-md-6">
-                            <div class="product-card">
-
+                            <div class="product-card" onclick="window.location.href='{{ route('marketplace.show', $produk->id_produk) }}'" style="cursor: pointer;">
+    
                                 {{-- FOTO --}}
                                 <img src="{{ asset('storage/' . $produk->foto_produk1) }}"
                                     alt="{{ $produk->nama_produk }}" class="product-image">
-
+    
                                 <div class="product-body">
-
+    
                                     {{-- KATEGORI (ENUM / STRING) --}}
                                     <span class="product-category">
                                         {{ str_replace('_', ' ', ucfirst($produk->kategori)) }}
                                     </span>
-
+    
                                     {{-- NAMA --}}
                                     <h3 class="product-title">
                                         {{ $produk->nama_produk }}
                                     </h3>
-
+    
                                     {{-- PENJUAL --}}
                                     <p class="product-seller">
                                         <i class="bi bi-shop"></i>
                                         {{ $produk->penjual->nama_penjual ?? 'Penjual' }}
                                     </p>
-
+    
                                     {{-- HARGA --}}
                                     <div class="product-price">
                                         Rp {{ number_format($produk->harga, 0, ',', '.') }}
                                     </div>
-
+    
                                     {{-- LOKASI (OPTIONAL) --}}
                                     <p class="product-location">
                                         <i class="bi bi-geo-alt-fill"></i>
                                         {{ $produk->lokasi ?? 'Indonesia' }}
                                     </p>
-
+    
                                 </div>
                             </div>
                         </div>
@@ -420,7 +420,7 @@
 
                     @foreach ($dummyProducts as $product)
                         <div class="col-lg-3 col-md-6">
-                            <div class="product-card">
+                            <div class="product-card" onclick="window.location.href='{{ route('marketplace.index') }}'" style="cursor: pointer;">
                                 <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}"
                                     class="product-image">
                                 <div class="product-body">

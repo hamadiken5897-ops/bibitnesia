@@ -10,7 +10,7 @@ class KeranjangController extends Controller
     public function index()
     {
         // ambil data keranjang untuk user yg login, termasuk relasi produk
-        $keranjang = Keranjang::where('user_id', auth()->id())
+        $keranjang = Keranjang::where('user_id', auth()->user()->id_user)
             ->with('produk') // relasi produk harus ada di model Keranjang
             ->get();
 
@@ -20,21 +20,26 @@ class KeranjangController extends Controller
 
     public function add(Request $request)
     {
-        $item = Keranjang::where('user_id', auth()->id())
+        $userId = auth()->user()->id_user;
+
+        $item = Keranjang::where('user_id', $userId)
             ->where('produk_id', $request->produk_id)
             ->first();
 
         if ($item) {
-            $item->qty += 1;
+            $item->qty += (int) ($request->qty ?? 1);
             $item->save();
         } else {
             Keranjang::create([
-                'user_id' => auth()->id(),
+                'user_id' => $userId,
                 'produk_id' => $request->produk_id,
-                'qty' => 1,
+                'qty' => (int) ($request->qty ?? 1),
             ]);
         }
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => 'Berhasil ditambahkan ke keranjang!']);
+        }
         return back()->with('success', 'Berhasil ditambahkan ke keranjang!');
     }
 

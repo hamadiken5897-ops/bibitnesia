@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorit extends Model
 {
-    protected $fillable = ['user_id', 'produk_id'];
+    protected $fillable = ['id_user', 'produk_id'];
 
     public function produk()
     {
-        return $this->belongsTo(Produk::class);
+        return $this->belongsTo(Produk::class, 'produk_id', 'id_produk');
     }
 }

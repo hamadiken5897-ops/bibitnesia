@@ -278,43 +278,6 @@ function initProductCards() {
     });
 }
 
-/**
- * Add to Cart Function
- */
-function addToCart(productId) {
-    // Show loading
-    const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menambahkan...';
-    btn.disabled = true;
-
-    // Simulate API call
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> Ditambahkan!';
-        btn.style.background = "#27ae60";
-
-        // Show notification
-        showToast("Produk berhasil ditambahkan ke keranjang!", "success");
-
-        // Reset button after 2 seconds
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            btn.style.background = "";
-        }, 2000);
-    }, 1000);
-}
-
-/**
- * Buy Now Function
- */
-function buyNow(productId) {
-    // Show confirmation
-    if (confirm("Lanjut ke pembayaran?")) {
-        // Redirect to checkout
-        window.location.href = "/checkout/" + productId;
-    }
-}
 
 /**
  * Show Toast Notification
@@ -415,9 +378,7 @@ document.addEventListener("click", function (e) {
     }
 });
 
-// Export functions for use in HTML
-window.addToCart = addToCart;
-window.buyNow = buyNow;
+
 window.performSearch = performSearch;
 window.filterByCategory = filterByCategory;
 window.closeNotificationDropdown = closeNotificationDropdown;

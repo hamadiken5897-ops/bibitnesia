@@ -114,6 +114,7 @@ class MarketplaceController extends Controller
         // Notifikasi
         $notifCount = 0;
         $notifLatest = [];
+        $isFavorit = false;
 
         if (auth()->check()) {
             $notifCount = NotifikasiUser::where('id_user', auth()->user()->id_user)
@@ -124,8 +125,12 @@ class MarketplaceController extends Controller
                 ->latest()
                 ->take(5)
                 ->get();
+                
+            $isFavorit = \App\Models\Favorit::where('id_user', auth()->user()->id_user)
+                ->where('produk_id', $id)
+                ->exists();
         }
 
-        return view('marketplace.detail', compact('produk', 'produkTerkait', 'notifCount', 'notifLatest'));
+        return view('marketplace.detail', compact('produk', 'produkTerkait', 'notifCount', 'notifLatest', 'isFavorit'));
     }
 }
