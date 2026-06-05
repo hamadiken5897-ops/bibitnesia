@@ -9,9 +9,9 @@ class RiwayatController extends Controller
 {
     public function riwayat()
     {
-        // ambil semua pesanan milik user tanpa filter status
         $riwayat = Pesanan::where('id_user', auth()->user()->id_user)
-            ->with(['detailPesanan', 'detailPesanan.produk'])
+            ->where('status_pesanan', 'Pesanan Selesai')
+            ->with(['detailPesanan.produk'])
             ->latest()
             ->get();
 

@@ -38,7 +38,12 @@ class CheckoutController extends Controller
             }
             $isFromCart = true;
         } else {
-            $produk = Produk::where('id_produk', $request->id_produk)->firstOrFail();
+            $produk = Produk::where('id_produk', $request->id_produk)->with('penjual')->firstOrFail();
+            
+            if ($produk->penjual && $produk->penjual->id_user == auth()->user()->id_user) {
+                return redirect()->back()->with('error', 'Anda tidak bisa membeli produk Anda sendiri!');
+            }
+
             $jumlah = max(1, (int) $request->jumlah);
 
             $items[] = [
@@ -81,7 +86,12 @@ class CheckoutController extends Controller
         $totalProduk = 0;
 
         foreach ($request->items as $item) {
-            $produk = Produk::where('id_produk', $item['id_produk'])->firstOrFail();
+            $produk = Produk::where('id_produk', $item['id_produk'])->with('penjual')->firstOrFail();
+            
+            if ($produk->penjual && $produk->penjual->id_user == auth()->user()->id_user) {
+                return redirect()->back()->with('error', 'Anda tidak bisa membeli produk Anda sendiri!');
+            }
+
             $totalProduk += $produk->harga * $item['jumlah'];
         }
 

@@ -14,4 +14,9 @@ class LaporanPenjual extends Model
         'id_pesanan',
         'jumlah',
     ];
+
+    public function pesanan()
+    {
+        return $this->belongsTo(Pesanan::class, 'id_pesanan', 'id_pesanan');
+    }
 }

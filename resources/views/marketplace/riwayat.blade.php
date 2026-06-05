@@ -1,50 +1,45 @@
 @extends('layouts.marketplace.main')
 
 @section('content')
-<div class="container mt-4">
+    <div class="container mt-4">
 
-    <h3 class="fw-bold mb-4">Riwayat Pesanan</h3>
+        <h3 class="fw-bold mb-4">Riwayat Pesanan</h3>
 
-    @if ($riwayat->count() == 0)
-        <div class="alert alert-info">
-            Belum ada riwayat pesanan.
-        </div>
-    @else
-        @foreach ($riwayat as $item)
-            <div class="card mb-3 shadow-sm">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold">Invoice: {{ $item->kode_invoice ?? $item->id_pesanan }}</h6>
-                    <small class="text-muted">{{ $item->created_at->format('d M Y') }}</small>
-                </div>
-                <div class="card-body">
-                    @foreach ($item->detailPesanan as $detail)
-                        <div class="d-flex {{ !$loop->last ? 'mb-3 border-bottom pb-3' : '' }}">
-                            <img src="{{ asset('storage/' . ($detail->produk->foto_produk1 ?? '')) }}"
-                                class="me-3"
-                                style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-
-                            <div class="flex-grow-1">
-                                <h6 class="fw-bold">{{ $detail->produk->nama_produk ?? 'Produk Tidak Ditemukan' }}</h6>
-                                <p class="m-0 text-muted small">
-                                    {{ $detail->jumlah }} item x Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}
-                                </p>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        @if ($riwayat->isEmpty())
+            <div class="alert alert-info">
+                Anda belum memiliki riwayat pesanan yang selesai.
+            </div>
+        @else
+            @foreach ($riwayat as $p)
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                         <div>
-                            <span class="text-muted d-block small">Total Belanja</span>
-                            <h6 class="fw-bold mb-0">Rp {{ number_format($item->total_harga, 0, ',', '.') }}</h6>
+                            <span class="badge bg-success">{{ $p->status_pesanan }}</span>
+                            <small class="text-muted ms-2">{{ \Carbon\Carbon::parse($p->created_at)->format('d M Y H:i') }}</small>
                         </div>
-                        <span class="badge bg-secondary px-3 py-2">
-                            {{ ucfirst($item->status_pesanan) }}
-                        </span>
+                        <div>
+                            <span class="fw-bold">Total Invoice: <span class="text-success">Rp {{ number_format($p->total_harga, 0, ',', '.') }}</span></span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($p->detailPesanan as $detail)
+                            @if($detail->produk)
+                            <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                                <img src="{{ asset('storage/' . $detail->produk->foto_produk1) }}" class="rounded me-3"
+                                    style="width:70px;height:70px;object-fit:cover">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{ $detail->produk->nama_produk }}</h6>
+                                    <small class="text-muted d-block">
+                                        {{ $detail->jumlah }} x Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}
+                                    </small>
+                                </div>
+                            </div>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
-            </div>
-        @endforeach
-    @endif
+            @endforeach
+        @endif
 
-</div>
+    </div>
 @endsection

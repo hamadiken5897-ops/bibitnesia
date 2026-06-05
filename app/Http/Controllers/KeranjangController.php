@@ -22,6 +22,14 @@ class KeranjangController extends Controller
     {
         $userId = auth()->user()->id_user;
 
+        $produk = \App\Models\Produk::with('penjual')->where('id_produk', $request->produk_id)->first();
+        if ($produk && $produk->penjual && $produk->penjual->id_user == $userId) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Anda tidak bisa membeli produk Anda sendiri!'], 400);
+            }
+            return back()->with('error', 'Anda tidak bisa membeli produk Anda sendiri!');
+        }
+
         $item = Keranjang::where('user_id', $userId)
             ->where('produk_id', $request->produk_id)
             ->first();

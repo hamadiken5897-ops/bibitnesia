@@ -109,6 +109,9 @@ class MarketplaceController extends Controller
             ->where('status', 'tersedia')
             ->firstOrFail();
 
+        // Tambah jumlah kunjungan
+        $produk->increment('jumlah_lihat');
+
         $produkTerkait = Produk::with('penjual')->where('kategori', $produk->kategori)->where('id_produk', '!=', $id)->where('status', 'tersedia')->limit(4)->get();
 
         // Notifikasi

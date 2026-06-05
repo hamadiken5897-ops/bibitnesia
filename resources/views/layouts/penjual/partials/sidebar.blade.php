@@ -58,11 +58,11 @@
                     </a>
                 </li>  
 
-                {{-- Pembayaran / Keuangan --}}
-                <li class="sidebar-item {{ request()->routeIs('penjual.pembayaran') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.pembayaran') }}" class='sidebar-link'>
-                        <i class="bi bi-credit-card-fill"></i>
-                        <span>Pembayaran</span>
+                {{-- Saldo / Keuangan --}}
+                <li class="sidebar-item {{ request()->routeIs('penjual.saldo') ? 'active' : '' }}">
+                    <a href="{{ route('penjual.saldo') }}" class='sidebar-link'>
+                        <i class="bi bi-wallet2"></i>
+                        <span>Saldo Pendapatan</span>
                     </a>
                 </li>
 

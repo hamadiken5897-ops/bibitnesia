@@ -97,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
 */
 
     // Dashboard routes akan dihandle di masing-masing prefix controller
-    Route::get('/penjual/dashboard', fn() => view('penjual.penjual'))->name('penjual.dashboard');
+    Route::get('/penjual/dashboard', [\App\Http\Controllers\Penjual\DashboardController::class, 'index'])->name('penjual.dashboard');
     Route::get('/pembeli/dashboard', fn() => view('pembeli.dashboard'))->name('pembeli.dashboard');
     Route::get('/kurir/dashboard', fn() => view('kurir.dashboard'))->name('kurir.dashboard');
 
@@ -210,16 +210,25 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/marketplace/invoice/{id_pesanan}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('marketplace.invoice');
     Route::get('/marketplace/pesanan-saya', [App\Http\Controllers\PesananController::class, 'index'])->name('marketplace.pesanan.saya');
+    Route::post('/marketplace/pesanan-saya/{id}/selesai', [App\Http\Controllers\PesananController::class, 'selesai'])->name('marketplace.pesanan.selesai');
     Route::get('/pembayaran/{id}/proses', function ($id) {
         $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
 
         if ($pesanan->status_pesanan === 'Menunggu Pembayaran') {
-            $pesanan->update([
-                'status_pesanan' => 'Pesanan sedang diproses',
-            ]);
+            \Illuminate\Support\Facades\DB::transaction(function () use ($pesanan) {
+                $pesanan->update([
+                    'status_pesanan' => 'Pesanan sedang diproses',
+                ]);
+
+                \App\Models\Pembayaran::where('id_pesanan', $pesanan->id_pesanan)->update([
+                    'status_validasi' => 'dibayar',
+                    'tanggal_pembayaran' => now(),
+                    'tgl_validasi' => now(),
+                ]);
+            });
         }
 
-        return redirect()->route('marketplace.pesanan.saya')->with('success', 'Pembayaran berhasil (simulasi)');
+        return redirect()->route('marketplace.pesanan.saya')->with('success', 'Pembayaran berhasil dikonfirmasi (Simulasi Otomatis)');
     })->name('pembayaran.proses');
 
     /*
@@ -327,9 +336,6 @@ Route::middleware(['auth'])->group(function () {
                 return back()->with('success', 'Pesanan ditolak');
             })->name('pesanan.reject');
 
-            // pengiriman - penjual
-            Route::get('/pengiriman/{pesanan}/buat', [App\Http\Controllers\Penjual\PengirimanController::class, 'create'])->name('pengiriman.create');
-            Route::post('/pengiriman', [App\Http\Controllers\Penjual\PengirimanController::class, 'store'])->name('pengiriman.store');
 
             Route::get('/status-pesanan', [App\Http\Controllers\Penjual\StatusPesananController::class, 'index'])->name('status-pesanan.index');
 
@@ -337,8 +343,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/pesanan/{id}/kurir', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'simpanKurir'])->name('pesanan.kurir.simpan');
 
-            // VIEW STATIS
-            Route::get('/pembayaran', fn() => view('penjual.pembayaran'))->name('pembayaran');
             Route::get('/pengaturan', fn() => view('penjual.pengaturan'))->name('pengaturan');
         });
 
@@ -363,28 +367,17 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [App\Http\Controllers\Kurir\KurirController::class, 'dashboard'])->name('dashboard');
 
-            Route::get('/inbox', [App\Http\Controllers\Kurir\KurirController::class, 'index'])->name('inbox');
 
-            Route::get('/inbox/{id}', [App\Http\Controllers\Kurir\KurirController::class, 'detail'])->name('inbox.detail');
-
-            Route::post('/inbox/{id}/selesai', [App\Http\Controllers\Kurir\KurirController::class, 'selesai'])->name('inbox.selesai');
-
-            Route::get('/pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'index'])->name('pengiriman.index');
-
-            Route::post('/pengiriman/{pengiriman}/terima', [App\Http\Controllers\Kurir\PengirimanController::class, 'accept'])->name('pengiriman.accept');
-
-            Route::post('/pengiriman/{pengiriman}/selesai', [App\Http\Controllers\Kurir\PengirimanController::class, 'selesai'])->name('pengiriman.selesai');
 
             // 🚚 STATUS PENGIRIMAN
             Route::get('/status-pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'statusIndex'])->name('status-pengiriman.index');
+            Route::get('/riwayat-pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'riwayat'])->name('riwayat-pengiriman.index');
 
        //     Route::get('/pengiriman/{id}/status', [App\Http\Controllers\Kurir\PengirimanController::class, 'status'])->name('pengiriman.status');
 
             Route::put('/pengiriman/{id}/status', [App\Http\Controllers\Kurir\PengirimanController::class, 'updateStatus'])->name('pengiriman.status.update');
 
-            Route::get('/inbox', fn() => view('kurir.inbox'))->name('inbox');
-      //      Route::get('/pengiriman', fn() => view('kurir.pengiriman'))->name('pengiriman');
-            Route::get('/pembayaran', fn() => view('kurir.pembayaran'))->name('pembayaran');
+
 
             // PROFIL KURIR
             Route::get('/profil', fn() => view('kurir.profil'))->name('profil');
@@ -407,39 +400,7 @@ Route::middleware(['auth'])->group(function () {
                 return back()->with('success', 'Profile Kurir berhasil diperbarui');
             })->name('profil.update');
 
-            // INBOX KURIR
-            Route::get('/inbox/{id}', function ($id) {
-                // Contoh data dummy (karena belum pakai database inbox)
-                $messages = [
-                    1 => [
-                        'pengirim' => 'Admin BibitNesia',
-                        'subjek' => 'Konfirmasi Pembayaran',
-                        'pesan' => 'Mohon cek ulang pembayaran order dengan ID #INV-2025-01.',
-                        'tanggal' => '03 Jan 2025',
-                        'status' => 'Unread',
-                    ],
-                    2 => [
-                        'pengirim' => 'Rina Putri',
-                        'subjek' => 'Alamat Pengiriman',
-                        'pesan' => 'Kak alamat saya sudah saya perbarui, mohon dicek ya.',
-                        'tanggal' => '03 Jan 2025',
-                        'status' => 'Read',
-                    ],
-                    3 => [
-                        'pengirim' => 'Admin',
-                        'subjek' => 'Pengiriman Gagal',
-                        'pesan' => 'Mohon follow up pengiriman ID #SHIP-8891.',
-                        'tanggal' => '02 Jan 2025',
-                        'status' => 'Unread',
-                    ],
-                ];
 
-                abort_if(!isset($messages[$id]), 404);
-
-                return view('kurir.inbox-detail', [
-                    'message' => $messages[$id],
-                ]);
-            })->name('inbox.detail');
 
             Route::get('/pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'index'])->name('pengiriman.index');
 

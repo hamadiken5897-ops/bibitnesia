@@ -49,7 +49,7 @@ class PenjualPengirimanController extends Controller
                 'id_pesanan' => $pesanan->id_pesanan,
                 'id_kurir' => $request->id_kurir,
                 'alamat_tujuan' => $pesanan->alamat,
-                'status_pengiriman' => 'dikemas',
+                'status_pengiriman' => 'diproses',
             ]);
 
             $pesanan->update([

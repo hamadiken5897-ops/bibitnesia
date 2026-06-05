@@ -82,11 +82,43 @@ class PengirimanController extends Controller
 
         // Sinkron ke pesanan
         if ($request->status_pengiriman === 'selesai') {
-            $pengiriman->pesanan->update([
-                'status_pesanan' => 'Pesanan Selesai',
-            ]);
+            \Illuminate\Support\Facades\DB::transaction(function () use ($pengiriman) {
+                $pesanan = $pengiriman->pesanan;
+                
+                $pesanan->update([
+                    'status_pesanan' => 'Pesanan Selesai',
+                ]);
+
+                // Hitung saldo penjual jika belum dicatat
+                $sudahDicatat = \App\Models\LaporanPenjual::where('id_pesanan', $pesanan->id_pesanan)->exists();
+                
+                if (!$sudahDicatat) {
+                    foreach ($pesanan->detailPesanan as $detail) {
+                        if ($detail->produk && $detail->produk->id_penjual) {
+                            $pendapatan = $detail->harga_satuan * $detail->jumlah;
+                            
+                            \App\Models\LaporanPenjual::create([
+                                'id_penjual' => $detail->produk->id_penjual,
+                                'id_pesanan' => $pesanan->id_pesanan,
+                                'jumlah' => $pendapatan,
+                            ]);
+                        }
+                    }
+                }
+            });
         }
 
         return back()->with('success', 'Status pengiriman diperbarui');
+    }
+    public function riwayat()
+    {
+        $kurirId = auth()->user()->kurir->id_kurir;
+
+        $pengiriman = Pengiriman::where('id_kurir', $kurirId)
+            ->where('status_pengiriman', 'selesai')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+
+        return view('kurir.riwayat.index', compact('pengiriman'));
     }
 }

@@ -47,7 +47,7 @@
                                         @method('PUT')
 
                                         <select name="status_pengiriman" class="form-select form-select-sm"
-                                            onchange="this.form.submit()">
+                                            onchange="confirmSelesai(this, '{{ $p->status_pengiriman }}')">
                                             <option value="diproses" @selected($p->status_pengiriman == 'diproses')>
                                                 Diproses
                                             </option>
@@ -69,4 +69,31 @@
 
         </div>
     </div>
+@endsection
+
+@section('scripts')
+<script>
+    function confirmSelesai(selectElem, oldStatus) {
+        if (selectElem.value === 'selesai') {
+            Swal.fire({
+                title: 'Konfirmasi Selesai',
+                text: 'Yakin ingin menyelesaikan pengiriman ini? (Saldo pendapatan akan otomatis diteruskan ke penjual)',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Selesai!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    selectElem.form.submit();
+                } else {
+                    selectElem.value = oldStatus;
+                }
+            });
+        } else {
+            selectElem.form.submit();
+        }
+    }
+</script>
 @endsection

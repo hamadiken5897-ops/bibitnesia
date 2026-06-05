@@ -33,33 +33,23 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('kurir.inbox') ? 'active' : '' }}">
-                    <a href="{{ route('kurir.inbox') }}" class="sidebar-link">
-                        <i class="bi bi-envelope-fill"></i>
-                        <span>Inbox</span>
-                    </a>
-                </li>
 
-                <li class="sidebar-item {{ request()->routeIs('kurir.pengiriman') ? 'active' : '' }}">
-                    <a href="{{ route('kurir.pengiriman.index') }}" class="sidebar-link">
-                        <i class="bi bi-box"></i>
-                        <span>Pengiriman Masuk</span>
-                    </a>
-                </li>
 
-                <li class="sidebar-item {{ request()->routeIs('status-pengiriman.index') ? 'active' : '' }}">
+                <li class="sidebar-item {{ request()->routeIs('kurir.status-pengiriman.index') ? 'active' : '' }}">
                     <a href="{{ route('kurir.status-pengiriman.index') }}" class="sidebar-link">
                         <i class="bi bi-truck"></i>
                         <span>Status Pengiriman</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ request()->routeIs('kurir.pembayaran') ? 'active' : '' }}">
-                    <a href="{{ route('kurir.pembayaran') }}" class="sidebar-link">
-                        <i class="bi bi-wallet2"></i>
-                        <span>Pembayaran</span>
+                <li class="sidebar-item {{ request()->routeIs('kurir.riwayat-pengiriman.index') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.riwayat-pengiriman.index') }}" class="sidebar-link">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Riwayat Pengiriman</span>
                     </a>
                 </li>
+
+
 
                 <li class="sidebar-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
                     <a href="{{ route('marketplace.index') }}" class="sidebar-link">

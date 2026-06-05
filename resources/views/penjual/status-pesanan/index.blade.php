@@ -20,13 +20,18 @@
                             Pembeli: {{ $row->user->name }}
                         </div>
 
-                        <div>
+                        <div class="text-end">
                             @if (!$row->pengiriman)
-                                <span class="badge bg-warning">Belum Dikirim</span>
+                                <span class="badge bg-warning">Menunggu Kurir</span>
                             @else
-                                <span class="badge bg-info">
+                                <span class="badge bg-info mb-1 d-block">
                                     {{ ucfirst($row->pengiriman->status_pengiriman) }}
                                 </span>
+                                @if($row->pengiriman->kurir && $row->pengiriman->kurir->user)
+                                <small class="text-muted">
+                                    <i class="bi bi-person"></i> {{ $row->pengiriman->kurir->user->name }}
+                                </small>
+                                @endif
                             @endif
                         </div>
                     </div>

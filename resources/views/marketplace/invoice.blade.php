@@ -31,6 +31,10 @@
                     Bayar sebelum:
                     {{ \Carbon\Carbon::parse($pembayaran->expired_at)->format('d M Y H:i') }}
                 </small>
+
+                <a href="{{ route('pembayaran.proses', $pesanan->id_pesanan) }}" class="btn btn-success w-100 mt-3 fw-bold">
+                    Simulasi Bayar Otomatis (Midtrans Mock)
+                </a>
             @elseif ($pembayaran->status_validasi == 'expired')
                 <div class="alert alert-danger mt-3">
                     Pembayaran telah kedaluwarsa.

@@ -10,12 +10,20 @@ class StatusPesananController extends Controller
 {
     public function index()
     {
+        $penjual = auth()->user()->penjual;
+        if (!$penjual) {
+            abort(403, 'Akun ini bukan penjual');
+        }
+
         $pesanan = Pesanan::whereIn('status_pesanan', [
             'Menunggu Kurir',
             'Pesanan dalam pengiriman',
             'Pesanan Selesai'
         ])
-            ->with(['user', 'pengiriman'])
+            ->whereHas('detailPesanan.produk', function ($query) use ($penjual) {
+                $query->where('id_penjual', $penjual->id_penjual);
+            })
+            ->with(['user', 'pengiriman.kurir.user'])
             ->orderByRaw("FIELD(status_pesanan,
                 'Menunggu Kurir',
                 'Pesanan dalam pengiriman',

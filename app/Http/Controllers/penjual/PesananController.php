@@ -14,9 +14,17 @@ class PesananController extends Controller
      */
     public function index()
     {
+        $penjual = auth()->user()->penjual;
+        if (!$penjual) {
+            abort(403, 'Akun ini bukan penjual');
+        }
+
         // Ambil pesanan yang statusnya "sedang diproses"
-        $pesanan = Pesanan::with(['user', 'detailPesanan.produk'])
-            ->where('status_pesanan', 'Pesanan sedang diproses')
+        $pesanan = Pesanan::where('status_pesanan', 'Pesanan sedang diproses')
+            ->whereHas('detailPesanan.produk', function ($query) use ($penjual) {
+                $query->where('id_penjual', $penjual->id_penjual);
+            })
+            ->with(['user', 'detailPesanan.produk'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -55,18 +63,18 @@ class PesananController extends Controller
         $pesanan = Pesanan::where('id_pesanan', $id)->firstOrFail();
 
         $pesanan->update([
-            'status_pesanan' => 'Pesanan dalam pengiriman',
+            'status_pesanan' => 'Menunggu Kurir',
         ]);
 
         // Kirim notifikasi ke pembeli
         NotifikasiUser::create([
             'id_user' => $pesanan->id_user,
             'judul' => 'Pesanan Diterima',
-            'pesan' => 'Pesanan #' . $pesanan->kode_invoice . ' telah diterima penjual dan sedang diproses.',
+            'pesan' => 'Pesanan #' . $pesanan->kode_invoice . ' telah diterima penjual dan menunggu kurir.',
             'type' => 'success',
         ]);
 
-        return redirect()->route('penjual.pesanan.index')->with('success', 'Pesanan berhasil diterima!');
+        return redirect()->route('penjual.pesanan.index')->with('success', 'Pesanan berhasil diterima, silakan tugaskan kurir.');
     }
 
     /**

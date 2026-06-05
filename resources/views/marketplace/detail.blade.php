@@ -157,13 +157,23 @@
                                 <i id="favoritIcon" class="{{ $isFavorit ? 'fas' : 'far' }} fa-heart"></i>
                             </button>
 
-                            <button class="btn-add-cart" onclick="addToCart()">
-                                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
-                            </button>
+                            @if(auth()->user()->id_user == $produk->penjual->id_user)
+                                <button class="btn-add-cart" onclick="Swal.fire('Oops', 'Anda tidak bisa membeli produk Anda sendiri!', 'error')">
+                                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                                </button>
 
-                            <button class="btn-buy-now" onclick="confirmCheckout()">
-                                <i class="fas fa-bolt"></i> Beli Sekarang
-                            </button>
+                                <button class="btn-buy-now" onclick="Swal.fire('Oops', 'Anda tidak bisa membeli produk Anda sendiri!', 'error')">
+                                    <i class="fas fa-bolt"></i> Beli Sekarang
+                                </button>
+                            @else
+                                <button class="btn-add-cart" onclick="addToCart()">
+                                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                                </button>
+
+                                <button class="btn-buy-now" onclick="confirmCheckout()">
+                                    <i class="fas fa-bolt"></i> Beli Sekarang
+                                </button>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="btn btn-outline-danger btn-add-favorit text-center" style="text-decoration:none; padding: 12px;" title="Tambahkan ke Favorit">
                                 <i class="fas fa-heart"></i>
