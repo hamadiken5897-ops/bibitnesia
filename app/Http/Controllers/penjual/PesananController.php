@@ -60,7 +60,19 @@ class PesananController extends Controller
      */
     public function accept($id)
     {
-        $pesanan = Pesanan::where('id_pesanan', $id)->firstOrFail();
+        $pesanan = Pesanan::with('detailPesanan.produk')->where('id_pesanan', $id)->firstOrFail();
+
+        // Kurangi stok produk
+        foreach ($pesanan->detailPesanan as $detail) {
+            if ($detail->produk) {
+                $detail->produk->decrement('stok', $detail->jumlah);
+                
+                // Jika stok habis, ubah status
+                if ($detail->produk->fresh()->stok <= 0) {
+                    $detail->produk->update(['status' => 'habis']);
+                }
+            }
+        }
 
         $pesanan->update([
             'status_pesanan' => 'Menunggu Kurir',

@@ -123,6 +123,16 @@
         font-weight: 600;
         color: #7f8c8d;
     }
+    .chat-main.has-preview {
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+    }
+    
+    /* Hide the global floating chat button on the chat page */
+    .floating-chat-btn {
+        display: none !important;
+    }
 </style>
 
 <div class="container py-4">
@@ -181,4 +191,55 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let clickTimer = null;
+        const delay = 300; // milliseconds to distinguish between single and double click
+        
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const href = this.getAttribute('href');
+                const chatMain = document.querySelector('.chat-main');
+                
+                if (clickTimer === null) {
+                    // Start timer for single click (Preview)
+                    clickTimer = setTimeout(() => {
+                        clickTimer = null;
+                        
+                        // Show loading state
+                        chatMain.classList.remove('has-preview');
+                        chatMain.innerHTML = '<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>';
+                        
+                        // Fetch preview
+                        const previewUrl = href + (href.includes('?') ? '&' : '?') + 'preview=1';
+                        
+                        fetch(previewUrl, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(res => res.text())
+                        .then(html => {
+                            chatMain.classList.add('has-preview');
+                            chatMain.innerHTML = html;
+                        })
+                        .catch(err => {
+                            chatMain.innerHTML = '<div class="text-danger">Gagal memuat preview pesan.</div>';
+                        });
+                        
+                    }, delay);
+                } else {
+                    // Double click detected (Enter chat)
+                    clearTimeout(clickTimer);
+                    clickTimer = null;
+                    
+                    // Navigate to the chat page
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script>
 @endsection

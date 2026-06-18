@@ -1,6 +1,9 @@
 <div class="search-filter-section">
     <form action="{{ route('marketplace.index') }}" method="GET">
         <div class="search-bar">
+            @if(request('kategori'))
+                <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+            @endif
             <input type="text" name="search" placeholder="Cari tanaman, bibit, atau lainnya..."
                 value="{{ request('search') }}">
             <button type="submit"><i class="fas fa-search"></i> Cari</button>
@@ -35,11 +38,11 @@
                 <label>Urutkan</label>
                 <select name="sort" onchange="this.form.submit()">
                     <option value="">Terbaru</option>
-                    <option value="termurah">Termurah</option>
-                    <option value="termahal">Termahal</option>
+                    <option value="termurah" {{ request('sort') == 'termurah' ? 'selected' : '' }}>Termurah</option>
+                    <option value="termahal" {{ request('sort') == 'termahal' ? 'selected' : '' }}>Termahal</option>
                 </select>
             </div>
-            <div class="filter-row">g
+            <div class="filter-row">
                 <div class="filter-item d-flex align-items-end">
                     <a href="{{ route('marketplace.index') }}" class="btn btn-secondary">
                         <i class="fas fa-redo"></i> Reset Filter

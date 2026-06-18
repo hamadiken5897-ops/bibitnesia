@@ -90,6 +90,10 @@ class PesanController extends Controller
         $isPenjual = auth()->user()->role === 'penjual';
         $layout = $isPenjual ? 'layouts.penjual.penjual' : 'layouts.marketplace.main';
 
+        if (request()->has('preview')) {
+            return view('pesan.preview', compact('pesans', 'lawanBicara'));
+        }
+
         return view('pesan.show', compact('pesans', 'lawanBicara', 'layout'));
     }
 

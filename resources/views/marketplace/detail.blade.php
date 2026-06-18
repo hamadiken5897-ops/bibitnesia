@@ -124,24 +124,28 @@
 
                     {{-- JUMLAH & TOTAL --}}
                     <div class="product-purchase-box">
-
-                        <div class="qty-wrapper">
-                            <label for="qty">Jumlah</label>
-                            <div class="qty-control">
-                                <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
-                                <input type="number" id="qty" value="1" min="1"
-                                    max="{{ $produk->stok }}">
-                                <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                        @if($produk->status == 'habis' || $produk->stok <= 0)
+                            <div class="alert alert-warning mb-3 w-100 text-center fw-bold">
+                                <i class="fas fa-info-circle"></i> Mohon maaf, stok produk sedang habis.
                             </div>
-                        </div>
+                        @else
+                            <div class="qty-wrapper">
+                                <label for="qty">Jumlah</label>
+                                <div class="qty-control">
+                                    <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+                                    <input type="number" id="qty" value="1" min="1"
+                                        max="{{ $produk->stok }}">
+                                    <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                                </div>
+                            </div>
 
-                        <div class="total-wrapper">
-                            <span>Total Harga</span>
-                            <strong id="totalHarga">
-                                Rp {{ number_format($produk->harga, 0, ',', '.') }}
-                            </strong>
-                        </div>
-
+                            <div class="total-wrapper">
+                                <span>Total Harga</span>
+                                <strong id="totalHarga">
+                                    Rp {{ number_format($produk->harga, 0, ',', '.') }}
+                                </strong>
+                            </div>
+                        @endif
                     </div>
 
 
@@ -157,7 +161,15 @@
                                 <i id="favoritIcon" class="{{ $isFavorit ? 'fas' : 'far' }} fa-heart"></i>
                             </button>
 
-                            @if(auth()->user()->id_user == $produk->penjual->id_user)
+                            @if($produk->status == 'habis' || $produk->stok <= 0)
+                                <button class="btn-add-cart disabled" style="background-color: #e0e0e0; color: #999; border: none; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                                </button>
+
+                                <button class="btn-buy-now disabled" style="background-color: #d0d0d0; color: #888; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-bolt"></i> Beli Sekarang
+                                </button>
+                            @elseif(auth()->user()->id_user == $produk->penjual->id_user)
                                 <button class="btn-add-cart" onclick="Swal.fire('Oops', 'Anda tidak bisa membeli produk Anda sendiri!', 'error')">
                                     <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
                                 </button>
@@ -179,13 +191,23 @@
                                 <i class="fas fa-heart"></i>
                             </a>
 
-                            <a href="{{ route('login') }}" class="btn-add-cart text-center" style="text-decoration:none;">
-                                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
-                            </a>
+                            @if($produk->status == 'habis' || $produk->stok <= 0)
+                                <button class="btn-add-cart disabled text-center" style="background-color: #e0e0e0; color: #999; border: none; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                                </button>
 
-                            <a href="{{ route('login') }}" class="btn-buy-now text-center" style="text-decoration:none;">
-                                <i class="fas fa-bolt"></i> Beli Sekarang
-                            </a>
+                                <button class="btn-buy-now disabled text-center" style="background-color: #d0d0d0; color: #888; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-bolt"></i> Beli Sekarang
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}" class="btn-add-cart text-center" style="text-decoration:none;">
+                                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                                </a>
+
+                                <a href="{{ route('login') }}" class="btn-buy-now text-center" style="text-decoration:none;">
+                                    <i class="fas fa-bolt"></i> Beli Sekarang
+                                </a>
+                            @endif
                         @endauth
                     </div>
 

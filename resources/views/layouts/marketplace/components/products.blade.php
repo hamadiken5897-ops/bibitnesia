@@ -1,7 +1,7 @@
 <div class="products-grid">
 
     @forelse ($produk as $item)
-        <a href="{{ route('marketplace.show', $item->id_produk) }}" class="product-card-link">
+        <a href="{{ route('marketplace.show', $item->id_produk) }}" class="product-card-link text-decoration-none text-dark">
 
             <div class="product-card">
 
@@ -23,28 +23,28 @@
                         Rp {{ number_format($item->harga, 0, ',', '.') }}
                     </div>
 
-                    <div class="product-seller">
+                    <div class="product-seller" style="font-size: 0.95rem;">
                         <i class="fas fa-store"></i>
-                        {{ $item->user->name ?? 'Penjual' }}
+                        {{ $item->penjual->nama_penjual ?? 'Penjual' }}
                     </div>
                 </div>
 
                 {{-- FOOTER --}}
                 <div class="product-footer">
-                    <div class="product-stock">
+                    <div class="product-stock" style="font-size: 0.9rem;">
                         <i class="fas fa-box"></i> Stok: {{ $item->stok }}
                     </div>
 
-                    <div class="product-location">
+                    <div class="product-location" style="font-size: 0.9rem;">
                         <i class="fas fa-map-marker-alt"></i>
-                        {{ $item->user->alamat ?? '-' }}
+                        {{ $item->penjual->provinsi->nama_provinsi ?? ($item->penjual->alamatPJ ?? '-') }}
                     </div>
                 </div>
 
             </div>
         </a>
     @empty
-        <div class="text-center w-100 py-5 text-muted">
+        <div class="text-center w-100 py-5 text-muted" style="grid-column: 1 / -1;">
             <i class="fas fa-box-open fa-2x mb-3"></i>
             <p>Produk belum tersedia</p>
         </div>

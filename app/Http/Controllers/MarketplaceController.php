@@ -106,7 +106,6 @@ class MarketplaceController extends Controller
     {
         $produk = Produk::with(['penjual', 'penjual.provinsi', 'penjual.user', 'ulasans', 'ulasans.user'])
             ->where('id_produk', $id)
-            ->where('status', 'tersedia')
             ->firstOrFail();
 
         // Tambah jumlah kunjungan

@@ -143,6 +143,11 @@
         transform: scale(1.05);
         box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
     }
+    
+    /* Hide the global floating chat button on the chat page */
+    .floating-chat-btn {
+        display: none !important;
+    }
 </style>
 
 <div class="container py-4">
