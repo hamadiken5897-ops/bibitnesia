@@ -714,6 +714,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .action-buttons {
@@ -753,6 +754,7 @@ body {
     font-weight: 700;
     color: #fff;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .seller-avatar img {
@@ -819,6 +821,8 @@ body {
     gap: 15px;
     position: relative;
     z-index: 20; /* angkat ke atas overlay */
+    align-items: center;
+    justify-content: center;
 }
 
 /* TOMBOL TETAP ASLI, JANGAN DIUBAH FEEL-NYA */
@@ -831,6 +835,7 @@ body {
     font-size: 15px;
     cursor: pointer;
     transition: all 0.25s ease; /* hover smooth seperti lama */
+    white-space: nowrap;
 }
 
 /* === HOVER LAMA (BIARKAN / SESUAIKAN PUNYA KAMU) === */
