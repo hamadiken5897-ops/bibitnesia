@@ -1,7 +1,9 @@
 <div class="sidebar">
     <div class="sidebar-logo">
-        <i class="fas fa-seedling"></i>
-        <span>Bibitnesia</span>
+        <a href="{{ route('portal') }}" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-seedling"></i>
+            <span>Bibitnesia</span>
+        </a>
     </div>
 
     <ul class="sidebar-menu">
