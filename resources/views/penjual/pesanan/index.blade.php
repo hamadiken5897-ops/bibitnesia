@@ -232,6 +232,7 @@
     </div>
 
     <!-- Tabs -->
+    @php $status = $status ?? 'baru'; @endphp
     <ul class="nav nav-tabs-seller">
         <li class="nav-item">
             <a class="nav-link {{ $status == 'baru' ? 'active' : '' }}" href="{{ route('penjual.pesanan.index', ['status' => 'baru']) }}">Pesanan Baru</a>
