@@ -12,23 +12,38 @@ class PesananController extends Controller
     /**
      * Menampilkan daftar pesanan masuk
      */
-    public function index()
+    public function index(Request $request)
     {
         $penjual = auth()->user()->penjual;
         if (!$penjual) {
             abort(403, 'Akun ini bukan penjual');
         }
 
-        // Ambil pesanan yang statusnya "sedang diproses"
-        $pesanan = Pesanan::where('status_pesanan', 'Pesanan sedang diproses')
-            ->whereHas('detailPesanan.produk', function ($query) use ($penjual) {
-                $query->where('id_penjual', $penjual->id_penjual);
-            })
-            ->with(['user', 'detailPesanan.produk'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $status = $request->query('status', 'baru');
 
-        return view('penjual.pesanan.index', compact('pesanan'));
+        $query = Pesanan::whereHas('detailPesanan.produk', function ($q) use ($penjual) {
+                $q->where('id_penjual', $penjual->id_penjual);
+            })
+            ->with(['user', 'detailPesanan.produk', 'pengiriman'])
+            ->orderBy('created_at', 'desc');
+
+        if ($status == 'baru') {
+            $query->where('status_pesanan', 'Menunggu konfirmasi penjual');
+        } elseif ($status == 'perlu-dikirim') {
+            $query->where('status_pesanan', 'Pesanan sedang diproses');
+        } elseif ($status == 'dikirim') {
+            $query->where('status_pesanan', 'Pesanan dalam pengiriman');
+        } elseif ($status == 'selesai') {
+            $query->whereIn('status_pesanan', ['Pesanan selesai', 'Pesanan Selesai'])
+                  ->whereDate('updated_at', \Carbon\Carbon::today());
+        } elseif ($status == 'dibatalkan') {
+            $query->where('status_pesanan', 'Pesanan ditolak')
+                  ->whereDate('updated_at', \Carbon\Carbon::today());
+        }
+
+        $pesanan = $query->get();
+
+        return view('penjual.pesanan.index', compact('pesanan', 'status'));
     }
 
     /**
@@ -36,22 +51,9 @@ class PesananController extends Controller
      */
     public function show($id)
     {
-        $pesanan = Pesanan::with(['user', 'detailPesanan.produk'])
+        $pesanan = Pesanan::with(['user', 'detailPesanan.produk', 'pengiriman'])
             ->where('id_pesanan', $id)
             ->firstOrFail();
-
-        // Cek apakah ada detail pesanan
-        if ($pesanan->detailPesanan && $pesanan->detailPesanan->isNotEmpty()) {
-            // Opsional: Cek apakah pesanan ini punya produk milik penjual yang login
-            $hasOwnProduct = $pesanan->detailPesanan->contains(function ($detail) {
-                return $detail->produk && $detail->produk->id_user === auth()->id();
-            });
-
-            // Uncomment jika ingin restrict akses hanya ke pesanan sendiri
-            // if (!$hasOwnProduct) {
-            //     abort(403, 'Unauthorized access to this order');
-            // }
-        }
 
         return view('penjual.pesanan.show', compact('pesanan'));
     }
@@ -75,18 +77,60 @@ class PesananController extends Controller
         }
 
         $pesanan->update([
-            'status_pesanan' => 'Menunggu Kurir',
+            'status_pesanan' => 'Pesanan sedang diproses', // Berubah menjadi sedang diproses (dikemas)
         ]);
 
         // Kirim notifikasi ke pembeli
         NotifikasiUser::create([
             'id_user' => $pesanan->id_user,
             'judul' => 'Pesanan Diterima',
-            'pesan' => 'Pesanan #' . $pesanan->kode_invoice . ' telah diterima penjual dan menunggu kurir.',
+            'pesan' => 'Pesanan #' . $pesanan->kode_invoice . ' sedang dikemas oleh penjual.',
             'type' => 'success',
         ]);
 
-        return redirect()->route('penjual.pesanan.index')->with('success', 'Pesanan berhasil diterima, silakan tugaskan kurir.');
+        return redirect()->route('penjual.pesanan.index', ['status' => 'perlu-dikirim'])->with('success', 'Pesanan berhasil diterima dan siap dikemas.');
+    }
+
+    /**
+     * Kirim pesanan (Input Resi)
+     */
+    public function kirim(Request $request, $id)
+    {
+        $request->validate([
+            'kurir' => 'required|in:jne,jnt,parcel,ninja express',
+            'no_resi' => 'required|string|max:255',
+        ]);
+
+        $pesanan = Pesanan::where('id_pesanan', $id)->firstOrFail();
+
+        \DB::transaction(function () use ($pesanan, $request) {
+            $pesanan->update([
+                'status_pesanan' => 'Pesanan dalam pengiriman',
+            ]);
+
+            \App\Models\Pengiriman::updateOrCreate(
+                ['id_pesanan' => $pesanan->id_pesanan],
+                [
+                    'id_pengiriman' => 'KRM' . strtoupper(\Illuminate\Support\Str::random(8)),
+                    'kurir' => $request->kurir,
+                    'no_resi' => $request->no_resi,
+                    'alamat_tujuan' => $pesanan->alamat ?? 'Alamat tidak tersedia',
+                    'tanggal_pengiriman' => now(),
+                    'estimasi_tiba' => now()->addDays(3),
+                    'status_pengiriman' => 'dikirim',
+                ]
+            );
+        });
+
+        // Kirim notifikasi ke pembeli
+        NotifikasiUser::create([
+            'id_user' => $pesanan->id_user,
+            'judul' => 'Pesanan Dikirim',
+            'pesan' => 'Pesanan #' . $pesanan->kode_invoice . ' telah dikirim menggunakan ' . strtoupper($request->kurir) . ' dengan resi ' . $request->no_resi . '.',
+            'type' => 'success',
+        ]);
+
+        return redirect()->route('penjual.pesanan.index', ['status' => 'dikirim'])->with('success', 'Resi berhasil diinput dan pesanan dikirim.');
     }
 
     /**
@@ -95,7 +139,7 @@ class PesananController extends Controller
     public function reject(Request $request, $id)
     {
         $request->validate([
-            'alasan' => 'required|string|min:10',
+            'alasan' => 'required|string',
         ]);
 
         $pesanan = Pesanan::where('id_pesanan', $id)->firstOrFail();
@@ -113,6 +157,6 @@ class PesananController extends Controller
             'type' => 'danger',
         ]);
 
-        return redirect()->route('penjual.pesanan.index')->with('success', 'Pesanan berhasil ditolak');
+        return redirect()->route('penjual.pesanan.index', ['status' => 'dibatalkan'])->with('success', 'Pesanan berhasil ditolak');
     }
 }

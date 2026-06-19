@@ -1,12 +1,12 @@
 @extends('layouts.penjual.penjual')
 
-@section('page-title', 'Status Pesanan')
+@section('page-title', 'Riwayat Pesanan')
 
 @section('content')
 
     <div class="card">
         <div class="card-header">
-            <strong>Daftar Pesanan</strong>
+            <strong>Daftar Riwayat Pesanan</strong>
         </div>
 
         <div class="card-body p-0">
@@ -16,49 +16,42 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <strong>#{{ $row->kode_invoice }}</strong><br>
-                            Pembeli: {{ $row->user->name }}
+                            <strong>#{{ $row->id_pesanan }}</strong><br>
+                            Pembeli: {{ $row->user->nama ?? $row->user->name }}
+                            <div class="text-muted small mt-1">
+                                <i class="bi bi-clock"></i> {{ $row->updated_at->format('d M Y, H:i') }}
+                            </div>
                         </div>
 
                         <div class="text-end">
-                            @if (!$row->pengiriman)
-                                <span class="badge bg-warning">Menunggu Kurir</span>
+                            @if($row->status_pesanan == 'Pesanan Selesai')
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Selesai</span>
+                            @elseif($row->status_pesanan == 'Pesanan ditolak')
+                                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Ditolak</span>
                             @else
-                                <span class="badge bg-info mb-1 d-block">
-                                    {{ ucfirst($row->pengiriman->status_pengiriman) }}
-                                </span>
-                                @if($row->pengiriman->kurir && $row->pengiriman->kurir->user)
-                                <small class="text-muted">
-                                    <i class="bi bi-person"></i> {{ $row->pengiriman->kurir->user->name }}
-                                </small>
-                                @endif
+                                <span class="badge bg-secondary">{{ $row->status_pesanan }}</span>
+                            @endif
+                            
+                            @if($row->pengiriman && $row->pengiriman->kurir && $row->pengiriman->kurir->user)
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-truck"></i> Kurir: {{ $row->pengiriman->kurir->user->nama ?? $row->pengiriman->kurir->user->name }}
+                            </small>
                             @endif
                         </div>
                     </div>
 
                     <div class="mt-2">
-                        <small>
+                        <small class="fw-bold text-success" style="font-size: 1rem;">
                             Total: Rp {{ number_format($row->total_harga, 0, ',', '.') }}
                         </small>
-                    </div>
-
-                    <div class="mt-3">
-                       @if (!$row->pengiriman) 
-                            <a href="{{ route('penjual.pesanan.kurir', $row->id_pesanan) }}" class="btn btn-sm btn-primary">
-                                Cari Kurir
-                            </a>
-                        @else  
-                         {{--    <a href="{{ route('penjual.pengiriman.show', $row->pengiriman->id_pengiriman) }}"
-                                class="btn btn-sm btn-outline-secondary">
-                                Lihat Pengiriman
-                            </a> --}} 
-                        @endif  
                     </div>
 
                 </div>
             @empty
                 <div class="text-center p-5 text-muted">
-                    Belum ada pesanan yang diproses.
+                    <i class="bi bi-clipboard-x" style="font-size: 3rem; opacity: 0.5;"></i>
+                    <h5 class="mt-3">Belum ada riwayat pesanan.</h5>
+                    <p>Pesanan yang telah selesai atau ditolak akan muncul di sini.</p>
                 </div>
             @endforelse
 

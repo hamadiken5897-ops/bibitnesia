@@ -14,7 +14,7 @@
         <!-- Header -->
         <div class="header">
             <div class="header-title">
-                <h1>Detail Pesanan #{{ $pesanan->kode_invoice }}</h1>
+                <h1>Detail Pesanan #{{ $pesanan->id_pesanan }}</h1>
                 <p>Informasi lengkap pesanan dari pelanggan</p>
             </div>
             <div class="header-actions">
@@ -41,10 +41,7 @@
                             <span class="info-label">ID Pesanan</span>
                             <span class="info-value">{{ $pesanan->id_pesanan }}</span>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">Kode Invoice</span>
-                            <span class="info-value">#{{ $pesanan->kode_invoice }}</span>
-                        </div>
+
                         <div class="info-row">
                             <span class="info-label">Tanggal Pesanan</span>
                             <span class="info-value">{{ $pesanan->created_at->format('d M Y, H:i') }}</span>
@@ -122,7 +119,7 @@
 
 
                 <!-- Action Buttons -->
-                @if ($pesanan->status_pesanan === 'Pesanan sedang diproses')
+                @if ($pesanan->status_pesanan === 'Menunggu konfirmasi penjual')
                     <div class="action-card mt-4">
                         <button type="button" class="btn btn-accept w-100 mb-3" data-bs-toggle="modal"
                             data-bs-target="#acceptModal">
@@ -240,7 +237,7 @@
                     <div class="modal-body">
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle me-2"></i>
-                            Terima pesanan <strong>#{{ $pesanan->kode_invoice }}</strong>?
+                            Terima pesanan <strong>#{{ $pesanan->id_pesanan }}</strong>?
                         </div>
 
                         <p class="text-muted mb-0">
@@ -275,7 +272,7 @@
                     <div class="modal-body">
                         <div class="alert alert-warning mb-3">
                             <i class="fas fa-exclamation-triangle me-2"></i>
-                            Pesanan <strong>#{{ $pesanan->kode_invoice }}</strong> akan ditolak
+                            Pesanan <strong>#{{ $pesanan->id_pesanan }}</strong> akan ditolak
                         </div>
                         <label class="form-label fw-bold">
                             Alasan Penolakan <span class="text-danger">*</span>

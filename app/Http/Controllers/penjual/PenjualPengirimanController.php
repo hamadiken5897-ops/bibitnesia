@@ -57,6 +57,6 @@ class PenjualPengirimanController extends Controller
             ]);
         });
 
-        return redirect()->route('penjual.status-pesanan.index')->with('success', 'Kurir berhasil ditugaskan');
+        return redirect()->route('penjual.pesanan.index', ['status' => 'dikirim'])->with('success', 'Kurir berhasil ditugaskan');
     }
 }

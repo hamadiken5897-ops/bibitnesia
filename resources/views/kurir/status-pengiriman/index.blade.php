@@ -29,7 +29,18 @@
                         @foreach ($pengiriman as $p)
                             <tr>
                                 <td>{{ $p->id_pesanan }}</td>
-                                <td>{{ $p->alamat_tujuan }}</td>
+                                <td>
+                                    @if($p->pesanan && $p->pesanan->user)
+                                        <div class="mb-1 text-dark fw-bold">{{ $p->pesanan->user->nama ?? $p->pesanan->user->name }}</div>
+                                        <div class="mb-1 text-success">
+                                            <i class="bi bi-telephone-fill me-1"></i>{{ $p->pesanan->user->no_telepon ?? 'Tidak ada No. HP' }}
+                                            @if($p->pesanan->user->id_user)
+                                                <a href="{{ route('pesan.show', $p->pesanan->user->id_user) }}" class="btn btn-sm btn-success ms-2 py-0 px-2" title="Chat Pembeli"><i class="bi bi-chat-dots"></i></a>
+                                            @endif
+                                        </div>
+                                    @endif
+                                    <div class="text-muted small">{{ $p->alamat_tujuan }}</div>
+                                </td>
                                 <td>
                                     <span
                                         class="badge 

@@ -222,6 +222,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/marketplace/invoice/{id_pesanan}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('marketplace.invoice');
     Route::get('/marketplace/pesanan-saya', [App\Http\Controllers\PesananController::class, 'index'])->name('marketplace.pesanan.saya');
+    Route::get('/marketplace/pesanan-saya/{id}', [App\Http\Controllers\PesananController::class, 'show'])->name('marketplace.pesanan.saya.show');
     Route::post('/marketplace/pesanan-saya/{id}/selesai', [App\Http\Controllers\PesananController::class, 'selesai'])->name('marketplace.pesanan.selesai');
     Route::get('/pembayaran/{id}/proses', function ($id) {
         $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
@@ -229,7 +230,7 @@ Route::middleware(['auth'])->group(function () {
         if ($pesanan->status_pesanan === 'Menunggu Pembayaran') {
             \Illuminate\Support\Facades\DB::transaction(function () use ($pesanan) {
                 $pesanan->update([
-                    'status_pesanan' => 'Pesanan sedang diproses',
+                    'status_pesanan' => 'Menunggu konfirmasi penjual',
                 ]);
 
                 \App\Models\Pembayaran::where('id_pesanan', $pesanan->id_pesanan)->update([
@@ -319,34 +320,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/pesanan', [App\Http\Controllers\Penjual\PesananController::class, 'index'])->name('pesanan.index'); // ← Tambahkan .index
 
             Route::get('/pesanan/{id}', [App\Http\Controllers\Penjual\PesananController::class, 'show'])->name('pesanan.show');
-            Route::post('/pesanan/{id}/accept', function ($id) {
-                $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
-                $pesanan->update([
-                    'status_pesanan' => 'Pesanan dalam pengiriman',
-                ]);
-                return back()->with('success', 'Pesanan diterima');
-            })->name('pesanan.accept');
-
-            Route::post('/pesanan/{id}/reject', function (\Illuminate\Http\Request $request, $id) {
-                $request->validate([
-                    'alasan' => 'required|string',
-                ]);
-
-                $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
-                $pesanan->update([
-                    'status_pesanan' => 'Pesanan ditolak',
-                    'catatan' => $request->alasan,
-                ]);
-
-                \App\Models\NotifikasiUser::create([
-                    'id_user' => $pesanan->id_user,
-                    'judul' => 'Pesanan Ditolak',
-                    'pesan' => $request->alasan,
-                    'type' => 'danger',
-                ]);
-
-                return back()->with('success', 'Pesanan ditolak');
-            })->name('pesanan.reject');
+            Route::post('/pesanan/{id}/accept', [App\Http\Controllers\Penjual\PesananController::class, 'accept'])->name('pesanan.accept');
+            Route::post('/pesanan/{id}/kirim', [App\Http\Controllers\Penjual\PesananController::class, 'kirim'])->name('pesanan.kirim');
+            Route::post('/pesanan/{id}/reject', [App\Http\Controllers\Penjual\PesananController::class, 'reject'])->name('pesanan.reject');
 
 
             Route::get('/status-pesanan', [App\Http\Controllers\Penjual\StatusPesananController::class, 'index'])->name('status-pesanan.index');

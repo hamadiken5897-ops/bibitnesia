@@ -149,7 +149,7 @@
                         
                         <div class="fav-img-wrap">
                             {{-- Hapus Favorit Button Absolute --}}
-                            <form action="{{ route('favorit.delete', $item->id) }}" method="POST" onsubmit="return confirm('Hapus dari daftar favorit?');">
+                            <form action="{{ route('favorit.delete', $item->id) }}" method="POST" class="form-delete-fav">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn-delete-fav" title="Hapus dari Favorit">
                                     <i class="bi bi-trash-fill"></i>
@@ -193,4 +193,30 @@
         </div>
     @endif
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('.form-delete-fav');
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Hapus Favorit?',
+                    text: "Apakah Anda yakin ingin menghapus produk ini dari daftar favorit?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

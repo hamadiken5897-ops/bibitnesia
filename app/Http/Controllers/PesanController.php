@@ -46,8 +46,14 @@ class PesanController extends Controller
         }
 
         // Tampilan khusus jika penjual atau pembeli (kita gunakan view yang sama, layout mungkin beda)
-        $isPenjual = auth()->user()->role === 'penjual';
-        $layout = $isPenjual ? 'layouts.penjual.penjual' : 'layouts.marketplace.main';
+        $userRole = auth()->user()->role;
+        if ($userRole === 'penjual') {
+            $layout = 'layouts.penjual.penjual';
+        } elseif ($userRole === 'kurir') {
+            $layout = 'layouts.kurir.kurir';
+        } else {
+            $layout = 'layouts.marketplace.main';
+        }
 
         return view('pesan.index', compact('kontaks', 'layout'));
     }
@@ -87,8 +93,14 @@ class PesanController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $isPenjual = auth()->user()->role === 'penjual';
-        $layout = $isPenjual ? 'layouts.penjual.penjual' : 'layouts.marketplace.main';
+        $userRole = auth()->user()->role;
+        if ($userRole === 'penjual') {
+            $layout = 'layouts.penjual.penjual';
+        } elseif ($userRole === 'kurir') {
+            $layout = 'layouts.kurir.kurir';
+        } else {
+            $layout = 'layouts.marketplace.main';
+        }
 
         if (request()->has('preview')) {
             return view('pesan.preview', compact('pesans', 'lawanBicara'));

@@ -10,15 +10,41 @@ use Illuminate\Support\Facades\DB;
 
 class PesananController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pesanan = Pesanan::with(['detailPesanan.produk'])
+        $status = $request->query('status', 'semua');
+        
+        $query = Pesanan::with(['detailPesanan.produk', 'pengiriman'])
             ->where('id_user', auth()->user()->id_user)
-            ->where('status_pesanan', '!=', 'Pesanan Selesai')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
 
-        return view('marketplace.pesanan', compact('pesanan'));
+        if ($status != 'semua') {
+            if ($status == 'belum-bayar') {
+                $query->where('status_pesanan', 'Menunggu Pembayaran');
+            } elseif ($status == 'dikemas') {
+                $query->whereIn('status_pesanan', ['Menunggu konfirmasi penjual', 'Pesanan sedang diproses']);
+            } elseif ($status == 'dikirim') {
+                $query->whereIn('status_pesanan', ['Pesanan dalam pengiriman', 'Sampai Tujuan']);
+            } elseif ($status == 'selesai') {
+                $query->where('status_pesanan', 'Pesanan selesai');
+            } elseif ($status == 'dibatalkan') {
+                $query->where('status_pesanan', 'Pesanan ditolak');
+            }
+        }
+
+        $pesanan = $query->get();
+
+        return view('marketplace.pesanan', compact('pesanan', 'status'));
+    }
+
+    public function show($id)
+    {
+        $pesanan = Pesanan::with(['detailPesanan.produk', 'pengiriman'])
+            ->where('id_user', auth()->user()->id_user)
+            ->where('id_pesanan', $id)
+            ->firstOrFail();
+
+        return view('marketplace.detail-pesanan', compact('pesanan'));
     }
     public function selesai($id)
     {

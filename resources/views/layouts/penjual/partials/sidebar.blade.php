@@ -54,7 +54,7 @@
                     <a href="{{ route('penjual.status-pesanan.index') }}"
                        class="sidebar-link">
                         <i class="bi bi-truck"></i>
-                        <span>Status Pesanan</span>
+                        <span>Riwayat Pesanan</span>
                     </a>
                 </li>  
 

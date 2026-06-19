@@ -16,9 +16,20 @@ class NotifikasiController extends Controller
         // dari mana user datang (portal, marketplace, dashboard, dll)
         $backUrl = $request->get('from', url()->previous());
 
+        // Determine layout based on role
+        $userRole = auth()->user()->role;
+        if ($userRole === 'penjual') {
+            $layout = 'layouts.penjual.penjual';
+        } elseif ($userRole === 'kurir') {
+            $layout = 'layouts.kurir.kurir';
+        } else {
+            $layout = 'layouts.marketplace.main';
+        }
+
         return view('notifikasi.index', [
             'notifikasi' => $notifikasi,
             'backUrl' => $backUrl,
+            'layout' => $layout,
         ]);
     }
 

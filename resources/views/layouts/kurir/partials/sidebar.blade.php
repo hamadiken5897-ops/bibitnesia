@@ -4,7 +4,7 @@
         <div class="sidebar-header">
             <div class="d-flex justify-content-between">
                 <div class="logo">
-                    <a href="{{ route('penjual.dashboard') }}">
+                    <a href="{{ route('kurir.dashboard') }}">
                         <img src="{{ asset('dist/assets/images/logo/logo bibitnesia.png') }}" alt="Logo"
                             style="width:175px; height:auto;">
                     </a>
@@ -50,6 +50,13 @@
                 </li>
 
 
+
+                <li class="sidebar-item {{ request()->routeIs('pesan.*') ? 'active' : '' }}">
+                    <a href="{{ route('pesan.index') }}" class="sidebar-link">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>Pesan / Chat</span>
+                    </a>
+                </li>
 
                 <li class="sidebar-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
                     <a href="{{ route('marketplace.index') }}" class="sidebar-link">

@@ -234,7 +234,7 @@
                                 </form>
 
                                 {{-- Delete --}}
-                                <form action="{{ route('keranjang.delete', $item->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini dari keranjang?');">
+                                <form action="{{ route('keranjang.delete', $item->id) }}" method="POST" class="form-delete-cart">
                                     @csrf @method('DELETE')
                                     <button class="btn-delete">
                                         <i class="bi bi-trash3"></i> Hapus
@@ -277,4 +277,31 @@
         </div>
     @endif
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('.form-delete-cart');
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Hapus Item?',
+                    text: "Apakah Anda yakin ingin menghapus produk ini dari keranjang?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

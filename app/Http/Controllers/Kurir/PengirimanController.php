@@ -48,7 +48,7 @@ class PengirimanController extends Controller
         ]);
 
         $pengiriman->pesanan->update([
-            'status_pesanan' => 'selesai',
+            'status_pesanan' => 'Sampai Tujuan',
         ]);
 
         return back()->with('success', 'Pengiriman selesai');
@@ -82,30 +82,9 @@ class PengirimanController extends Controller
 
         // Sinkron ke pesanan
         if ($request->status_pengiriman === 'selesai') {
-            \Illuminate\Support\Facades\DB::transaction(function () use ($pengiriman) {
-                $pesanan = $pengiriman->pesanan;
-                
-                $pesanan->update([
-                    'status_pesanan' => 'Pesanan Selesai',
-                ]);
-
-                // Hitung saldo penjual jika belum dicatat
-                $sudahDicatat = \App\Models\LaporanPenjual::where('id_pesanan', $pesanan->id_pesanan)->exists();
-                
-                if (!$sudahDicatat) {
-                    foreach ($pesanan->detailPesanan as $detail) {
-                        if ($detail->produk && $detail->produk->id_penjual) {
-                            $pendapatan = $detail->harga_satuan * $detail->jumlah;
-                            
-                            \App\Models\LaporanPenjual::create([
-                                'id_penjual' => $detail->produk->id_penjual,
-                                'id_pesanan' => $pesanan->id_pesanan,
-                                'jumlah' => $pendapatan,
-                            ]);
-                        }
-                    }
-                }
-            });
+            $pengiriman->pesanan->update([
+                'status_pesanan' => 'Sampai Tujuan',
+            ]);
         }
 
         return back()->with('success', 'Status pengiriman diperbarui');
