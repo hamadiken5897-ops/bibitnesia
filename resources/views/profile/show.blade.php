@@ -175,11 +175,12 @@
                                         @enderror
                                     </div>
 
-                                    {{-- Alamat --}}
+                                    {{-- Daerah/Kota Asal --}}
                                     <div class="col-md-12 mb-3">
-                                        <label class="form-label fw-semibold">Alamat</label>
+                                        <label class="form-label fw-semibold">Daerah/Kota Asal (Publik)</label>
                                         <textarea name="alamat" rows="2" class="form-control @error('alamat') is-invalid @enderror"
-                                            placeholder="Alamat lengkap...">{{ old('alamat', $user->alamat) }}</textarea>
+                                            placeholder="Contoh: Jakarta Selatan, DKI Jakarta">{{ old('alamat', $user->alamat) }}</textarea>
+                                        <small class="text-muted">Daerah asal ini akan ditampilkan di profil publik Anda.</small>
                                         @error('alamat')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

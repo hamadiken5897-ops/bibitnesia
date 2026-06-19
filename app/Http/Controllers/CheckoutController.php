@@ -58,11 +58,16 @@ class CheckoutController extends Controller
         $totalProduk = collect($items)->sum('subtotal');
 
         $provinsi = Provinsi::orderBy('nama_provinsi')->get();
+        
+        $alamats = auth()->user()->alamats;
+        $alamatUtama = $alamats->where('is_utama', true)->first() ?? $alamats->first();
 
         return view('marketplace.checkout', [
             'items' => $items,
             'totalProduk' => $totalProduk,
             'provinsi' => $provinsi,
+            'alamats' => $alamats,
+            'alamatUtama' => $alamatUtama,
             'ongkirTetap' => self::ONGKIR_TETAP, // 🔥 INI WAJIB
             'is_from_cart' => $isFromCart ? 1 : 0,
         ]);

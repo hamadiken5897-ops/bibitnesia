@@ -93,24 +93,50 @@
 
                         <h5 class="section-title">Alamat Pengiriman</h5>
 
-                        <div class="input-group">
-                            <label>Provinsi *</label>
-                            <select name="provinsi" id="provinsi" required>
-                                <option value="">-- Pilih Provinsi --</option>
-                                @foreach ($provinsi as $p)
-                                    <option value="{{ $p->id_provinsi }}" data-ongkir="{{ $p->estimasi_ongkir }}">
-                                        {{ $p->nama_provinsi }}
-                                    </option>
+                        @if(count($alamats) > 0)
+                            <div class="mb-3">
+                                <label class="fw-bold mb-2">Pilih Alamat Pengiriman</label>
+                                @foreach($alamats as $al)
+                                    <div class="card mb-2 {{ $alamatUtama && $alamatUtama->id == $al->id ? 'border-success bg-light' : '' }}">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="alamat_id" id="alamat_{{ $al->id }}" value="{{ $al->id }}" {{ $alamatUtama && $alamatUtama->id == $al->id ? 'checked' : '' }} onchange="selectAlamat('{{ $al->provinsi->id_provinsi }}', '{{ addslashes($al->detail_alamat . ', ' . $al->kota . ', ' . $al->provinsi->nama_provinsi . ' ' . $al->kode_pos) }}')">
+                                                <label class="form-check-label w-100" for="alamat_{{ $al->id }}">
+                                                    <strong>{{ $al->nama_penerima }}</strong> ({{ $al->no_telepon }})
+                                                    @if($al->is_utama) <span class="badge bg-success ms-1">Utama</span> @endif
+                                                    <div class="small text-muted mt-1">{{ $al->detail_alamat }}, {{ $al->kecamatan ? $al->kecamatan.', ' : '' }}{{ $al->kota }}, {{ $al->provinsi->nama_provinsi }}, {{ $al->kode_pos }}</div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </select>
-                        </div>
+                            </div>
+                            <!-- Hidden inputs to keep existing logic working -->
+                            <input type="hidden" name="provinsi" id="hidden_provinsi" value="{{ $alamatUtama ? $alamatUtama->provinsi->id_provinsi : '' }}">
+                            <input type="hidden" name="alamat" id="hidden_alamat" value="{{ $alamatUtama ? $alamatUtama->detail_alamat . ', ' . $alamatUtama->kota . ', ' . $alamatUtama->provinsi->nama_provinsi . ' ' . $alamatUtama->kode_pos : '' }}">
+                        @else
+                            <div class="alert alert-warning mb-3">
+                                Anda belum memiliki alamat tersimpan. <a href="{{ route('account.alamat') }}" class="alert-link text-decoration-underline">Tambah alamat di Pengaturan</a>.
+                            </div>
+                            <div class="input-group">
+                                <label>Provinsi *</label>
+                                <select name="provinsi" id="provinsi" required>
+                                    <option value="">-- Pilih Provinsi --</option>
+                                    @foreach ($provinsi as $p)
+                                        <option value="{{ $p->id_provinsi }}" data-ongkir="{{ $p->estimasi_ongkir }}">
+                                            {{ $p->nama_provinsi }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div class="input-group">
-                            <label>Alamat Lengkap *</label>
-                            <textarea name="alamat" required></textarea>
-                        </div>
+                            <div class="input-group">
+                                <label>Alamat Lengkap *</label>
+                                <textarea name="alamat" id="alamat_manual" required></textarea>
+                            </div>
+                        @endif
 
-                        <button type="button" class="btn btn-primary w-100 mt-3" onclick="nextStep()">
+                        <button type="button" class="btn btn-primary w-100 mt-3" onclick="validateStep2()">
                             Lanjutkan →
                         </button>
 
@@ -213,6 +239,32 @@
             </strong>
         </small>
     `;
+                }
+
+                function selectAlamat(idProvinsi, alamatLengkap) {
+                    document.getElementById('hidden_provinsi').value = idProvinsi;
+                    document.getElementById('hidden_alamat').value = alamatLengkap;
+                }
+
+                function validateStep2() {
+                    const alamatsExists = {{ count($alamats) > 0 ? 'true' : 'false' }};
+                    
+                    if (alamatsExists) {
+                        const prov = document.getElementById('hidden_provinsi').value;
+                        const alam = document.getElementById('hidden_alamat').value;
+                        if (!prov || !alam) {
+                            alert("Silakan pilih alamat terlebih dahulu.");
+                            return;
+                        }
+                    } else {
+                        const prov = document.getElementById('provinsi').value;
+                        const alam = document.getElementById('alamat_manual').value;
+                        if (!prov || !alam.trim()) {
+                            alert("Silakan lengkapi Provinsi dan Alamat.");
+                            return;
+                        }
+                    }
+                    nextStep();
                 }
 
                 function nextStep() {

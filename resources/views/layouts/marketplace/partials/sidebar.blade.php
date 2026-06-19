@@ -70,8 +70,8 @@
         @endauth
 
 
-        <li>
-            <a href="#">
+        <li class="{{ request()->routeIs('account.*') ? 'active' : '' }}">
+            <a href="{{ route('account.profile') }}">
                 <i class="fas fa-cog"></i> Pengaturan
             </a>
         </li>

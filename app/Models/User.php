@@ -136,4 +136,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pesan::class, 'id_penerima', 'id_user');
     }
+
+    public function alamats()
+    {
+        return $this->hasMany(Alamat::class, 'id_user', 'id_user');
+    }
 }

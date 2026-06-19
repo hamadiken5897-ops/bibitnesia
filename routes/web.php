@@ -158,6 +158,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profileA.show');
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profileA.update');
 
+    /*
+    |--------------------------------------------------------------------------
+    | PENGATURAN AKUN (ACCOUNT SETTINGS)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/account/profile', [App\Http\Controllers\AccountController::class, 'profile'])->name('account.profile');
+    Route::get('/account/alamat', [App\Http\Controllers\AccountController::class, 'alamat'])->name('account.alamat');
+    Route::post('/account/alamat', [App\Http\Controllers\AccountController::class, 'storeAlamat'])->name('account.alamat.store');
+    Route::put('/account/alamat/{id}', [App\Http\Controllers\AccountController::class, 'updateAlamat'])->name('account.alamat.update');
+    Route::post('/account/alamat/{id}/utama', [App\Http\Controllers\AccountController::class, 'setUtamaAlamat'])->name('account.alamat.utama');
+    Route::delete('/account/alamat/{id}', [App\Http\Controllers\AccountController::class, 'deleteAlamat'])->name('account.alamat.delete');
+
     // Keranjang marketplace
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
