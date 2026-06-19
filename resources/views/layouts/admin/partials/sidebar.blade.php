@@ -31,6 +31,7 @@
                     </a>
                 </li>
 
+                @if(optional(auth()->user()->admin)->jabatan === 'super_admin')
                 <li class="sidebar-title">Management</li>
 
                 <li class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
@@ -54,6 +55,14 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.logs.index') }}" class='sidebar-link'>
+                        <i class="bi bi-clock-history"></i>
+                        <span>Log Aktivitas</span>
+                    </a>
+                </li>
+                @endif
+
                 <li class="sidebar-title">Services</li>
                 <li class="sidebar-item {{ request()->routeIs('admin.komplain') ? 'active' : '' }}">
                     <a href="{{ route('admin.komplain') }}" class='sidebar-link'>
@@ -73,16 +82,15 @@
 
                 <li class="sidebar-title">Teams</li>
 
-                <li class="sidebar-item ">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.staff.index') }}" class='sidebar-link'>
+                        <i class="bi bi-person-badge-fill"></i>
                         <span>Staff</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item ">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('admin.conversation.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.conversation.index') }}" class='sidebar-link'>
+                        <i class="bi bi-chat-dots-fill"></i>
                         <span>Team Conversation</span>
                     </a>
                 </li>

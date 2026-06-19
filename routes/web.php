@@ -31,6 +31,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
+use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Admin\TeamConversationController;
 
 // Kurir Controllers
 use App\Http\Controllers\Kurir\KurirInboxController;
@@ -251,32 +253,46 @@ Route::middleware(['auth'])->group(function () {
     */
     Route::prefix('admin')
         ->name('admin.')
+        ->middleware(['role:admin'])
         ->group(function () {
             // ✅ DASHBOARD - Menggunakan AdminDashboardController
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-            // USER
-            Route::get('/users', [UserController::class, 'index'])->name('users.index');
-            Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-            Route::post('/users', [UserController::class, 'store'])->name('users.store');
-            Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-            Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-            Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-            Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+            // ==========================================
+            // MANAGEMENT ROUTES (ONLY SUPER ADMIN)
+            // ==========================================
+            Route::middleware(['role:super_admin'])->group(function () {
+                // USER
+                Route::get('/users', [UserController::class, 'index'])->name('users.index');
+                Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+                Route::post('/users', [UserController::class, 'store'])->name('users.store');
+                Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+                Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+                Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+                Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
-            // PRODUK
-            Route::prefix('produk')
-                ->name('produk.')
-                ->group(function () {
-                    Route::get('/', [App\Http\Controllers\Admin\ProdukController::class, 'index'])->name('index');
-                    Route::get('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'show'])->name('show');
-                    Route::get('/{produk}/edit', [App\Http\Controllers\Admin\ProdukController::class, 'edit'])->name('edit');
-                    Route::put('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'update'])->name('update');
-                    Route::delete('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'destroy'])->name('destroy');
-                });
-            // PEMBAYARAN
-            Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
-            Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+                // PRODUK
+                Route::prefix('produk')
+                    ->name('produk.')
+                    ->group(function () {
+                        Route::get('/', [App\Http\Controllers\Admin\ProdukController::class, 'index'])->name('index');
+                        Route::get('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'show'])->name('show');
+                        Route::get('/{produk}/edit', [App\Http\Controllers\Admin\ProdukController::class, 'edit'])->name('edit');
+                        Route::put('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'update'])->name('update');
+                        Route::delete('/{produk}', [App\Http\Controllers\Admin\ProdukController::class, 'destroy'])->name('destroy');
+                    });
+                
+                // PEMBAYARAN
+                Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
+                Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+                
+                // LOG AKTIVITAS
+                Route::get('/logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'index'])->name('logs.index');
+            });
+
+            // ==========================================
+            // SERVICES ROUTES (ADMIN & SUPER ADMIN)
+            // ==========================================
 
             // KOMPLAIN
             Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
@@ -292,6 +308,33 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/pengajuan-mitra/{id}/reject', [PengajuanMitraController::class, 'reject'])->name('pengajuan.reject');
 
             Route::delete('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'destroy'])->name('pengajuan.destroy');
+
+            // ==========================================
+            // TEAMS (STAFF)
+            // ==========================================
+            Route::prefix('staff')
+                ->name('staff.')
+                ->group(function () {
+                    // Semua admin bisa melihat daftar staff
+                    Route::get('/', [StaffController::class, 'index'])->name('index');
+                    
+                    // Hanya super_admin yang bisa menambah staff baru
+                    Route::middleware(['role:super_admin'])->group(function() {
+                        Route::get('/create', [StaffController::class, 'create'])->name('create');
+                        Route::post('/', [StaffController::class, 'store'])->name('store');
+                    });
+                });
+
+            // ==========================================
+            // TEAM CONVERSATION
+            // ==========================================
+            Route::prefix('team-conversation')
+                ->name('conversation.')
+                ->group(function () {
+                    Route::get('/', [TeamConversationController::class, 'index'])->name('index');
+                    Route::get('/fetch', [TeamConversationController::class, 'fetchMessages'])->name('fetch');
+                    Route::post('/store', [TeamConversationController::class, 'store'])->name('store');
+                });
         });
 
     /*

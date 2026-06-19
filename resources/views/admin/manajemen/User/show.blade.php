@@ -24,7 +24,7 @@
                             <img src="{{ $user->file->file_stream }}" class="rounded-circle border"
                                 style="width: 130px; height: 130px; object-fit: cover;">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama) }}"
                                 class="rounded-circle border" style="width: 130px; height: 130px; object-fit: cover;">
                         @endif
 

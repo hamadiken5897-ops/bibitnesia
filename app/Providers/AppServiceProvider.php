@@ -6,10 +6,13 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\NotifikasiUser;
 
+use Illuminate\Pagination\Paginator;
+
 class AppServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        Paginator::useBootstrapFive();
         View::composer('*', function ($view) {
             $notifCount = 0;
             if (auth()->check()) {

@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h3>Detail Pembayaran</h3>
 
-        <a href="{{ route('admin.pembayaran.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.pembayaran') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
@@ -35,7 +35,7 @@
             @if ($pembayaran->user)
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">User</div>
-                <div class="col-md-8">{{ $pembayaran->user->name }} ({{ $pembayaran->user->email }})</div>
+                <div class="col-md-8">{{ $pembayaran->user->nama }} ({{ $pembayaran->user->email }})</div>
             </div>
             @endif
 

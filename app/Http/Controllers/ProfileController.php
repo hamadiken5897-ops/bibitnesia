@@ -39,8 +39,8 @@ class ProfileController extends Controller
 
             $file = $request->file('profile');
             $extension = $file->getClientOriginalExtension();
-            $filename = $user->id . '_' . time() . '.' . $extension;
-            $folder = 'profiles/' . $user->id;
+            $filename = $user->id_user . '_' . time() . '.' . $extension;
+            $folder = 'profiles/' . $user->id_user; 
             $path = $file->storeAs($folder, $filename);
 
             $user->file()->create([
@@ -50,7 +50,7 @@ class ProfileController extends Controller
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
                 'fileable_type' => 'App\Models\User',
-                'fileable_id' => (int) $user->id, // ← Cast ke integer
+                'fileable_id' => $user->id_user,
             ]);
         }
 

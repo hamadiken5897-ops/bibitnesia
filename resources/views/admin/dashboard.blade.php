@@ -270,6 +270,45 @@
                     </div>
                 </div>
             </div>
+
+            {{-- 📝 Log Aktivitas Khusus Super Admin --}}
+            @if(optional(auth()->user()->admin)->jabatan === 'super_admin')
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Log Aktivitas Sistem</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Waktu</th>
+                                            <th>User</th>
+                                            <th>Aktivitas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($adminLogs as $log)
+                                        <tr>
+                                            <td class="text-nowrap">{{ $log->created_at->format('d M Y H:i') }}</td>
+                                            <td class="text-nowrap font-bold">{{ optional($log->user)->nama ?? 'Sistem' }}</td>
+                                            <td>{{ $log->aktivitas }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">Belum ada log aktivitas.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
     </section>
 @endsection

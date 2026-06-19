@@ -21,7 +21,7 @@
                                 class="rounded-circle border"
                                 style="width: 130px; height: 130px; object-fit: cover;">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama) }}"
                                 class="rounded-circle border"
                                 style="width: 130px; height: 130px; object-fit: cover;">
                         @endif
@@ -67,7 +67,7 @@
                             {{-- Nama --}}
                             <div class="form-group mb-3">
                                 <label class="fw-semibold">Nama</label>
-                                <input type="text" name="name" class="form-control"
+                                <input type="text" name="nama" class="form-control"
                                        value="{{ $user->nama }}">
                             </div>
 

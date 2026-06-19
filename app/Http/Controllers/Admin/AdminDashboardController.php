@@ -37,6 +37,12 @@ class AdminDashboardController extends Controller
         // 💰 Data Keuangan per Bulan
         $chartKeuangan = $this->getMonthlyRevenue();
 
+        // 📝 Log Aktivitas Khusus Super Admin
+        $adminLogs = collect();
+        if (optional(auth()->user()->admin)->jabatan === 'super_admin') {
+            $adminLogs = \App\Models\AdminLog::with('user')->orderBy('created_at', 'desc')->limit(10)->get();
+        }
+
         return view('admin.dashboard', compact(
             'totalKunjungan',
             'totalPengguna',
@@ -45,7 +51,8 @@ class AdminDashboardController extends Controller
             'admins',
             'chartKunjungan',
             'kunjunganRegional',
-            'chartKeuangan'
+            'chartKeuangan',
+            'adminLogs'
         ));
     }
 
