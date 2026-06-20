@@ -22,5 +22,30 @@ class AppServiceProvider extends ServiceProvider
             }
             $view->with('notifCount', $notifCount);
         });
+
+        // Global Anti-DDoS Rate Limiter (150 requests per minute)
+        \Illuminate\Support\Facades\RateLimiter::for('global', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(150)->by($request->ip());
+        });
+
+        // Anti-Bruteforce for Login (5 requests per minute)
+        \Illuminate\Support\Facades\RateLimiter::for('login', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->input('email').$request->ip());
+        });
+
+        // OTP Rate Limiter (5 requests per minute)
+        \Illuminate\Support\Facades\RateLimiter::for('otp', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->ip());
+        });
+
+        // Register Rate Limiter (3 requests per minute)
+        \Illuminate\Support\Facades\RateLimiter::for('register', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(3)->by($request->ip());
+        });
+
+        // Password Reset Rate Limiter (3 requests per minute)
+        \Illuminate\Support\Facades\RateLimiter::for('password-reset', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(3)->by($request->ip());
+        });
     }
 }

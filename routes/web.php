@@ -63,13 +63,13 @@ Route::get('/', [PortalController::class, 'index'])->name('portal');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
 // Proses login
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register')->name('register.post');
 
 // OTP Routes
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify.otp');
-Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:otp')->name('verify.otp');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->middleware('throttle:otp')->name('resend.otp');
 
 // Google Login
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
@@ -77,9 +77,9 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 // Forgot & Reset Password
 Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->middleware('throttle:password-reset')->name('password.email');
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:password-reset')->name('password.update');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
