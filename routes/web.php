@@ -66,8 +66,20 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+// OTP Routes
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify.otp');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp');
+
+// Google Login
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
+
+// Forgot & Reset Password
 Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -166,6 +178,8 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/account/profile', [App\Http\Controllers\AccountController::class, 'profile'])->name('account.profile');
+    Route::put('/account/password', [App\Http\Controllers\AccountController::class, 'updatePassword'])->name('account.password.update');
+    Route::post('/account/password/verify', [App\Http\Controllers\AccountController::class, 'verifyPasswordOtp'])->name('account.password.verify');
     Route::get('/account/alamat', [App\Http\Controllers\AccountController::class, 'alamat'])->name('account.alamat');
     Route::post('/account/alamat', [App\Http\Controllers\AccountController::class, 'storeAlamat'])->name('account.alamat.store');
     Route::put('/account/alamat/{id}', [App\Http\Controllers\AccountController::class, 'updateAlamat'])->name('account.alamat.update');

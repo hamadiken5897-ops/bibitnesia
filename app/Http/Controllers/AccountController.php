@@ -19,6 +19,74 @@ class AccountController extends Controller
     }
 
     /**
+     * Update Password - Step 1: Send OTP
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+        }
+
+        // Generate OTP
+        $otp = sprintf("%06d", mt_rand(1, 999999));
+        \App\Models\User::where('id_user', $user->id_user)->update([
+            'otp_code' => $otp,
+            'otp_expires_at' => \Carbon\Carbon::now()->addMinutes(10),
+        ]);
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\OtpMail($otp));
+        } catch (\Exception $e) {}
+
+        session(['new_password' => $request->password, 'require_password_otp' => true]);
+        if (app()->environment('local')) {
+            session(['dev_otp_code' => $otp]);
+        }
+
+        return back()->with('success', 'OTP telah dikirim ke email Anda. Silakan verifikasi untuk mengubah password.');
+    }
+
+    /**
+     * Update Password - Step 2: Verify OTP and save
+     */
+    public function verifyPasswordOtp(Request $request)
+    {
+        $request->validate([
+            'otp_code' => 'required|string|size:6',
+        ]);
+
+        $user = Auth::user();
+
+        if ($user->otp_code !== $request->otp_code) {
+            session(['require_password_otp' => true]);
+            return back()->withErrors(['otp_code' => 'Kode OTP salah.']);
+        }
+
+        if (\Carbon\Carbon::now()->isAfter($user->otp_expires_at)) {
+            session(['require_password_otp' => true]);
+            return back()->withErrors(['otp_code' => 'Kode OTP sudah kedaluwarsa.']);
+        }
+
+        // Update password
+        \App\Models\User::where('id_user', $user->id_user)->update([
+            'password' => \Illuminate\Support\Facades\Hash::make(session('new_password')),
+            'otp_code' => null,
+            'otp_expires_at' => null,
+        ]);
+
+        session()->forget(['new_password', 'require_password_otp', 'dev_otp_code']);
+
+        return back()->with('success', 'Password berhasil diperbarui!');
+    }
+
+    /**
      * Show Addresses Settings Page
      */
     public function alamat()

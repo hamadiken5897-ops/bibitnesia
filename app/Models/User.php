@@ -28,6 +28,9 @@ class User extends Authenticatable
         'tanggal_daftar',
         'status_akun',
         'terakhir_login',
+        'otp_code',
+        'otp_expires_at',
+        'google_id',
     ];
 
     protected $hidden = ['password'];

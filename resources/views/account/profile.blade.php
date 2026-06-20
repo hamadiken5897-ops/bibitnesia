@@ -83,6 +83,61 @@
     </div>
 </form>
 
+<div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4 mt-5">
+    <div>
+        <h4 class="fw-bold mb-1">Ubah Password</h4>
+        <p class="text-muted mb-0 small">Untuk keamanan akun Anda, mohon tidak menyebarkan password Anda kepada orang lain.</p>
+    </div>
+</div>
+
+<form action="{{ route('account.password.update') }}" method="POST">
+    @csrf
+    @method('PUT')
+    <div class="row">
+        <div class="col-md-8 pe-md-5">
+            <div class="row mb-3 align-items-center">
+                <div class="col-sm-4 text-sm-end text-muted">
+                    <label class="mb-0">Password Saat Ini</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="password" name="current_password" class="form-control" required>
+                    @error('current_password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-sm-4 text-sm-end text-muted">
+                    <label class="mb-0">Password Baru</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="password" name="password" class="form-control" required>
+                    @error('password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-sm-4 text-sm-end text-muted">
+                    <label class="mb-0">Konfirmasi Password Baru</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="password" name="password_confirmation" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-8">
+                    <button type="submit" class="btn btn-success px-4 rounded-3">Simpan Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <script>
     // Simple image preview
     document.getElementById('profile_upload').addEventListener('change', function(e) {
@@ -101,4 +156,60 @@
         }
     });
 </script>
+
+{{-- SWEETALERT OTP UNTUK UBAH PASSWORD --}}
+@if(session('require_password_otp'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let devOtpMsg = '';
+            @if(session('dev_otp_code'))
+                devOtpMsg = '<br><br><span style="color: #0d6efd; font-weight: bold; font-size: 18px;">[Dev Mode] Kode OTP Anda: {{ session("dev_otp_code") }}</span>';
+            @endif
+
+            Swal.fire({
+                title: 'Verifikasi OTP',
+                html: 'Masukkan 6 digit kode OTP yang telah dikirim ke email <strong>{{ Auth::user()->email }}</strong> untuk mengonfirmasi perubahan password.' + devOtpMsg,
+                input: 'text',
+                inputAttributes: {
+                    maxlength: 6,
+                    autocapitalize: 'off',
+                    autocorrect: 'off',
+                    style: 'text-align: center; font-size: 24px; letter-spacing: 5px; font-weight: bold;',
+                    placeholder: '------'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Verifikasi',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#198754',
+                allowOutsideClick: false,
+                preConfirm: (otp) => {
+                    if (!otp || otp.length !== 6) {
+                        Swal.showValidationMessage('Kode OTP harus berisi 6 digit angka');
+                        return false;
+                    }
+                    
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route("account.password.verify") }}';
+                    
+                    let token = document.createElement('input');
+                    token.type = 'hidden';
+                    token.name = '_token';
+                    token.value = '{{ csrf_token() }}';
+                    form.appendChild(token);
+
+                    let otpInput = document.createElement('input');
+                    otpInput.type = 'hidden';
+                    otpInput.name = 'otp_code';
+                    otpInput.value = otp;
+                    form.appendChild(otpInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    </script>
+@endif
 @endsection

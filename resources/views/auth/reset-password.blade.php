@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Forgot Password')
+@section('title', 'Reset Password')
 
 @section('content')
     <div class="row h-100">
@@ -16,41 +16,44 @@
                 </div>
 
                 {{-- JUDUL & SUBTITLE --}}
-                <h1 class="auth-title">Forgot Password.</h1>
-                <p class="auth-subtitle mb-5">Enter your email and we'll send you a link to reset your password.</p>
+                <h1 class="auth-title">Reset Password.</h1>
+                <p class="auth-subtitle mb-5">Create a new password for your account.</p>
 
                 {{-- Notifikasi --}}
                 @if (session('success'))
-                    <div class="alert alert-success">{!! session('success') !!}</div>
+                    <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
                 @if ($errors->any())
                     <div class="alert alert-danger">{{ $errors->first() }}</div>
                 @endif
 
-                {{-- FORM FORGOT PASSWORD --}}
-                <form method="POST" action="{{ route('password.email') }}">
+                {{-- FORM RESET PASSWORD --}}
+                <form method="POST" action="{{ route('password.update') }}">
                     @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+                    <input type="hidden" name="email" value="{{ $email }}">
+
                     <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="email" name="email" class="form-control form-control-xl" placeholder="Email"
+                        <input type="password" name="password" class="form-control form-control-xl" placeholder="New Password"
                             required>
                         <div class="form-control-icon">
-                            <i class="bi bi-envelope"></i>
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group position-relative has-icon-left mb-4">
+                        <input type="password" name="password_confirmation" class="form-control form-control-xl" placeholder="Confirm New Password"
+                            required>
+                        <div class="form-control-icon">
+                            <i class="bi bi-shield-lock"></i>
                         </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
-                        Send Reset Link
+                        Reset Password
                     </button>
                 </form>
-
-                {{-- LINK LOGIN --}}
-                <div class="text-center mt-5 text-lg fs-4">
-                    <p class="text-gray-600">
-                        Remember your password?
-                        <a href="{{ route('login') }}" class="font-bold">Log in</a>.
-                    </p>
-                </div>
 
             </div>
         </div>
