@@ -95,6 +95,7 @@
     @method('PUT')
     <div class="row">
         <div class="col-md-8 pe-md-5">
+            @if(empty(Auth::user()->google_id))
             <div class="row mb-3 align-items-center">
                 <div class="col-sm-4 text-sm-end text-muted">
                     <label class="mb-0">Password Saat Ini</label>
@@ -106,6 +107,7 @@
                     @enderror
                 </div>
             </div>
+            @endif
 
             <div class="row mb-3 align-items-center">
                 <div class="col-sm-4 text-sm-end text-muted">

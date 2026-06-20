@@ -23,15 +23,24 @@ class AccountController extends Controller
      */
     public function updatePassword(Request $request)
     {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
         $user = Auth::user();
 
-        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+        $rules = [
+            'password' => 'required|string|min:8|confirmed',
+        ];
+
+        // Jika user tidak menggunakan google_id, maka current_password wajib diisi
+        if (empty($user->google_id)) {
+            $rules['current_password'] = 'required';
+        }
+
+        $request->validate($rules);
+
+        // Jika user mengisi current_password (walau opsional untuk akun google), kita tetap cek validitasnya
+        if ($request->filled('current_password')) {
+            if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+            }
         }
 
         // Generate OTP
