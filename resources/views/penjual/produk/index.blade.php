@@ -44,7 +44,7 @@
             @foreach ($produks as $produk)
                 <div class="col-xl-3 col-lg-4 col-md-6">
 
-                    <div class="product-card">
+                    <div class="product-card" style="{{ in_array($produk->status, ['hidden', 'dihapus_admin']) ? 'opacity: 0.6; border: 1px solid red;' : '' }}">
 
                         @if ($produk->foto_produk2 || $produk->foto_produk3)
                             <div id="carousel{{ $produk->id_produk }}" class="carousel slide product-carousel"
@@ -94,12 +94,19 @@
                                 <span>Stok: {{ $produk->stok }}</span>
                             </div>
 
+                            @if($produk->status === 'hidden')
+                                <div class="mt-2"><span class="badge bg-warning text-dark w-100">Disembunyikan Admin</span></div>
+                            @elseif($produk->status === 'dihapus_admin')
+                                <div class="mt-2"><span class="badge bg-danger w-100">Dihapus Admin</span></div>
+                            @endif
+
                             <div class="mt-2 d-flex gap-2">
                                 <a href="{{ route('penjual.produk.edit', $produk->id_produk) }}"
                                     class="btn btn-sm btn-outline-primary w-100">
-                                    Edit
+                                    Detail / Edit
                                 </a>
 
+                                @if($produk->status !== 'dihapus_admin')
                                 <form action="{{ route('penjual.produk.destroy', $produk->id_produk) }}" method="POST"
                                     onsubmit="return confirm('Yakin hapus produk ini?')">
                                     @csrf
@@ -109,6 +116,7 @@
                                         Hapus
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </div>
 

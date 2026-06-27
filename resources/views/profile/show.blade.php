@@ -17,6 +17,14 @@
                     </div>
                 @endif
 
+                {{-- Warning Banner for Owner --}}
+                @if($isOwner && $user->peringatan_teks && $user->tgl_peringatan && \Carbon\Carbon::parse($user->tgl_peringatan)->addDays(5)->isFuture())
+                    <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert" style="background-color: #fff8e1; color: #d35400; font-weight: 500; border: 1px solid #ffeaa7; border-radius: 12px;">
+                        <i class="bi bi-exclamation-triangle-fill me-2" style="color: #f39c12;"></i> <strong>Peringatan Admin:</strong> {{ $user->peringatan_teks }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 {{-- PROFILE CARD --}}
                 <div class="profile-card">
 
@@ -121,15 +129,19 @@
                                         @endif
                                     @endif
 
-                                    {{-- Tombol Edit (hanya untuk owner) --}}
-                                    @if ($isOwner)
-                                        <div class="mt-3">
+                                    {{-- Tombol Edit (hanya untuk owner) / Lapor (untuk pengunjung) --}}
+                                    <div class="mt-3">
+                                        @if ($isOwner)
                                             <button class="btn btn-primary btn-edit" onclick="toggleEditForm()">
                                                 <i class="bi bi-pencil-square me-1"></i>
                                                 Edit Profil
                                             </button>
-                                        </div>
-                                    @endif
+                                        @elseif(auth()->check())
+                                            <button class="btn btn-outline-danger btn-sm" onclick="reportItem('user', '{{ $user->id_user }}')">
+                                                <i class="bi bi-flag-fill me-1"></i> Laporkan Pengguna
+                                            </button>
+                                        @endif
+                                    </div>
 
                                 </div>
                             </div>

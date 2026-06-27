@@ -16,7 +16,9 @@ class Komplain extends Model
         'id_komplain',
         'id_user',
         'id_pesanan',
-        'id_terlapor',
+        'id_produk',
+        'id_ulasan',
+        'kategori_laporan',
         'judul_laporan',
         'deskripsi_laporan',
         'bukti_foto',
@@ -53,5 +55,17 @@ class Komplain extends Model
     public function terlapor()
     {
         return $this->belongsTo(User::class, 'id_terlapor', 'id_user');
+    }
+
+    // Relasi ke Produk
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
+    }
+
+    // Relasi ke Ulasan
+    public function ulasan()
+    {
+        return $this->belongsTo(Ulasan::class, 'id_ulasan', 'id');
     }
 }

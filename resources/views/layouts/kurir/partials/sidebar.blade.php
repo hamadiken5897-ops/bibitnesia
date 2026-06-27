@@ -33,6 +33,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ request()->routeIs('kurir.permintaan.index') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.permintaan.index') }}" class="sidebar-link">
+                        <i class="bi bi-inbox-fill"></i>
+                        <span>Permintaan Penjemputan</span>
+                    </a>
+                </li>
+
 
 
                 <li class="sidebar-item {{ request()->routeIs('kurir.status-pengiriman.index') ? 'active' : '' }}">

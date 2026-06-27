@@ -161,6 +161,12 @@
                                 <i id="favoritIcon" class="{{ $isFavorit ? 'fas' : 'far' }} fa-heart"></i>
                             </button>
 
+                            @if(auth()->user()->id_user != $produk->penjual->id_user)
+                                <button class="btn btn-outline-warning" style="border: 2px solid #f1c40f; color:#f39c12; padding: 12px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px;" onclick="reportItem('produk', '{{ $produk->id_produk }}')" title="Laporkan Produk">
+                                    <i class="fas fa-flag"></i>
+                                </button>
+                            @endif
+
                             @if($produk->status == 'habis' || $produk->stok <= 0)
                                 <button class="btn-add-cart disabled" style="background-color: #e0e0e0; color: #999; border: none; cursor: not-allowed;" disabled>
                                     <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
@@ -295,7 +301,23 @@
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <strong class="fs-6" style="color: #34495e;">{{ $ulasan->user->nama }}</strong>
-                                <small class="text-muted" style="font-size: 0.8rem;"><i class="far fa-clock me-1"></i> {{ $ulasan->created_at->diffForHumans() }}</small>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted me-2" style="font-size: 0.8rem;"><i class="far fa-clock me-1"></i> {{ $ulasan->created_at->diffForHumans() }}</small>
+                                    @auth
+                                        @if(auth()->user()->id_user != $ulasan->id_user)
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-link text-muted p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 12px; font-size: 0.9rem; border: none; min-width: 180px;">
+                                                    <li><a class="dropdown-item py-2" href="{{ route('profile.show', $ulasan->id_user) }}"><i class="fas fa-user text-secondary me-2"></i> Profil Pengguna</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger py-2" href="javascript:void(0)" onclick="reportItem('ulasan', '{{ $ulasan->id }}')"><i class="fas fa-flag me-2"></i> Laporkan</a></li>
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    @endauth
+                                </div>
                             </div>
                             <div class="star-rating-display mb-2">
                                 @for ($i = 1; $i <= 5; $i++)

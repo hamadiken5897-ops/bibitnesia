@@ -42,21 +42,20 @@
                     </a>
                 </li>
 
-                {{-- Pesanan Masuk --}}{{--
-                <li class="sidebar-item {{ request()->routeIs('penjual.pesanan.*') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.pesanan.index') }}" class="sidebar-link">
-                        <i class="bi bi-bag-check-fill"></i>
+                <li class="sidebar-item {{ request()->routeIs('penjual.pengiriman.*') ? 'active' : '' }}">
+                    <a href="{{ route('penjual.pengiriman.index') }}" class="sidebar-link">
+                        <i class="bi bi-truck-flatbed"></i>
                         <span>Pengiriman</span>
                     </a>
-                </li>  --}}
+                </li>
                 
                 <li class="sidebar-item">
                     <a href="{{ route('penjual.status-pesanan.index') }}"
                        class="sidebar-link">
-                        <i class="bi bi-truck"></i>
+                        <i class="bi bi-clock-history"></i>
                         <span>Riwayat Pesanan</span>
                     </a>
-                </li>  
+                </li>
 
                 {{-- Saldo / Keuangan --}}
                 <li class="sidebar-item {{ request()->routeIs('penjual.saldo') ? 'active' : '' }}">
@@ -77,13 +76,7 @@
                     </a>
                 </li>
 
-                {{-- Pengaturan Toko --}}
-                <li class="sidebar-item {{ request()->routeIs('penjual.pengaturan') ? 'active' : '' }}">
-                    <a href="{{ route('penjual.pengaturan') }}" class='sidebar-link'>
-                        <i class="bi bi-gear-fill"></i>
-                        <span>Pengaturan Toko</span>
-                    </a>
-                </li>
+
 
                 {{-- MENU MARKETPLACE --}}
                 <li class="sidebar-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">

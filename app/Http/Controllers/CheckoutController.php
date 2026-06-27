@@ -130,11 +130,18 @@ class CheckoutController extends Controller
 
                 // 🔥 SNAPSHOT DARI CHECKOUT
                 'alamat' => $request->alamat,
+                'catatan' => $request->catatan ?? null,
                 'provinsi' => $request->provinsi,
-
                 'status_pesanan' => 'Menunggu Pembayaran',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+
+            // CATAT RIWAYAT
+            \App\Models\RiwayatPesanan::create([
+                'id_pesanan' => $pesananId,
+                'status' => 'Pesanan Dibuat',
+                'deskripsi' => 'Pesanan berhasil dibuat dan menunggu pembayaran.'
             ]);
 
             // ===============================

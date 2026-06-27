@@ -24,6 +24,12 @@ class Produk extends Model
         'foto_produk1',
         'foto_produk2',
         'foto_produk3',
+        'alasan_admin',
+        'tgl_dihapus_admin',
+    ];
+
+    protected $casts = [
+        'tgl_dihapus_admin' => 'datetime',
     ];
 
     // PENTING untuk route model binding

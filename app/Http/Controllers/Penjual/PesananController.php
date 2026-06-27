@@ -32,7 +32,7 @@ class PesananController extends Controller
         } elseif ($status == 'perlu-dikirim') {
             $query->where('status_pesanan', 'Pesanan sedang diproses');
         } elseif ($status == 'dikirim') {
-            $query->where('status_pesanan', 'Pesanan dalam pengiriman');
+            $query->whereIn('status_pesanan', ['Menunggu penjemputan kurir', 'Pesanan dalam pengiriman']);
         } elseif ($status == 'selesai') {
             $query->whereIn('status_pesanan', ['Pesanan selesai', 'Pesanan Selesai'])
                   ->whereDate('updated_at', \Carbon\Carbon::today());
@@ -51,7 +51,7 @@ class PesananController extends Controller
      */
     public function show($id)
     {
-        $pesanan = Pesanan::with(['user', 'detailPesanan.produk', 'pengiriman'])
+        $pesanan = Pesanan::with(['user', 'detailPesanan.produk', 'pengiriman', 'riwayat'])
             ->where('id_pesanan', $id)
             ->firstOrFail();
 
@@ -80,6 +80,12 @@ class PesananController extends Controller
             'status_pesanan' => 'Pesanan sedang diproses', // Berubah menjadi sedang diproses (dikemas)
         ]);
 
+        \App\Models\RiwayatPesanan::create([
+            'id_pesanan' => $pesanan->id_pesanan,
+            'status' => 'Sedang Dikemas',
+            'deskripsi' => 'Penjual telah menerima pesanan dan sedang mengemas pesanan Anda.'
+        ]);
+
         // Kirim notifikasi ke pembeli
         NotifikasiUser::create([
             'id_user' => $pesanan->id_user,
@@ -106,6 +112,12 @@ class PesananController extends Controller
         \DB::transaction(function () use ($pesanan, $request) {
             $pesanan->update([
                 'status_pesanan' => 'Pesanan dalam pengiriman',
+            ]);
+
+            \App\Models\RiwayatPesanan::create([
+                'id_pesanan' => $pesanan->id_pesanan,
+                'status' => 'Dikirim',
+                'deskripsi' => 'Paket sedang dalam perjalanan oleh kurir ' . strtoupper($request->kurir) . ' dengan nomor resi ' . $request->no_resi . '.'
             ]);
 
             \App\Models\Pengiriman::updateOrCreate(
@@ -147,6 +159,12 @@ class PesananController extends Controller
         $pesanan->update([
             'status_pesanan' => 'Pesanan ditolak',
             'catatan' => $request->alasan,
+        ]);
+
+        \App\Models\RiwayatPesanan::create([
+            'id_pesanan' => $pesanan->id_pesanan,
+            'status' => 'Dibatalkan',
+            'deskripsi' => 'Pesanan ditolak oleh penjual dengan alasan: ' . $request->alasan
         ]);
 
         // Kirim notifikasi ke pembeli

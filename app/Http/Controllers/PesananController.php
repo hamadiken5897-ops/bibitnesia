@@ -21,8 +21,10 @@ class PesananController extends Controller
         if ($status != 'semua') {
             if ($status == 'belum-bayar') {
                 $query->where('status_pesanan', 'Menunggu Pembayaran');
+            } elseif ($status == 'menunggu-konfirmasi') {
+                $query->where('status_pesanan', 'Menunggu konfirmasi penjual');
             } elseif ($status == 'dikemas') {
-                $query->whereIn('status_pesanan', ['Menunggu konfirmasi penjual', 'Pesanan sedang diproses']);
+                $query->where('status_pesanan', 'Pesanan sedang diproses');
             } elseif ($status == 'dikirim') {
                 $query->whereIn('status_pesanan', ['Pesanan dalam pengiriman', 'Sampai Tujuan']);
             } elseif ($status == 'selesai') {
@@ -39,7 +41,7 @@ class PesananController extends Controller
 
     public function show($id)
     {
-        $pesanan = Pesanan::with(['detailPesanan.produk', 'pengiriman'])
+        $pesanan = Pesanan::with(['detailPesanan.produk', 'pengiriman', 'riwayat'])
             ->where('id_user', auth()->user()->id_user)
             ->where('id_pesanan', $id)
             ->firstOrFail();
@@ -73,6 +75,12 @@ class PesananController extends Controller
                 }
 
                 $pesanan->update(['status_pesanan' => 'Pesanan Selesai']);
+
+                \App\Models\RiwayatPesanan::create([
+                    'id_pesanan' => $pesanan->id_pesanan,
+                    'status' => 'Pesanan Selesai',
+                    'deskripsi' => 'Pesanan telah diselesaikan oleh pembeli. Dana akan diteruskan ke penjual.'
+                ]);
             });
         }
 

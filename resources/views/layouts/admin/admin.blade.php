@@ -6,6 +6,7 @@
 </head>
 
 <body class="page-transition">
+    @include('components.global-loader')
     <div id="app">
         @include('layouts.admin.partials.sidebar')
         

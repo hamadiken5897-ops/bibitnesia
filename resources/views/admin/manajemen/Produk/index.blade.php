@@ -105,21 +105,9 @@
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('admin.produk.show', $item->id_produk) }}" 
                                                class="btn btn-sm btn-info" title="Detail">
-                                                <i class="bi bi-eye"></i>
+                                                <i class="bi bi-eye"></i> Detail
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger" 
-                                                    onclick="confirmDelete('{{ $item->id_produk }}')"
-                                                    title="Hapus">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
                                         </div>
-
-                                        <form id="delete-form-{{ $item->id_produk }}" 
-                                              action="{{ route('admin.produk.destroy', $item->id_produk) }}" 
-                                              method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -143,14 +131,4 @@
     </section>
 </div>
 
-@endsection
-
-@section('scripts')
-<script>
-function confirmDelete(id) {
-    if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-        document.getElementById('delete-form-' + id).submit();
-    }
-}
-</script>
 @endsection

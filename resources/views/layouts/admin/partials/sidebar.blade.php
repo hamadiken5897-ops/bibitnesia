@@ -64,10 +64,17 @@
                 @endif
 
                 <li class="sidebar-title">Services</li>
-                <li class="sidebar-item {{ request()->routeIs('admin.komplain') ? 'active' : '' }}">
-                    <a href="{{ route('admin.komplain') }}" class='sidebar-link'>
-                        <i class="bi bi-pen-fill"></i>
-                        <span>Komplain</span>
+                <li class="sidebar-item {{ request()->routeIs('admin.customer_service.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.customer_service.index') }}" class='sidebar-link'>
+                        <i class="bi bi-headset"></i>
+                        <span>Customer Service</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->routeIs('admin.pengiriman.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengiriman.index') }}" class='sidebar-link'>
+                        <i class="bi bi-truck"></i>
+                        <span>Pengiriman</span>
                     </a>
                 </li>
 
@@ -92,6 +99,15 @@
                     <a href="{{ route('admin.conversation.index') }}" class='sidebar-link'>
                         <i class="bi bi-chat-dots-fill"></i>
                         <span>Team Conversation</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-title">Lainnya</li>
+                
+                <li class="sidebar-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
+                    <a href="{{ route('marketplace.index') }}" class='sidebar-link'>
+                        <i class="bi bi-shop"></i>
+                        <span>Marketplace</span>
                     </a>
                 </li>
 

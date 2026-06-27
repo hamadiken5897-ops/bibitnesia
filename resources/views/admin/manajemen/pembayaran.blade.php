@@ -27,6 +27,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>ID Pembayaran</th>
                             <th>ID Pesanan</th>
                             <th>Metode</th>
@@ -49,7 +50,7 @@
                                 <td>Rp {{ number_format($p->total_bayar, 0, ',', '.') }}</td>
 
                                 <td>
-                                    @if ($p->status_validasi === 'paid' || strtolower($p->status_validasi ?? '') === 'valid' || $p->status_validasi === 'sudah_bayar')
+                                    @if ($p->status_validasi === 'paid' || strtolower($p->status_validasi ?? '') === 'valid' || $p->status_validasi === 'sudah_bayar' || $p->status_validasi === 'dibayar')
                                         <span class="badge bg-success">Paid</span>
                                     @elseif ($p->status_validasi === 'pending' || $p->status_validasi === 'belum_bayar')
                                         <span class="badge bg-warning text-dark">Pending</span>

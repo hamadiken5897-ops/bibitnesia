@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    @include('components.global-loader')
 
     {{-- SIDEBAR --}}
     @include('layouts.marketplace.partials.sidebar')
@@ -111,6 +112,70 @@
             // Polling every 15 seconds
             setInterval(fetchUnreadChat, 15000);
         });
+
+        function reportItem(type, id) {
+            let kategoriOptions = {
+                'Spam': 'Spam / Iklan Mengganggu',
+                'Penipuan': 'Penipuan / Indikasi Palsu',
+                'Kata Kasar': 'Kata Kasar / Pelecehan',
+                'Produk Ilegal': 'Produk Ilegal / Berbahaya',
+                'Lainnya': 'Lainnya'
+            };
+
+            Swal.fire({
+                title: 'Laporkan ' + (type === 'user' ? 'Pengguna' : type === 'produk' ? 'Produk' : 'Komentar'),
+                text: "Pilih kategori pelanggaran:",
+                icon: 'warning',
+                input: 'select',
+                inputOptions: kategoriOptions,
+                inputPlaceholder: 'Pilih Kategori',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Kirim Laporan',
+                cancelButtonText: 'Batal',
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value) {
+                            resolve();
+                        } else {
+                            resolve('Anda harus memilih kategori laporan!');
+                        }
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let payload = {
+                        _token: '{{ csrf_token() }}',
+                        kategori_laporan: result.value
+                    };
+                    
+                    if (type === 'user') payload.id_terlapor = id;
+                    if (type === 'produk') payload.id_produk = id;
+                    if (type === 'ulasan') payload.id_ulasan = id;
+
+                    fetch("{{ route('marketplace.report.store') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success) {
+                            Swal.fire('Berhasil!', data.message, 'success');
+                        } else {
+                            Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Gagal!', 'Terjadi kesalahan sistem.', 'error');
+                    });
+                }
+            });
+        }
     </script>
     @endauth
 
