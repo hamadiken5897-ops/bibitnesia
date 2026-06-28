@@ -287,7 +287,7 @@
                         </div>
 
                         {{-- hidden untuk backend --}}
-                        <input type="hidden" name="ongkir" value="{{ $ongkirTetap }}">
+                        <input type="hidden" name="ongkir" id="ongkirValue" value="{{ $ongkirTetap }}">
 
                         <div class="d-flex flex-column gap-2 mt-4">
                             <button class="btn btn-success rounded-pill py-2 fw-bold w-100 shadow-sm">
