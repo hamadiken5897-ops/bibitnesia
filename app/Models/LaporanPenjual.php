@@ -13,6 +13,7 @@ class LaporanPenjual extends Model
         'id_penjual',
         'id_pesanan',
         'jumlah',
+        'komisi'
     ];
 
     public function pesanan()

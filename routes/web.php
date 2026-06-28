@@ -6,6 +6,26 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarketplaceController;
+use Illuminate\Support\Facades\DB;
+
+// ==========================================
+// FIX: SINKRONISASI DATA TESTING LAMA
+// ==========================================
+Route::get('/sync-saldo', function () {
+    // 1. Sync Saldo Penjual
+    $penjuals = \App\Models\Penjual::all();
+    foreach ($penjuals as $penjual) {
+        // Hitung total pemasukan dari laporan penjual
+        $totalMasuk = \App\Models\LaporanPenjual::where('id_penjual', $penjual->id_penjual)->sum('jumlah');
+        // Hitung total penarikan selesai
+        $totalKeluar = \App\Models\PenarikanSaldo::where('user_id', $penjual->id_penjual)->where('status', 'selesai')->sum('jumlah_penarikan');
+        
+        $penjual->update(['saldo' => $totalMasuk - $totalKeluar]);
+    }
+
+    return "Sukses! Saldo seluruh Penjual telah disinkronkan dengan data testing lama Anda. Silakan kembali ke halaman Admin Pembayaran.";
+});
+// ==========================================
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\FavoritController;
@@ -321,6 +341,11 @@ Route::middleware(['auth'])->group(function () {
                 // PEMBAYARAN
                 Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
                 Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+                Route::post('/pembayaran/payout/{id}', [PembayaranController::class, 'updatePayout'])->name('pembayaran.payout.update');
+                
+                // PENGATURAN PEMBAYARAN (ADMIN SETTINGS)
+                Route::get('/pengaturan/pembayaran', [\App\Http\Controllers\Admin\PengaturanPembayaranController::class, 'index'])->name('pengaturan.pembayaran');
+                Route::post('/pengaturan/pembayaran', [\App\Http\Controllers\Admin\PengaturanPembayaranController::class, 'update'])->name('pengaturan.pembayaran.update');
                 
                 // LOG AKTIVITAS
                 Route::get('/logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'index'])->name('logs.index');
@@ -394,8 +419,10 @@ Route::middleware(['auth'])->group(function () {
             // DASHBOARD
             Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
 
-            // SALDO
-            Route::get('/saldo', [App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('saldo');
+            // Saldo
+            Route::get('/saldo', [\App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('saldo');
+            Route::post('/saldo/rekening', [\App\Http\Controllers\Penjual\SaldoController::class, 'updateRekening'])->name('rekening.update');
+            Route::post('/saldo/tarik', [\App\Http\Controllers\Penjual\SaldoController::class, 'tarikSaldo'])->name('saldo.tarik');
 
             // PRODUK
             Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
@@ -448,7 +475,10 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [App\Http\Controllers\Kurir\KurirController::class, 'dashboard'])->name('dashboard');
 
-
+            // Saldo Kurir
+            Route::get('/saldo', [\App\Http\Controllers\Kurir\SaldoController::class, 'index'])->name('saldo');
+            Route::post('/saldo/rekening', [\App\Http\Controllers\Kurir\SaldoController::class, 'updateRekening'])->name('rekening.update');
+            Route::post('/saldo/tarik', [\App\Http\Controllers\Kurir\SaldoController::class, 'tarikSaldo'])->name('saldo.tarik');
 
             // 📥 PERMINTAAN PENJEMPUTAN
             Route::get('/permintaan', [App\Http\Controllers\Kurir\PengirimanController::class, 'permintaan'])->name('permintaan.index');
@@ -523,3 +553,7 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
+
+
+// Midtrans Webhook
+Route::post('/midtrans/callback', [\App\Http\Controllers\WebhookController::class, 'handleCallback']);

@@ -1,4 +1,4 @@
-@extends('layouts.penjual.penjual')
+@extends('layouts.kurir.kurir')
 
 @section('content')
 <style>
@@ -289,19 +289,19 @@
                 <div class="card-body py-4 d-flex flex-column justify-content-between">
                     <div>
                         <h6 class="text-white-50 text-uppercase fw-bold mb-1">Saldo Aktif Bisa Ditarik</h6>
-                        <h2 class="mb-0 text-white fw-bold">Rp {{ number_format($penjual->saldo, 0, ',', '.') }}</h2>
+                        <h2 class="mb-0 text-white fw-bold">Rp {{ number_format($kurir->saldo, 0, ',', '.') }}</h2>
                     </div>
                     <div class="mt-4">
                         @php
-                            $hasBank = !empty($penjual->nama_bank) && !empty($penjual->no_rekening);
-                            $hasEwallet = !empty($penjual->ewallet_name) && !empty($penjual->ewallet_phone);
+                            $hasBank = !empty($kurir->nama_bank) && !empty($kurir->no_rekening);
+                            $hasEwallet = !empty($kurir->ewallet_name) && !empty($kurir->ewallet_phone);
                         @endphp
                         
                         @if(!$hasBank && !$hasEwallet)
                             <button class="btn btn-light fw-bold" disabled>
                                 <i class="bi bi-wallet2 me-1"></i> Set Rekening Dulu
                             </button>
-                        @elseif($penjual->saldo < 10000)
+                        @elseif($kurir->saldo < 10000)
                             <button class="btn btn-light fw-bold" disabled>
                                 <i class="bi bi-wallet2 me-1"></i> Minimal Tarik Rp 10.000
                             </button>
@@ -329,8 +329,8 @@
                 <div class="col-12">
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
-                            <small class="text-muted text-uppercase fw-bold">Pesanan Selesai</small>
-                            <h4 class="fw-bold text-dark mt-1">{{ $total_pesanan }} Pesanan</h4>
+                            <small class="text-muted text-uppercase fw-bold">Paket Selesai Dikirim</small>
+                            <h4 class="fw-bold text-dark mt-1">{{ $total_pengiriman }} Pesanan</h4>
                         </div>
                     </div>
                 </div>
@@ -341,7 +341,7 @@
     <div class="row">
         {{-- Pengaturan Rekening --}}
         <div class="col-lg-5 mb-4">
-            <form action="{{ route('penjual.rekening.update') }}" method="POST" id="rekening-form">
+            <form action="{{ route('kurir.rekening.update') }}" method="POST" id="rekening-form">
                 @csrf
                 
                 {{-- Bagian Bank --}}
@@ -355,14 +355,14 @@
                         <div class="payment-card-preview theme-blue" id="cardPreview">
                             <div class="card-chip"></div>
                             <div class="card-bank-name" id="previewBankName">
-                                {{ $penjual->nama_bank ?: 'BANK / DOMPET ELEKTRONIK' }}
+                                {{ $kurir->nama_bank ?: 'BANK / DOMPET ELEKTRONIK' }}
                             </div>
                             <div class="card-number" id="previewAccountNumber">
-                                {{ $penjual->no_rekening ? implode(' ', str_split(str_pad($penjual->no_rekening, 16, '0'), 4)) : '0000 0000 0000 0000' }}
+                                {{ $kurir->no_rekening ? implode(' ', str_split(str_pad($kurir->no_rekening, 16, '0'), 4)) : '0000 0000 0000 0000' }}
                             </div>
                             <div class="card-owner-label">Atas Nama</div>
                             <div class="card-owner-name" id="previewOwnerName">
-                                {{ $penjual->nama_pemilik_rekening ?: 'PEMILIK' }}
+                                {{ $kurir->nama_pemilik_rekening ?: 'PEMILIK' }}
                             </div>
                             <div class="card-contactless">
                                 <i class="bi bi-wifi" style="transform: rotate(90deg); display: inline-block;"></i>
@@ -373,31 +373,31 @@
                             <label>Pilih Bank</label>
                             <div class="option-grid">
                                 <label class="option-card">
-                                    <input type="radio" name="nama_bank" value="BCA" {{ $penjual->nama_bank == 'BCA' ? 'checked' : '' }}>
+                                    <input type="radio" name="nama_bank" value="BCA" {{ $kurir->nama_bank == 'BCA' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/bca.png') }}" alt="BCA">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="nama_bank" value="MANDIRI" {{ $penjual->nama_bank == 'MANDIRI' ? 'checked' : '' }}>
+                                    <input type="radio" name="nama_bank" value="MANDIRI" {{ $kurir->nama_bank == 'MANDIRI' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/mandiri.png') }}" alt="MANDIRI">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="nama_bank" value="BNI" {{ $penjual->nama_bank == 'BNI' ? 'checked' : '' }}>
+                                    <input type="radio" name="nama_bank" value="BNI" {{ $kurir->nama_bank == 'BNI' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/bni.png') }}" alt="BNI">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="nama_bank" value="BRI" {{ $penjual->nama_bank == 'BRI' ? 'checked' : '' }}>
+                                    <input type="radio" name="nama_bank" value="BRI" {{ $kurir->nama_bank == 'BRI' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/bri.png') }}" alt="BRI">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="nama_bank" value="BSI" {{ $penjual->nama_bank == 'BSI' ? 'checked' : '' }}>
+                                    <input type="radio" name="nama_bank" value="BSI" {{ $kurir->nama_bank == 'BSI' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/bsi.png') }}" alt="BSI">
                                     </div>
@@ -406,11 +406,11 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Nomor Rekening</label>
-                            <input type="text" name="no_rekening" class="form-control" value="{{ $penjual->no_rekening }}" placeholder="0000000000" id="inputAccountNumber">
+                            <input type="text" name="no_rekening" class="form-control" value="{{ $kurir->no_rekening }}" placeholder="0000000000" id="inputAccountNumber">
                         </div>
                         <div class="form-group mb-0">
                             <label>Atas Nama (A/N)</label>
-                            <input type="text" name="nama_pemilik_rekening" class="form-control" value="{{ $penjual->nama_pemilik_rekening }}" placeholder="Nama Pemilik Rekening" id="inputOwnerName">
+                            <input type="text" name="nama_pemilik_rekening" class="form-control" value="{{ $kurir->nama_pemilik_rekening }}" placeholder="Nama Pemilik Rekening" id="inputOwnerName">
                         </div>
                     </div>
                 </div>
@@ -425,19 +425,19 @@
                             <label>Pilih Dompet Elektronik</label>
                             <div class="option-grid">
                                 <label class="option-card">
-                                    <input type="radio" name="ewallet_name" value="GOPAY" {{ $penjual->ewallet_name == 'GOPAY' ? 'checked' : '' }}>
+                                    <input type="radio" name="ewallet_name" value="GOPAY" {{ $kurir->ewallet_name == 'GOPAY' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/gopay.png') }}" alt="GoPay">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="ewallet_name" value="OVO" {{ $penjual->ewallet_name == 'OVO' ? 'checked' : '' }}>
+                                    <input type="radio" name="ewallet_name" value="OVO" {{ $kurir->ewallet_name == 'OVO' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/ovo.png') }}" alt="OVO">
                                     </div>
                                 </label>
                                 <label class="option-card">
-                                    <input type="radio" name="ewallet_name" value="DANA" {{ $penjual->ewallet_name == 'DANA' ? 'checked' : '' }}>
+                                    <input type="radio" name="ewallet_name" value="DANA" {{ $kurir->ewallet_name == 'DANA' ? 'checked' : '' }}>
                                     <div class="card-content">
                                         <img src="{{ asset('img/banks/dana.png') }}" alt="DANA">
                                     </div>
@@ -446,11 +446,11 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Nomor HP / Dompet Elektronik</label>
-                            <input type="text" name="ewallet_phone" class="form-control" placeholder="081234567890" value="{{ $penjual->ewallet_phone }}">
+                            <input type="text" name="ewallet_phone" class="form-control" placeholder="081234567890" value="{{ $kurir->ewallet_phone }}">
                         </div>
                         <div class="form-group mb-0">
                             <label>Atas Nama (A/N)</label>
-                            <input type="text" name="ewallet_owner" class="form-control" placeholder="Nama Pemilik E-Wallet" value="{{ $penjual->ewallet_owner }}">
+                            <input type="text" name="ewallet_owner" class="form-control" placeholder="Nama Pemilik E-Wallet" value="{{ $kurir->ewallet_owner }}">
                         </div>
                     </div>
                 </div>
@@ -568,14 +568,14 @@
                 <h5 class="modal-title fw-bold">Tarik Saldo Ke Rekening</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('penjual.saldo.tarik') }}" method="POST">
+            <form action="{{ route('kurir.saldo.tarik') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="saldo-card-modal mb-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-1 text-white-50">Saldo Aktif Anda:</h6>
-                                <h3 class="mb-0 fw-bold text-white">Rp {{ number_format($penjual->saldo, 0, ',', '.') }}</h3>
+                                <h3 class="mb-0 fw-bold text-white">Rp {{ number_format($kurir->saldo, 0, ',', '.') }}</h3>
                             </div>
                             <div class="icon-circle">
                                 <i class="bi bi-wallet2"></i>
@@ -592,10 +592,10 @@
                             <div class="tarik-content">
                                 <div>
                                     <div class="fw-bold mb-1"><i class="bi bi-bank text-primary me-2"></i>Rekening Bank</div>
-                                    <div class="text-muted small">{{ $penjual->no_rekening }} (a/n {{ $penjual->nama_pemilik_rekening }})</div>
+                                    <div class="text-muted small">{{ $kurir->no_rekening }} (a/n {{ $kurir->nama_pemilik_rekening }})</div>
                                 </div>
                                 <div class="tarik-logo-img">
-                                    <img src="{{ asset('img/banks/' . strtolower($penjual->nama_bank) . '.png') }}" alt="{{ $penjual->nama_bank }}">
+                                    <img src="{{ asset('img/banks/' . strtolower($kurir->nama_bank) . '.png') }}" alt="{{ $kurir->nama_bank }}">
                                 </div>
                             </div>
                         </label>
@@ -607,10 +607,10 @@
                             <div class="tarik-content">
                                 <div>
                                     <div class="fw-bold mb-1"><i class="bi bi-wallet2 text-info me-2"></i>E-Wallet</div>
-                                    <div class="text-muted small">{{ $penjual->ewallet_phone }} (a/n {{ $penjual->ewallet_owner }})</div>
+                                    <div class="text-muted small">{{ $kurir->ewallet_phone }} (a/n {{ $kurir->ewallet_owner }})</div>
                                 </div>
                                 <div class="tarik-logo-img">
-                                    <img src="{{ asset('img/banks/' . strtolower($penjual->ewallet_name) . '.png') }}" alt="{{ $penjual->ewallet_name }}">
+                                    <img src="{{ asset('img/banks/' . strtolower($kurir->ewallet_name) . '.png') }}" alt="{{ $kurir->ewallet_name }}">
                                 </div>
                             </div>
                         </label>
@@ -621,7 +621,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nominal Penarikan (Rp)</label>
-                        <input type="number" name="jumlah_penarikan" class="form-control form-control-lg" max="{{ $penjual->saldo }}" min="10000" placeholder="Minimal Rp 10.000" required>
+                        <input type="number" name="jumlah_penarikan" class="form-control form-control-lg" max="{{ $kurir->saldo }}" min="10000" placeholder="Minimal Rp 10.000" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -644,35 +644,25 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
-                    @if(isset($pesananDetails[$row->id_pesanan]))
-                        @foreach($pesananDetails[$row->id_pesanan]->detailPesanan as $detail)
+                    @if(isset($pengirimanDetails[$row->id_pesanan]))
+                        @foreach($pengirimanDetails[$row->id_pesanan]->pesanan->detailPesanan as $detail)
                             @if($detail->produk)
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <div>
                                     <h6 class="mb-0">{{ $detail->produk->nama_produk }}</h6>
-                                    <small class="text-muted">{{ $detail->jumlah }} x Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}</small>
+                                    <small class="text-muted">Ongkir dari Pesanan #{{ $row->id_pesanan }}</small>
                                 </div>
-                                <strong class="text-success">Rp {{ number_format($detail->jumlah * $detail->harga_satuan, 0, ',', '.') }}</strong>
+                                <strong class="text-success">Rp {{ number_format($detail->ongkir ?? 15000, 0, ',', '.') }}</strong>
                             </li>
+                            @break <!-- Only show one ongkir since it's per order -->
                             @endif
                         @endforeach
                     @endif
                 </ul>
-                <hr class="my-2">
-                <div class="px-3 pb-2">
-                    <div class="d-flex justify-content-between mb-1">
-                        <span class="text-muted">Pendapatan Kotor:</span>
-                        <span>Rp {{ number_format($row->total_jumlah + $row->total_komisi, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-1">
-                        <span class="text-danger">Biaya Layanan ({{ floatval($komisiPersen) }}%):</span>
-                        <span class="text-danger">- Rp {{ number_format($row->total_komisi, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2 pt-2 border-top">
-                        <span class="fw-bold">Pendapatan Bersih:</span>
-                        <span class="fw-bold text-success">Rp {{ number_format($row->total_jumlah, 0, ',', '.') }}</span>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <span class="fw-bold">Total:</span>
+                <span class="fw-bold text-success">Rp {{ number_format($row->total_jumlah, 0, ',', '.') }}</span>
             </div>
         </div>
     </div>
@@ -719,5 +709,6 @@
 </script>
 
 @endsection
+
 
 

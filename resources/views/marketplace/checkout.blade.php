@@ -3,6 +3,42 @@
 @section('title', 'Checkout Pesanan')
 
 @section('content')
+<style>
+    .option-card {
+        cursor: pointer;
+        display: block;
+        margin-bottom: 0;
+    }
+    .option-card input[type="radio"] {
+        display: none;
+    }
+    .option-card .card-content {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+        transition: all 0.2s ease;
+        background: #fff;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .option-card .card-content img {
+        max-width: 90%;
+        max-height: 30px;
+        object-fit: contain;
+        transition: all 0.2s ease;
+    }
+    .option-card input[type="radio"]:checked ~ .card-content {
+        border-color: #198754; /* Bootstrap success color */
+        background-color: #f0fdf4;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.2);
+    }
+    .option-card input[type="radio"]:not(:checked) ~ .card-content img {
+        filter: grayscale(100%) opacity(0.6);
+    }
+</style>
     <div class="checkout-page">
         <div class="container my-5">
 
@@ -170,14 +206,84 @@
                             </div>
                         </div>
 
-                        <div class="input-group mb-4">
-                            <label class="fw-bold mb-2">Metode Pembayaran *</label>
-                            <select name="metode" class="form-select rounded-pill px-4 py-2" required>
-                                <option value="">-- Pilih Metode --</option>
-                                <option value="VA BANK">Transfer Bank (VA)</option>
-                                <option value="E-Wallet">E-Wallet (GoPay, OVO)</option>
-                                <option value="QRIS">QRIS</option>
-                            </select>
+                        <div class="mb-4">
+                            <label class="fw-bold mb-3 d-block">Metode Pembayaran *</label>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted fw-bold d-block mb-2">Transfer Bank (Virtual Account)</small>
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="bca_va" required>
+                                            <div class="card-content">
+                                                <img src="{{ asset('img/banks/bca.png') }}" alt="BCA">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="mandiri_va">
+                                            <div class="card-content">
+                                                <img src="{{ asset('img/banks/mandiri.png') }}" alt="Mandiri">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="bni_va">
+                                            <div class="card-content">
+                                                <img src="{{ asset('img/banks/bni.png') }}" alt="BNI">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="bri_va">
+                                            <div class="card-content">
+                                                <img src="{{ asset('img/banks/bri.png') }}" alt="BRI">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="permata_va">
+                                            <div class="card-content">
+                                                <span class="fw-bold text-secondary">Permata</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <small class="text-muted fw-bold d-block mb-2">E-Wallet & QRIS</small>
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="gopay">
+                                            <div class="card-content">
+                                                <img src="{{ asset('img/banks/gopay.png') }}" alt="GoPay">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="shopeepay">
+                                            <div class="card-content">
+                                                <span class="fw-bold text-secondary" style="font-size:0.8rem">ShopeePay</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="option-card">
+                                            <input type="radio" name="metode" value="other_qris">
+                                            <div class="card-content">
+                                                <span class="fw-bold text-secondary">QRIS</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- hidden untuk backend --}}

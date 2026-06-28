@@ -55,6 +55,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ request()->routeIs('admin.pengaturan.pembayaran') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengaturan.pembayaran') }}" class='sidebar-link'>
+                        <i class="bi bi-gear-fill"></i>
+                        <span>Pengaturan Pembayaran</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.logs.index') }}" class='sidebar-link'>
                         <i class="bi bi-clock-history"></i>

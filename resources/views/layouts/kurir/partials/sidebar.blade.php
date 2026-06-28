@@ -56,6 +56,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ request()->routeIs('kurir.saldo') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.saldo') }}" class="sidebar-link">
+                        <i class="bi bi-wallet2"></i>
+                        <span>Saldo & Pendapatan</span>
+                    </a>
+                </li>
+
 
 
                 <li class="sidebar-item {{ request()->routeIs('pesan.*') ? 'active' : '' }}">

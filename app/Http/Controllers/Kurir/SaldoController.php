@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Penjual;
+namespace App\Http\Controllers\Kurir;
 
 use App\Http\Controllers\Controller;
-use App\Models\LaporanPenjual;
-use App\Models\Pesanan;
+use App\Models\LaporanKurir;
+use App\Models\Pengiriman;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -12,45 +12,43 @@ class SaldoController extends Controller
 {
     public function index()
     {
-        $penjual = auth()->user()->penjual;
+        $kurir = auth()->user()->kurir;
         
-        if (!$penjual) {
-            abort(403, 'Anda bukan penjual');
+        if (!$kurir) {
+            abort(403, 'Anda bukan kurir');
         }
 
-        $id_penjual = $penjual->id_penjual;
+        $id_kurir = $kurir->id_kurir;
 
-        $total_pemasukan = LaporanPenjual::where('id_penjual', $id_penjual)->sum('jumlah');
-        $total_pesanan   = LaporanPenjual::where('id_penjual', $id_penjual)->distinct('id_pesanan')->count('id_pesanan');
+        $total_pemasukan = LaporanKurir::where('id_kurir', $id_kurir)->sum('jumlah');
+        $total_pengiriman = LaporanKurir::where('id_kurir', $id_kurir)->distinct('id_pesanan')->count('id_pesanan');
 
-        $laporan = LaporanPenjual::select('id_pesanan', DB::raw('SUM(jumlah) as total_jumlah'), DB::raw('SUM(komisi) as total_komisi'), DB::raw('MAX(created_at) as tgl_masuk'))
-            ->where('id_penjual', $id_penjual)
+        $laporan = LaporanKurir::select('id_pesanan', DB::raw('SUM(jumlah) as total_jumlah'), DB::raw('MAX(created_at) as tgl_masuk'))
+            ->where('id_kurir', $id_kurir)
             ->groupBy('id_pesanan')
             ->orderBy('tgl_masuk', 'desc')
             ->paginate(10);
 
         $pesananIds = $laporan->pluck('id_pesanan');
-        $pesananDetails = Pesanan::with(['detailPesanan.produk' => function($q) use ($id_penjual) {
-            $q->where('id_penjual', $id_penjual);
-        }])->whereIn('id_pesanan', $pesananIds)->get()->keyBy('id_pesanan');
+        
+        $pengirimanDetails = Pengiriman::with('pesanan.detailPesanan.produk')
+            ->whereIn('id_pesanan', $pesananIds)
+            ->where('id_kurir', $id_kurir)
+            ->get()
+            ->keyBy('id_pesanan');
 
-        $riwayatPenarikan = \App\Models\PenarikanSaldo::where('user_id', $id_penjual)
-            ->where('role', 'penjual')
+        $riwayatPenarikan = \App\Models\PenarikanSaldo::where('user_id', $id_kurir)
+            ->where('role', 'kurir')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        // Ambil persentase komisi platform
-        $pengaturan = \App\Models\PengaturanPembayaran::first();
-        $komisiPersen = $pengaturan ? $pengaturan->biaya_layanan_persen : 5.00;
-
-        return view('penjual.saldo.index', compact(
-            'penjual',
+        return view('kurir.saldo.index', compact(
+            'kurir',
             'total_pemasukan',
-            'total_pesanan',
+            'total_pengiriman',
             'laporan',
-            'pesananDetails',
-            'riwayatPenarikan',
-            'komisiPersen'
+            'pengirimanDetails',
+            'riwayatPenarikan'
         ));
     }
 
@@ -65,8 +63,8 @@ class SaldoController extends Controller
             'ewallet_owner' => 'nullable|string|max:100',
         ]);
 
-        $penjual = auth()->user()->penjual;
-        $penjual->update([
+        $kurir = auth()->user()->kurir;
+        $kurir->update([
             'nama_bank' => $request->nama_bank,
             'no_rekening' => $request->no_rekening,
             'nama_pemilik_rekening' => $request->nama_pemilik_rekening,
@@ -85,41 +83,41 @@ class SaldoController extends Controller
             'tujuan_penarikan' => 'required|in:bank,ewallet',
         ]);
 
-        $penjual = auth()->user()->penjual;
+        $kurir = auth()->user()->kurir;
         $jumlah = $request->jumlah_penarikan;
         $tujuan = $request->tujuan_penarikan;
 
         // Validasi rekening kosong berdasarkan tujuan
         if ($tujuan === 'bank') {
-            if (empty($penjual->nama_bank) || empty($penjual->no_rekening)) {
+            if (empty($kurir->nama_bank) || empty($kurir->no_rekening)) {
                 return back()->with('error', 'Silakan lengkapi informasi Rekening Bank terlebih dahulu.');
             }
-            $targetBank = $penjual->nama_bank;
-            $targetRekening = $penjual->no_rekening;
-            $targetPemilik = $penjual->nama_pemilik_rekening;
+            $targetBank = $kurir->nama_bank;
+            $targetRekening = $kurir->no_rekening;
+            $targetPemilik = $kurir->nama_pemilik_rekening;
         } else {
-            if (empty($penjual->ewallet_name) || empty($penjual->ewallet_phone)) {
+            if (empty($kurir->ewallet_name) || empty($kurir->ewallet_phone)) {
                 return back()->with('error', 'Silakan lengkapi informasi E-Wallet terlebih dahulu.');
             }
-            $targetBank = $penjual->ewallet_name;
-            $targetRekening = $penjual->ewallet_phone;
-            $targetPemilik = $penjual->ewallet_owner;
+            $targetBank = $kurir->ewallet_name;
+            $targetRekening = $kurir->ewallet_phone;
+            $targetPemilik = $kurir->ewallet_owner;
         }
 
         // Validasi kecukupan saldo
-        if ($penjual->saldo < $jumlah) {
+        if ($kurir->saldo < $jumlah) {
             return back()->with('error', 'Saldo Anda tidak mencukupi untuk melakukan penarikan sebesar Rp ' . number_format($jumlah, 0, ',', '.'));
         }
 
         // Mulai transaksi database
-        DB::transaction(function () use ($penjual, $jumlah, $targetBank, $targetRekening, $targetPemilik) {
-            // 1. Kurangi saldo penjual
-            $penjual->decrement('saldo', $jumlah);
+        DB::transaction(function () use ($kurir, $jumlah, $targetBank, $targetRekening, $targetPemilik) {
+            // 1. Kurangi saldo kurir
+            $kurir->decrement('saldo', $jumlah);
 
             // 2. Buat record penarikan
             \App\Models\PenarikanSaldo::create([
-                'user_id' => $penjual->id_penjual,
-                'role' => 'penjual',
+                'user_id' => $kurir->id_kurir,
+                'role' => 'kurir',
                 'nama_bank' => $targetBank,
                 'no_rekening' => $targetRekening,
                 'nama_pemilik_rekening' => $targetPemilik,

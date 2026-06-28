@@ -1,0 +1,1 @@
+﻿<?php require __DIR__.'/vendor/autoload.php'; $app = require_once __DIR__.'/bootstrap/app.php'; $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $pesanan = \App\Models\Pesanan::where('id_pesanan', 'ORD-E7V3LNXOTT')->first(); if($pesanan){ $pesanan->status_pesanan = 'Menunggu konfirmasi penjual'; $pesanan->save(); echo 'FIXED'; }
