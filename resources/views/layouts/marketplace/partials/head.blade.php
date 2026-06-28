@@ -17,5 +17,3 @@
 <link rel="stylesheet" href="{{ asset('marketplace_as/css/marketplace.css') }}?v={{ filemtime(public_path('marketplace_as/css/marketplace.css')) }}">
 <link rel="stylesheet" href="{{ asset('checkout_as/css/checkout.css') }}">
 
-<!-- Turbo.js for SPA-like transitions -->
-<script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
