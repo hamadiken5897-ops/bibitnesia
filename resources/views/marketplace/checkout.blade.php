@@ -306,6 +306,7 @@
 
             </div>
             <script>
+                const ongkirTetap = {{ $ongkirTetap ?? 15000 }};
                 let currentStep = 1;
                 const totalSteps = 3;
 
