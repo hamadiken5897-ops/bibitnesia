@@ -104,30 +104,13 @@
                             <tr>
                                 <th>Status</th>
                                 <td>
-                                    {{-- Form ubah status langsung --}}
-                                    <form id="status-form" 
-                                          action="{{ route('admin.produk.update', $produk->id_produk) }}" 
-                                          method="POST" 
-                                          class="d-inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="status" 
-                                                class="form-select form-select-sm d-inline w-auto" 
-                                                onchange="confirmStatusChange()">
-                                            <option value="tersedia" {{ $produk->status == 'tersedia' ? 'selected' : '' }}>
-                                                Tersedia
-                                            </option>
-                                            <option value="tidak_tersedia" {{ $produk->status == 'tidak_tersedia' ? 'selected' : '' }}>
-                                                Tidak Tersedia
-                                            </option>
-                                            <option value="habis" {{ $produk->status == 'habis' ? 'selected' : '' }}>
-                                                Habis
-                                            </option>
-                                            <option value="hidden" {{ $produk->status == 'hidden' ? 'selected' : '' }}>
-                                                Hidden (Admin)
-                                            </option>
-                                        </select>
-                                    </form>
+                                    @if($produk->status === 'hidden')
+                                        <span class="badge bg-warning text-dark">Disembunyikan Admin</span>
+                                    @elseif($produk->status === 'dihapus_admin')
+                                        <span class="badge bg-danger">Dihapus Admin</span>
+                                    @else
+                                        <span class="badge bg-info">{{ ucfirst(str_replace('_', ' ', $produk->status)) }}</span>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -144,10 +127,38 @@
                             <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-arrow-left"></i> Kembali
                             </a>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-                                <i class="bi bi-trash"></i> Hapus Produk
-                            </button>
+                            
+                            @if($produk->status !== 'dihapus_admin')
+                                @if($produk->status !== 'hidden')
+                                    <button type="button" class="btn btn-warning text-dark mx-1" onclick="confirmHide()">
+                                        <i class="bi bi-eye-slash"></i> Sembunyikan Produk
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-success mx-1" onclick="confirmUnhide()">
+                                        <i class="bi bi-eye"></i> Tampilkan Produk
+                                    </button>
+                                @endif
+                            @endif
+
+                            @if(optional(auth()->user()->admin)->jabatan === 'super_admin')
+                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                                    <i class="bi bi-trash"></i> Hapus Produk
+                                </button>
+                            @endif
                         </div>
+
+                        <form id="status-hide-form" action="{{ route('admin.produk.update', $produk->id_produk) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="hidden">
+                            <input type="hidden" name="alasan_admin" id="hide-reason-input" value="">
+                        </form>
+
+                        <form id="status-unhide-form" action="{{ route('admin.produk.update', $produk->id_produk) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="tersedia">
+                        </form>
 
                         <form id="delete-form" 
                               action="{{ route('admin.produk.destroy', $produk->id_produk) }}" 
@@ -155,6 +166,7 @@
                               style="display: none;">
                             @csrf
                             @method('DELETE')
+                            <input type="hidden" name="alasan_admin" id="delete-reason-input" value="">
                         </form>
                     </div>
                 </div>
@@ -172,7 +184,15 @@
                             </tr>
                             <tr>
                                 <th>Nama</th>
-                                <td>{{ $produk->penjual->user->nama ?? '-' }}</td>
+                                <td>
+                                    @if(isset($produk->penjual->user->id_user))
+                                        <a href="{{ route('admin.users.show', $produk->penjual->user->id_user) }}" class="text-primary text-decoration-underline fw-bold">
+                                            {{ $produk->penjual->user->nama ?? '-' }}
+                                        </a>
+                                    @else
+                                        {{ $produk->penjual->user->nama ?? '-' }}
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Email</th>
@@ -199,19 +219,79 @@
 </div>
 
 <script>
-function confirmStatusChange() {
-    if (confirm('Apakah Anda yakin ingin mengubah status produk ini?')) {
-        document.getElementById('status-form').submit();
-    } else {
-        // Reset ke nilai sebelumnya
-        location.reload();
-    }
+function confirmHide() {
+    Swal.fire({
+        title: 'Sembunyikan Produk?',
+        text: "Berikan alasan mengapa produk ini disembunyikan (akan dikirim ke penjual):",
+        icon: 'warning',
+        input: 'textarea',
+        inputPlaceholder: 'Tuliskan alasan Anda di sini...',
+        inputAttributes: {
+            'aria-label': 'Tuliskan alasan Anda di sini'
+        },
+        showCancelButton: true,
+        confirmButtonColor: '#ffc107',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Sembunyikan',
+        cancelButtonText: 'Batal',
+        preConfirm: (reason) => {
+            if (!reason) {
+                Swal.showValidationMessage('Alasan harus diisi!')
+            }
+            return reason
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('hide-reason-input').value = result.value;
+            document.getElementById('status-hide-form').submit();
+        }
+    });
+}
+
+function confirmUnhide() {
+    Swal.fire({
+        title: 'Tampilkan Produk?',
+        text: "Apakah Anda yakin ingin menampilkan kembali produk ini ke marketplace?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#198754',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Tampilkan',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('status-unhide-form').submit();
+        }
+    });
 }
 
 function confirmDelete() {
-    if (confirm('Apakah Anda yakin ingin menghapus produk ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
-        document.getElementById('delete-form').submit();
-    }
+    Swal.fire({
+        title: 'Hapus Produk?',
+        text: "Berikan alasan mengapa produk ini dihapus/diblokir (akan dikirim ke penjual). Produk akan disembunyikan dan otomatis terhapus permanen setelah 7 hari:",
+        icon: 'error',
+        input: 'textarea',
+        inputPlaceholder: 'Tuliskan alasan Anda di sini...',
+        inputAttributes: {
+            'aria-label': 'Tuliskan alasan Anda di sini'
+        },
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Hapus (Mulai 7 Hari)',
+        cancelButtonText: 'Batal',
+        preConfirm: (reason) => {
+            if (!reason) {
+                Swal.showValidationMessage('Alasan harus diisi!')
+            }
+            return reason
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-reason-input').value = result.value;
+            document.getElementById('delete-form').submit();
+        }
+    });
 }
 
 // Log untuk debugging

@@ -91,11 +91,12 @@
     @php
         $statusIndex = 0;
         if($pesanan->status_pesanan == 'Menunggu Pembayaran') $statusIndex = 0;
-        elseif(in_array($pesanan->status_pesanan, ['Menunggu konfirmasi penjual', 'Pesanan sedang diproses'])) $statusIndex = 1;
-        elseif(in_array($pesanan->status_pesanan, ['Pesanan dalam pengiriman', 'Sampai Tujuan'])) $statusIndex = 2;
-        elseif(in_array($pesanan->status_pesanan, ['Pesanan selesai', 'Pesanan Selesai'])) $statusIndex = 3;
+        elseif($pesanan->status_pesanan == 'Menunggu konfirmasi penjual') $statusIndex = 1;
+        elseif($pesanan->status_pesanan == 'Pesanan sedang diproses') $statusIndex = 2;
+        elseif(in_array($pesanan->status_pesanan, ['Pesanan dalam pengiriman', 'Sampai Tujuan'])) $statusIndex = 3;
+        elseif(in_array($pesanan->status_pesanan, ['Pesanan selesai', 'Pesanan Selesai'])) $statusIndex = 4;
         
-        $progressWidth = ($statusIndex / 3) * 100;
+        $progressWidth = ($statusIndex / 4) * 100;
     @endphp
 
     <!-- Progress Bar -->
@@ -112,21 +113,27 @@
         </div>
         <div class="tracking-step">
             <div class="tracking-icon {{ $statusIndex >= 1 ? 'active' : '' }}">
-                <i class="bi bi-box-seam"></i>
+                <i class="bi bi-hourglass-split"></i>
             </div>
-            <div class="tracking-label {{ $statusIndex >= 1 ? 'active' : '' }}">Sedang Dikemas</div>
+            <div class="tracking-label {{ $statusIndex >= 1 ? 'active' : '' }}">Menunggu Konfirmasi</div>
         </div>
         <div class="tracking-step">
             <div class="tracking-icon {{ $statusIndex >= 2 ? 'active' : '' }}">
-                <i class="bi bi-truck"></i>
+                <i class="bi bi-box-seam"></i>
             </div>
-            <div class="tracking-label {{ $statusIndex >= 2 ? 'active' : '' }}">Dikirim</div>
+            <div class="tracking-label {{ $statusIndex >= 2 ? 'active' : '' }}">Sedang Dikemas</div>
         </div>
         <div class="tracking-step">
             <div class="tracking-icon {{ $statusIndex >= 3 ? 'active' : '' }}">
+                <i class="bi bi-truck"></i>
+            </div>
+            <div class="tracking-label {{ $statusIndex >= 3 ? 'active' : '' }}">Dikirim</div>
+        </div>
+        <div class="tracking-step">
+            <div class="tracking-icon {{ $statusIndex >= 4 ? 'active' : '' }}">
                 <i class="bi bi-star"></i>
             </div>
-            <div class="tracking-label {{ $statusIndex >= 3 ? 'active' : '' }}">Selesai</div>
+            <div class="tracking-label {{ $statusIndex >= 4 ? 'active' : '' }}">Selesai</div>
         </div>
     </div>
 
@@ -138,6 +145,38 @@
 
     <div class="row">
         <div class="col-md-8">
+            <!-- Riwayat Status Pesanan (Timeline Vertikal) -->
+            @if($pesanan->riwayat->count() > 0)
+            <div class="detail-card">
+                <div class="section-title">Status Pengiriman</div>
+                <div class="timeline-container mt-3">
+                    @foreach($pesanan->riwayat as $riwayat)
+                        <div class="timeline-item {{ $loop->first ? 'active' : '' }}">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-date text-muted small">
+                                    {{ \Carbon\Carbon::parse($riwayat->created_at)->translatedFormat('d M Y, H:i') }}
+                                </div>
+                                <div class="timeline-title fw-bold {{ $loop->first ? 'text-success' : '' }}">
+                                    {{ $riwayat->status }}
+                                </div>
+                                <div class="timeline-desc text-muted small mt-1">
+                                    {{ $riwayat->deskripsi }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @else
+            <div class="detail-card">
+                <div class="section-title">Status Pengiriman</div>
+                <div class="alert alert-info mt-3 border-0">
+                    <i class="bi bi-info-circle me-2"></i> Detail riwayat pengiriman secara vertikal belum tersedia untuk pesanan lama ini. 
+                </div>
+            </div>
+            @endif
+
             <!-- Informasi Pengiriman -->
             <div class="detail-card">
                 <div class="section-title">Alamat Pengiriman</div>
@@ -232,4 +271,49 @@
         </div>
     </div>
 </div>
+    <style>
+        .timeline-container {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #d1d5db;
+            z-index: 2;
+        }
+
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: -17px;
+            top: 15px;
+            bottom: -5px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 1;
+        }
+
+        .timeline-item.active .timeline-marker {
+            background-color: #198754; /* success color */
+            box-shadow: 0 0 0 2px #198754;
+        }
+    </style>
 @endsection

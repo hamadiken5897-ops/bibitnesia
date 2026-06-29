@@ -94,6 +94,9 @@
             <a class="nav-link {{ $status == 'belum-bayar' ? 'active' : '' }}" href="{{ route('marketplace.pesanan.saya', ['status' => 'belum-bayar']) }}">Belum Bayar</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ $status == 'menunggu-konfirmasi' ? 'active' : '' }}" href="{{ route('marketplace.pesanan.saya', ['status' => 'menunggu-konfirmasi']) }}">Menunggu Konfirmasi</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ $status == 'dikemas' ? 'active' : '' }}" href="{{ route('marketplace.pesanan.saya', ['status' => 'dikemas']) }}">Sedang Dikemas</a>
         </li>
         <li class="nav-item">
@@ -125,7 +128,9 @@
                         <span class="order-status-text">
                             @if($p->status_pesanan == 'Menunggu Pembayaran')
                                 Belum Bayar
-                            @elseif(in_array($p->status_pesanan, ['Menunggu konfirmasi penjual', 'Pesanan sedang diproses']))
+                            @elseif($p->status_pesanan == 'Menunggu konfirmasi penjual')
+                                Menunggu Konfirmasi
+                            @elseif($p->status_pesanan == 'Pesanan sedang diproses')
                                 Sedang Dikemas
                             @elseif(in_array($p->status_pesanan, ['Pesanan dalam pengiriman', 'Sampai Tujuan']))
                                 Dikirim

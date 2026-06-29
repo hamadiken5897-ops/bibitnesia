@@ -31,9 +31,18 @@ class User extends Authenticatable
         'otp_code',
         'otp_expires_at',
         'google_id',
+        'peringatan_teks',
+        'tgl_peringatan',
     ];
 
     protected $hidden = ['password'];
+
+    protected function casts(): array
+    {
+        return [
+            'tgl_peringatan' => 'datetime',
+        ];
+    }
 
     #// Bagian Generate ID USER Secara Terurut //
     // Event untuk auto-generate ID saat create

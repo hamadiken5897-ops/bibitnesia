@@ -78,8 +78,8 @@
             </a>
         </li>
 
-        <li>
-            <a href="#">
+        <li class="{{ request()->routeIs('bantuan') ? 'active' : '' }}">
+            <a href="{{ route('bantuan') }}">
                 <i class="fas fa-question-circle"></i> Bantuan
             </a>
         </li>

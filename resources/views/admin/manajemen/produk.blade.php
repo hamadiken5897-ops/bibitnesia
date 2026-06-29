@@ -62,22 +62,9 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('admin.produk.show', $produk->id_produk) }}" 
-                                           class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i>
+                                           class="btn btn-sm btn-info" title="Lihat Detail Produk">
+                                            <i class="bi bi-eye"></i> Detail
                                         </a>
-                                        <a href="{{ route('admin.produk.edit', $produk->id_produk) }}" 
-                                           class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('admin.produk.destroy', $produk->id_produk) }}" 
-                                              method="POST" 
-                                              onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
                                     </div>
                                 </td>
                             </tr>

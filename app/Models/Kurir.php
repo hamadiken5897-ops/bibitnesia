@@ -19,6 +19,13 @@ class Kurir extends Model
         'tipe_kendaraan',
         'status_kurir',
         'daerah',
+        'saldo',
+        'nama_bank',
+        'no_rekening',
+        'nama_pemilik_rekening',
+        'ewallet_name',
+        'ewallet_phone',
+        'ewallet_owner',
     ];
 
     // Relasi ke tabel users

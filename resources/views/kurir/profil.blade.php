@@ -45,8 +45,28 @@
                             <strong>{{ $user->alamat ?? '-' }}</strong>
                         </p>
 
+                        {{-- Toggle Status Aktif --}}
+                        @if($user->kurir)
+                        <div class="mt-4 p-3 bg-light rounded-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Mode Aktif Bekerja</h6>
+                                <small class="text-muted">Terima penugasan baru dari penjual</small>
+                            </div>
+                            <form action="{{ route('kurir.profil.toggle-status') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn {{ $user->kurir->status_kurir === 'AKTIF' ? 'btn-success' : 'btn-secondary' }}">
+                                    @if($user->kurir->status_kurir === 'AKTIF')
+                                        <i class="bi bi-toggle-on"></i> Aktif
+                                    @else
+                                        <i class="bi bi-toggle-off"></i> Non-Aktif
+                                    @endif
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+
                         {{-- Tombol Edit --}}
-                        <button class="btn btn-primary mt-2" onclick="toggleEdit(true)">
+                        <button class="btn btn-primary mt-4" onclick="toggleEdit(true)">
                             <i class="bi bi-pencil-square"></i> Edit Profil
                         </button>
                     </div>

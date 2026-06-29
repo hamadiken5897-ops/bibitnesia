@@ -4,6 +4,24 @@
 
 @section('content')
     <div class="row g-4">
+        
+        @if(in_array($produk->status, ['hidden', 'disembunyikan_admin', 'dihapus_admin']))
+            <div class="col-12">
+                <div class="alert alert-danger mb-0">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Perhatian:</strong> Produk ini sedang disembunyikan atau telah dihapus oleh Admin. Silakan hubungi Admin lebih lanjut untuk informasi dan penyelesaian.
+                    @if($produk->status === 'dihapus_admin')
+                        <div class="mt-2 text-dark fw-bold">
+                            ⚠️ Produk akan dihapus secara permanen pada: {{ $produk->tgl_dihapus_admin ? $produk->tgl_dihapus_admin->addDays(7)->format('d M Y, H:i') : '-' }}
+                        </div>
+                    @endif
+                    @if($produk->alasan_admin)
+                        <hr>
+                        <p class="mb-0"><strong>Alasan dari Admin:</strong> {{ $produk->alasan_admin }}</p>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         {{-- PREVIEW --}}
         <div class="col-lg-6">
@@ -17,6 +35,8 @@
 
                 @csrf
                 @method('PUT')
+
+                <fieldset {{ in_array($produk->status, ['hidden', 'disembunyikan_admin', 'dihapus_admin']) ? 'disabled' : '' }}>
 
                 {{-- Nama --}}
                 <div class="mb-3">
@@ -83,14 +103,18 @@
 
                 {{-- ACTION --}}
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('penjual.produk') }}" class="btn btn-secondary">
+                    <a href="{{ route('penjual.produk') }}" class="btn btn-secondary" style="pointer-events: auto;">
                         Kembali
                     </a>
 
+                    @if(!in_array($produk->status, ['hidden', 'disembunyikan_admin', 'dihapus_admin']))
                     <button type="submit" class="btn btn-success">
                         Update Produk
                     </button>
+                    @endif
                 </div>
+
+                </fieldset>
 
             </form>
         </div>

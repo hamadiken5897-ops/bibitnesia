@@ -7,6 +7,7 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Models\NotifikasiUser;
 
 class ProdukController extends Controller
 {
@@ -79,9 +80,23 @@ class ProdukController extends Controller
         try {
             $validated = $request->validate([
                 'status' => 'required|in:tersedia,tidak_tersedia,habis,hidden',
+                'alasan_admin' => 'nullable|string'
             ]);
 
-            $produk->update($validated);
+            $produk->update([
+                'status' => $validated['status'],
+                'alasan_admin' => $validated['alasan_admin'] ?? null,
+            ]);
+
+            // Jika di-hidden, kirim notifikasi
+            if ($validated['status'] === 'hidden') {
+                NotifikasiUser::create([
+                    'id_user' => $produk->penjual->id_user,
+                    'judul' => 'Produk Disembunyikan',
+                    'pesan' => "Produk Anda '{$produk->nama_produk}' telah disembunyikan oleh Admin. Alasan: " . ($validated['alasan_admin'] ?? 'Melanggar ketentuan'),
+                    'redirect_url' => route('penjual.produk.edit', $produk->id_produk)
+                ]);
+            }
 
             Log::info('Produk Status Updated', [
                 'id' => $produk->id_produk,
@@ -98,34 +113,37 @@ class ProdukController extends Controller
         }
     }
 
-    /**
-     * Hapus produk
-     */
-    public function destroy(Produk $produk)
+    public function destroy(Request $request, Produk $produk)
     {
         try {
-            Log::info('Delete Produk', ['id' => $produk->id_produk]);
+            $validated = $request->validate([
+                'alasan_admin' => 'required|string'
+            ]);
 
-            // Hapus foto jika ada
-            $fotos = ['foto_produk1', 'foto_produk2', 'foto_produk3'];
-            foreach ($fotos as $foto) {
-                if ($produk->$foto && Storage::disk('public')->exists($produk->$foto)) {
-                    Storage::disk('public')->delete($produk->$foto);
-                    Log::info("Deleted {$foto}");
-                }
-            }
+            Log::info('Hapus (Sembunyikan) Produk', ['id' => $produk->id_produk]);
 
-            $produk->delete();
+            $produk->update([
+                'status' => 'dihapus_admin',
+                'alasan_admin' => $validated['alasan_admin'],
+                'tgl_dihapus_admin' => now(),
+            ]);
+
+            NotifikasiUser::create([
+                'id_user' => $produk->penjual->id_user,
+                'judul' => 'Produk Dihapus Admin',
+                'pesan' => "Produk Anda '{$produk->nama_produk}' telah dihapus/diblokir oleh Admin. Alasan: {$validated['alasan_admin']}. Produk akan dihapus secara permanen dari sistem dalam 7 hari.",
+                'redirect_url' => route('penjual.produk.edit', $produk->id_produk)
+            ]);
             
-            Log::info('Produk Deleted Successfully');
+            Log::info('Produk Status Changed to dihapus_admin Successfully');
 
             return redirect()->route('admin.produk.index')
-                ->with('success', 'Produk berhasil dihapus!');
+                ->with('success', 'Produk berhasil disembunyikan/dihapus oleh admin!');
                 
         } catch (\Exception $e) {
             Log::error('Delete Error: ' . $e->getMessage());
             return redirect()->back()
-                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+                ->with('error', 'Gagal menyembunyikan/menghapus produk: ' . $e->getMessage());
         }
     }
 }

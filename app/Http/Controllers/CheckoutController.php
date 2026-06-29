@@ -130,11 +130,18 @@ class CheckoutController extends Controller
 
                 // 🔥 SNAPSHOT DARI CHECKOUT
                 'alamat' => $request->alamat,
+                'catatan' => $request->catatan ?? null,
                 'provinsi' => $request->provinsi,
-
                 'status_pesanan' => 'Menunggu Pembayaran',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+
+            // CATAT RIWAYAT
+            \App\Models\RiwayatPesanan::create([
+                'id_pesanan' => $pesananId,
+                'status' => 'Pesanan Dibuat',
+                'deskripsi' => 'Pesanan berhasil dibuat dan menunggu pembayaran.'
             ]);
 
             // ===============================
@@ -156,25 +163,73 @@ class CheckoutController extends Controller
             }
 
             // ===============================
-            // 4️⃣ GENERATE VA
+            // 4. GENERATE VA / MIDTRANS TOKEN
             // ===============================
             $vaNomor = '8801' . str_pad(preg_replace('/\D/', '', $pesananId), 8, '0', STR_PAD_LEFT);
+            $snapToken = null;
+
+            // Cek Pengaturan Midtrans
+            $pengaturan = \App\Models\PengaturanPembayaran::first();
+            if ($pengaturan && $pengaturan->midtrans_is_active && $pengaturan->midtrans_server_key) {
+                \Midtrans\Config::$serverKey = $pengaturan->midtrans_server_key;
+                \Midtrans\Config::$isProduction = false; // Gunakan Sandbox
+                \Midtrans\Config::$isSanitized = true;
+                \Midtrans\Config::$is3ds = true;
+
+                $user = auth()->user();
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => $pesananId,
+                        'gross_amount' => $totalHarga,
+                    ],
+                    'customer_details' => [
+                        'first_name' => $user->nama_lengkap,
+                        'email' => $user->email,
+                        'phone' => $user->no_hp ?? '',
+                    ],
+                ];
+
+                if ($request->metode !== 'other_qris') {
+                    $params['enabled_payments'] = [$request->metode];
+                } else {
+                    $params['enabled_payments'] = ['other_qris'];
+                }
+
+                try {
+                    $snapToken = \Midtrans\Snap::getSnapToken($params);
+                } catch (\Exception $e) {
+                    // Jika gagal, biarkan snapToken null, sistem akan fallback ke pembayaran manual
+                    \Log::error('Midtrans Snap Error: ' . $e->getMessage());
+                }
+            }
+
+            // Map metode untuk database ENUM
+            $metodeEnum = 'QRIS';
+            $vaBankStr = null;
+            if (str_contains($request->metode, '_va')) {
+                $metodeEnum = 'VA BANK';
+                $vaBankStr = strtoupper(str_replace('_va', '', $request->metode));
+            } else if (in_array($request->metode, ['gopay', 'shopeepay'])) {
+                $metodeEnum = 'E-Wallet';
+            }
 
             // ===============================
-            // 5️⃣ INSERT PEMBAYARAN (PENDING)
+            // 5. INSERT PEMBAYARAN (PENDING)
             // ===============================
             DB::table('pembayarans')->insert([
                 'id_pembayaran' => 'PAY-' . strtoupper(Str::random(10)),
                 'id_pesanan' => $pesananId,
-                'metode_pembayaran' => 'VA BANK',
-                'va_bank' => 'BCA',
-                'va_nomor' => $vaNomor,
+                'metode_pembayaran' => $metodeEnum,
+                'va_bank' => $vaBankStr,
+                'va_nomor' => $metodeEnum == 'VA BANK' ? $vaNomor : null,
                 'total_bayar' => $totalHarga,
                 'status_validasi' => 'pending',
                 'expired_at' => now()->addHours(24),
                 'tanggal_pembayaran' => null,
                 'bukti_pembayaran' => null,
                 'tgl_validasi' => null,
+                'snap_token' => $snapToken,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

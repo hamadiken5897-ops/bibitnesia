@@ -117,6 +117,35 @@
                     </div>
                 </div>
 
+                @if($pesanan->riwayat->count() > 0)
+                <!-- Timeline Riwayat Pesanan -->
+                <div class="info-card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i>
+                        <h3>Riwayat Pesanan</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline-container mt-3">
+                            @foreach($pesanan->riwayat as $riwayat)
+                                <div class="timeline-item {{ $loop->first ? 'active' : '' }}">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-date text-muted small">
+                                            {{ \Carbon\Carbon::parse($riwayat->created_at)->translatedFormat('d M Y, H:i') }}
+                                        </div>
+                                        <div class="timeline-title fw-bold {{ $loop->first ? 'text-success' : '' }}">
+                                            {{ $riwayat->status }}
+                                        </div>
+                                        <div class="timeline-desc text-muted small mt-1">
+                                            {{ $riwayat->deskripsi }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
 
                 <!-- Action Buttons -->
                 @if ($pesanan->status_pesanan === 'Menunggu konfirmasi penjual')
@@ -294,6 +323,51 @@
     </div>
 
     <style>
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #d1d5db;
+            z-index: 2;
+        }
+
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: -17px;
+            top: 15px;
+            bottom: -5px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 1;
+        }
+
+        .timeline-item.active .timeline-marker {
+            background-color: #198754;
+            box-shadow: 0 0 0 2px #198754;
+        }
+
         /* Back Button */
         .btn-back {
             display: inline-flex;

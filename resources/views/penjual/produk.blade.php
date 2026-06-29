@@ -1,4 +1,4 @@
-@extends('layouts.penjual.app')
+@extends('layouts.penjual.penjual')
 
 @section('page-title', 'Produk Saya')
 

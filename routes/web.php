@@ -6,6 +6,26 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarketplaceController;
+use Illuminate\Support\Facades\DB;
+
+// ==========================================
+// FIX: SINKRONISASI DATA TESTING LAMA
+// ==========================================
+Route::get('/sync-saldo', function () {
+    // 1. Sync Saldo Penjual
+    $penjuals = \App\Models\Penjual::all();
+    foreach ($penjuals as $penjual) {
+        // Hitung total pemasukan dari laporan penjual
+        $totalMasuk = \App\Models\LaporanPenjual::where('id_penjual', $penjual->id_penjual)->sum('jumlah');
+        // Hitung total penarikan selesai
+        $totalKeluar = \App\Models\PenarikanSaldo::where('user_id', $penjual->id_penjual)->where('status', 'selesai')->sum('jumlah_penarikan');
+        
+        $penjual->update(['saldo' => $totalMasuk - $totalKeluar]);
+    }
+
+    return "Sukses! Saldo seluruh Penjual telah disinkronkan dengan data testing lama Anda. Silakan kembali ke halaman Admin Pembayaran.";
+});
+// ==========================================
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\FavoritController;
@@ -33,6 +53,7 @@ use App\Http\Controllers\Admin\KomplainController;
 use App\Http\Controllers\Admin\ValidasiController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\TeamConversationController;
+use App\Http\Controllers\Admin\PengirimanController as AdminPengirimanController;
 
 // Kurir Controllers
 use App\Http\Controllers\Kurir\KurirInboxController;
@@ -51,6 +72,12 @@ use App\Http\Controllers\Penjual\PenjualController;
 Route::get('/', function () {
     return view('portal');
 })->name('portal');
+
+Route::get('/bantuan', function () {
+    return view('bantuan');
+})->name('bantuan');
+
+Route::get('/marketplace', [App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
 
 Route::get('/', [PortalController::class, 'index'])->name('portal');
 
@@ -186,6 +213,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/account/alamat/{id}/utama', [App\Http\Controllers\AccountController::class, 'setUtamaAlamat'])->name('account.alamat.utama');
     Route::delete('/account/alamat/{id}', [App\Http\Controllers\AccountController::class, 'deleteAlamat'])->name('account.alamat.delete');
 
+    // Customer Service (User Side)
+    Route::get('/account/customer-service', [App\Http\Controllers\User\CustomerServiceChatController::class, 'index'])->name('account.cs');
+    Route::get('/account/customer-service/fetch', [App\Http\Controllers\User\CustomerServiceChatController::class, 'getChatHistory'])->name('account.cs.fetch');
+    Route::post('/account/customer-service/send', [App\Http\Controllers\User\CustomerServiceChatController::class, 'sendMessage'])->name('account.cs.send');
+
     // Keranjang marketplace
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
@@ -240,6 +272,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/marketplace/pesanan-saya', [App\Http\Controllers\PesananController::class, 'index'])->name('marketplace.pesanan.saya');
     Route::get('/marketplace/pesanan-saya/{id}', [App\Http\Controllers\PesananController::class, 'show'])->name('marketplace.pesanan.saya.show');
     Route::post('/marketplace/pesanan-saya/{id}/selesai', [App\Http\Controllers\PesananController::class, 'selesai'])->name('marketplace.pesanan.selesai');
+
+    // LAPORKAN (REPORT)
+    Route::post('/marketplace/report', [App\Http\Controllers\MarketplaceController::class, 'storeReport'])->name('marketplace.report.store');
+
     Route::get('/pembayaran/{id}/proses', function ($id) {
         $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->firstOrFail();
 
@@ -247,6 +283,12 @@ Route::middleware(['auth'])->group(function () {
             \Illuminate\Support\Facades\DB::transaction(function () use ($pesanan) {
                 $pesanan->update([
                     'status_pesanan' => 'Menunggu konfirmasi penjual',
+                ]);
+
+                \App\Models\RiwayatPesanan::create([
+                    'id_pesanan' => $pesanan->id_pesanan,
+                    'status' => 'Menunggu Konfirmasi',
+                    'deskripsi' => 'Pembayaran berhasil dikonfirmasi. Menunggu penjual merespon pesanan.'
                 ]);
 
                 \App\Models\Pembayaran::where('id_pesanan', $pesanan->id_pesanan)->update([
@@ -299,6 +341,11 @@ Route::middleware(['auth'])->group(function () {
                 // PEMBAYARAN
                 Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
                 Route::get('/pembayaran/{id}', [PembayaranController::class, 'show'])->name('pembayaran.show');
+                Route::post('/pembayaran/payout/{id}', [PembayaranController::class, 'updatePayout'])->name('pembayaran.payout.update');
+                
+                // PENGATURAN PEMBAYARAN (ADMIN SETTINGS)
+                Route::get('/pengaturan/pembayaran', [\App\Http\Controllers\Admin\PengaturanPembayaranController::class, 'index'])->name('pengaturan.pembayaran');
+                Route::post('/pengaturan/pembayaran', [\App\Http\Controllers\Admin\PengaturanPembayaranController::class, 'update'])->name('pengaturan.pembayaran.update');
                 
                 // LOG AKTIVITAS
                 Route::get('/logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'index'])->name('logs.index');
@@ -308,12 +355,18 @@ Route::middleware(['auth'])->group(function () {
             // SERVICES ROUTES (ADMIN & SUPER ADMIN)
             // ==========================================
 
-            // KOMPLAIN
-            Route::get('/komplain', [KomplainController::class, 'index'])->name('komplain');
-            Route::put('/komplain/{id}/status', [KomplainController::class, 'updateStatus'])->name('komplain.status');
-            Route::post('/komplain/{id}/ban', [KomplainController::class, 'banUser'])->name('komplain.ban');
-            Route::post('/banned/{id_user}/unban', [KomplainController::class, 'unbanUser'])->name('banned.unban');
+            // CUSTOMER SERVICE (Laporan)
+            Route::get('/customer-service', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'index'])->name('customer_service.index');
+            Route::get('/customer-service/{id}', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'show'])->name('customer_service.show');
+            Route::put('/customer-service/{id}/status', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'updateStatus'])->name('customer_service.status');
+            Route::post('/customer-service/{id}/warn', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'warnUser'])->name('customer_service.warn');
+            Route::post('/customer-service/{id}/ban', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'banUser'])->name('customer_service.ban');
+            Route::post('/banned/{id_user}/unban', [\App\Http\Controllers\Admin\CustomerServiceController::class, 'unbanUser'])->name('banned.unban');
 
+            // CUSTOMER SERVICE CHAT
+            Route::get('/customer-service-chat/inbox', [\App\Http\Controllers\Admin\CustomerServiceChatController::class, 'getInbox'])->name('cs_chat.inbox');
+            Route::get('/customer-service-chat/{id_user}', [\App\Http\Controllers\Admin\CustomerServiceChatController::class, 'getChatHistory'])->name('cs_chat.history');
+            Route::post('/customer-service-chat/{id_user}', [\App\Http\Controllers\Admin\CustomerServiceChatController::class, 'sendMessage'])->name('cs_chat.send');
             // Pengajuan Mitra
             Route::get('/pengajuan-mitra', [PengajuanMitraController::class, 'adminIndex'])->name('pengajuan.index');
             Route::get('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'show'])->name('pengajuan.show');
@@ -322,6 +375,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/pengajuan-mitra/{id}/reject', [PengajuanMitraController::class, 'reject'])->name('pengajuan.reject');
 
             Route::delete('/pengajuan-mitra/{id}', [PengajuanMitraController::class, 'destroy'])->name('pengajuan.destroy');
+
+            // PENGIRIMAN
+            Route::get('/pengiriman', [AdminPengirimanController::class, 'index'])->name('pengiriman.index');
+            Route::get('/pengiriman/{id}', [AdminPengirimanController::class, 'show'])->name('pengiriman.show');
 
             // ==========================================
             // TEAMS (STAFF)
@@ -362,8 +419,10 @@ Route::middleware(['auth'])->group(function () {
             // DASHBOARD
             Route::get('/dashboard', [PenjualController::class, 'index'])->name('dashboard');
 
-            // SALDO
-            Route::get('/saldo', [App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('saldo');
+            // Saldo
+            Route::get('/saldo', [\App\Http\Controllers\Penjual\SaldoController::class, 'index'])->name('saldo');
+            Route::post('/saldo/rekening', [\App\Http\Controllers\Penjual\SaldoController::class, 'updateRekening'])->name('rekening.update');
+            Route::post('/saldo/tarik', [\App\Http\Controllers\Penjual\SaldoController::class, 'tarikSaldo'])->name('saldo.tarik');
 
             // PRODUK
             Route::get('/produk', [App\Http\Controllers\Penjual\ProdukController::class, 'index'])->name('produk');
@@ -387,6 +446,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/pesanan/{id}/kurir', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'pilihKurir'])->name('pesanan.kurir');
 
             Route::post('/pesanan/{id}/kurir', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'simpanKurir'])->name('pesanan.kurir.simpan');
+
+            // PENGIRIMAN
+            Route::get('/pengiriman', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'index'])->name('pengiriman.index');
+            Route::get('/pengiriman/{id}', [App\Http\Controllers\Penjual\PenjualPengirimanController::class, 'show'])->name('pengiriman.show');
 
             Route::get('/pengaturan', fn() => view('penjual.pengaturan'))->name('pengaturan');
         });
@@ -412,7 +475,14 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [App\Http\Controllers\Kurir\KurirController::class, 'dashboard'])->name('dashboard');
 
+            // Saldo Kurir
+            Route::get('/saldo', [\App\Http\Controllers\Kurir\SaldoController::class, 'index'])->name('saldo');
+            Route::post('/saldo/rekening', [\App\Http\Controllers\Kurir\SaldoController::class, 'updateRekening'])->name('rekening.update');
+            Route::post('/saldo/tarik', [\App\Http\Controllers\Kurir\SaldoController::class, 'tarikSaldo'])->name('saldo.tarik');
 
+            // 📥 PERMINTAAN PENJEMPUTAN
+            Route::get('/permintaan', [App\Http\Controllers\Kurir\PengirimanController::class, 'permintaan'])->name('permintaan.index');
+            Route::post('/permintaan/{id}/terima', [App\Http\Controllers\Kurir\PengirimanController::class, 'terima'])->name('permintaan.terima');
 
             // 🚚 STATUS PENGIRIMAN
             Route::get('/status-pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'statusIndex'])->name('status-pengiriman.index');
@@ -445,6 +515,16 @@ Route::middleware(['auth'])->group(function () {
                 return back()->with('success', 'Profile Kurir berhasil diperbarui');
             })->name('profil.update');
 
+            Route::post('/profil/toggle-status', function () {
+                $kurir = Auth::user()->kurir;
+                if ($kurir) {
+                    $kurir->status_kurir = $kurir->status_kurir === 'AKTIF' ? 'NONAKTIF' : 'AKTIF';
+                    $kurir->save();
+                    return back()->with('success', 'Status kerja berhasil diubah menjadi ' . $kurir->status_kurir);
+                }
+                return back()->with('error', 'Data kurir tidak ditemukan');
+            })->name('profil.toggle-status');
+
 
 
             Route::get('/pengiriman', [App\Http\Controllers\Kurir\PengirimanController::class, 'index'])->name('pengiriman.index');
@@ -473,3 +553,7 @@ Route::prefix('user')->group(function () {
     Route::get('/about', fn() => view('/user/about.html'));
     Route::get('/cart', fn() => view('/user/cart.html'));
 });
+
+
+// Midtrans Webhook
+Route::post('/midtrans/callback', [\App\Http\Controllers\WebhookController::class, 'handleCallback']);

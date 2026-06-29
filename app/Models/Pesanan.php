@@ -40,6 +40,11 @@ class Pesanan extends Model
         // ↑ Gunakan 'id_pesanan' sebagai foreign key
     }
 
+    public function riwayat()
+    {
+        return $this->hasMany(RiwayatPesanan::class, 'id_pesanan', 'id_pesanan')->orderBy('created_at', 'desc');
+    }
+
     public function provinsiRelasi()
     {
         return $this->belongsTo(Provinsi::class, 'provinsi', 'id_provinsi');

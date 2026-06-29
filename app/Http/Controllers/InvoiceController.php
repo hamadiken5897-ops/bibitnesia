@@ -47,6 +47,10 @@ class InvoiceController extends Controller
             $pesanan->status = 'dibatalkan';
         }
 
-        return view('marketplace.invoice', compact('pesanan', 'pembayaran'));
+        // Ambil client key
+        $pengaturan = \App\Models\PengaturanPembayaran::first();
+        $clientKey = $pengaturan ? $pengaturan->midtrans_client_key : '';
+
+        return view('marketplace.invoice', compact('pesanan', 'pembayaran', 'clientKey'));
     }
 }

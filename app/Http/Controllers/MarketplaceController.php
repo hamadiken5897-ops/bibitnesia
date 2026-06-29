@@ -80,6 +80,38 @@ class MarketplaceController extends Controller
         return view('marketplace.index', compact('produk', 'notifCount', 'notifLatest'));
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->get('q');
+        $produks = Produk::where('nama_produk', 'like', "%{$query}%")
+            ->whereNotIn('status', ['hidden', 'dihapus_admin'])
+            ->with(['penjual.user', 'ulasans'])
+            ->get();
+
+        return view('marketplace.index', compact('produks', 'query'));
+    }
+
+    public function storeReport(Request $request)
+    {
+        $request->validate([
+            'id_terlapor' => 'nullable|string',
+            'id_produk' => 'nullable|string',
+            'id_ulasan' => 'nullable|integer',
+            'kategori_laporan' => 'required|string',
+        ]);
+
+        \App\Models\Komplain::create([
+            'id_user' => auth()->user()->id_user,
+            'id_terlapor' => $request->id_terlapor,
+            'id_produk' => $request->id_produk,
+            'id_ulasan' => $request->id_ulasan,
+            'kategori_laporan' => $request->kategori_laporan,
+            'status' => 'MENUNGGU',
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Laporan berhasil dikirim dan akan direview oleh Admin.']);
+    }
+
     public function kategori($kategori)
     {
         $produk = Produk::with('penjual')->where('kategori', $kategori)->where('status', 'tersedia')->orderBy('created_at', 'desc')->paginate(12);

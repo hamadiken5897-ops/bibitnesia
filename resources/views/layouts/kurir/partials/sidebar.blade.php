@@ -33,6 +33,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ request()->routeIs('kurir.permintaan.index') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.permintaan.index') }}" class="sidebar-link">
+                        <i class="bi bi-inbox-fill"></i>
+                        <span>Permintaan Penjemputan</span>
+                    </a>
+                </li>
+
 
 
                 <li class="sidebar-item {{ request()->routeIs('kurir.status-pengiriman.index') ? 'active' : '' }}">
@@ -46,6 +53,13 @@
                     <a href="{{ route('kurir.riwayat-pengiriman.index') }}" class="sidebar-link">
                         <i class="bi bi-clock-history"></i>
                         <span>Riwayat Pengiriman</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->routeIs('kurir.saldo') ? 'active' : '' }}">
+                    <a href="{{ route('kurir.saldo') }}" class="sidebar-link">
+                        <i class="bi bi-wallet2"></i>
+                        <span>Saldo & Pendapatan</span>
                     </a>
                 </li>
 

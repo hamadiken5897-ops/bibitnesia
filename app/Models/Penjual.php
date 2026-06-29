@@ -23,6 +23,13 @@ class Penjual extends Model
         'tgl_verifikasi',
         'deskripsi_pj',
         'rating',
+        'saldo',
+        'nama_bank',
+        'no_rekening',
+        'nama_pemilik_rekening',
+        'ewallet_name',
+        'ewallet_phone',
+        'ewallet_owner',
     ];
 
     // Relasi ke User
