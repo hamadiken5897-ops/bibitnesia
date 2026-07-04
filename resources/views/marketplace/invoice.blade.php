@@ -56,6 +56,11 @@
             @endif
 
             <hr>
+            
+            <a href="{{ route('midtrans.cek_status', $pesanan->id_pesanan) }}" 
+               class="btn btn-warning w-100 mb-2 fw-bold">
+               <i class="bi bi-arrow-repeat me-1"></i> Sinkronisasi Status Midtrans (Lokal)
+            </a>
 
             <a href="{{ route('marketplace.pesanan.saya') }}"
                class="btn btn-outline-primary w-100 mt-2">

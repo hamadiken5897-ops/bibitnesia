@@ -154,18 +154,37 @@ class PesananController extends Controller
             'alasan' => 'required|string',
         ]);
 
-        $pesanan = Pesanan::where('id_pesanan', $id)->firstOrFail();
+        $pesanan = Pesanan::with(['pembayaran', 'user'])->where('id_pesanan', $id)->firstOrFail();
 
-        $pesanan->update([
-            'status_pesanan' => 'Pesanan ditolak',
-            'catatan' => $request->alasan,
-        ]);
+        \DB::transaction(function () use ($pesanan, $request) {
+            $pesanan->update([
+                'status_pesanan' => 'Pesanan ditolak',
+                'catatan' => $request->alasan,
+            ]);
 
-        \App\Models\RiwayatPesanan::create([
-            'id_pesanan' => $pesanan->id_pesanan,
-            'status' => 'Dibatalkan',
-            'deskripsi' => 'Pesanan ditolak oleh penjual dengan alasan: ' . $request->alasan
-        ]);
+            \App\Models\RiwayatPesanan::create([
+                'id_pesanan' => $pesanan->id_pesanan,
+                'status' => 'Dibatalkan',
+                'deskripsi' => 'Pesanan ditolak oleh penjual dengan alasan: ' . $request->alasan
+            ]);
+
+            // Cek apakah pesanan sudah dibayar
+            if ($pesanan->pembayaran && $pesanan->pembayaran->status_validasi === 'dibayar') {
+                $user = $pesanan->user;
+                $jumlahRefund = $pesanan->pembayaran->total_bayar;
+
+                // Tambahkan saldo user
+                $user->increment('saldo', $jumlahRefund);
+
+                // Catat di wallet history
+                \App\Models\WalletHistory::create([
+                    'user_id' => $user->id_user,
+                    'jumlah' => $jumlahRefund,
+                    'tipe' => 'masuk',
+                    'deskripsi' => 'Refund pesanan ' . $pesanan->id_pesanan . ' karena ditolak penjual',
+                ]);
+            }
+        });
 
         // Kirim notifikasi ke pembeli
         NotifikasiUser::create([

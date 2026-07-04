@@ -8,6 +8,28 @@
     </div>
 </div>
 
+{{-- Koin / Saldo (Hanya Pembeli) --}}
+@if ($user->role === 'pembeli')
+<div class="card mb-4 border-0 shadow-sm" style="border-radius: 12px; background: linear-gradient(135deg, #f8f9fa, #ffffff);">
+    <div class="card-body d-flex justify-content-between align-items-center py-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="fas fa-coins fs-4"></i>
+            </div>
+            <div>
+                <h6 class="mb-0 text-muted fw-bold">Koin / Saldo Bibitnesia</h6>
+                <h4 class="mb-0 fw-bold text-dark">Rp {{ number_format($user->saldo, 0, ',', '.') }}</h4>
+            </div>
+        </div>
+        <div>
+            <a href="{{ route('user.dompet.index') }}" class="btn btn-outline-success rounded-pill px-4">
+                <i class="fas fa-wallet me-1"></i> Tarik Dana
+            </a>
+        </div>
+    </div>
+</div>
+@endif
+
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
         <i class="fas fa-check-circle me-2"></i> {{ session('success') }}

@@ -152,6 +152,11 @@ Route::middleware(['auth'])->group(function () {
         return response()->json(['ok' => false], 403);
     })->middleware('auth');
 
+    // Dompet & Saldo
+    Route::get('/account/dompet', [\App\Http\Controllers\DompetController::class, 'index'])->name('user.dompet.index');
+    Route::post('/account/dompet/withdraw', [\App\Http\Controllers\DompetController::class, 'withdraw'])->name('user.dompet.withdraw');
+    Route::post('/account/dompet/rekening', [\App\Http\Controllers\DompetController::class, 'updateRekening'])->name('user.dompet.rekening');
+
     /*
     |--------------------------------------------------------------------------
     | Daftar Pengajuan Kurir, Penjual
@@ -555,5 +560,6 @@ Route::prefix('user')->group(function () {
 });
 
 
-// Midtrans Webhook
+// Midtrans Webhook & Manual Check (Local Testing)
 Route::post('/midtrans/callback', [\App\Http\Controllers\WebhookController::class, 'handleCallback']);
+Route::get('/midtrans/cek-status/{order_id}', [\App\Http\Controllers\WebhookController::class, 'cekStatusManual'])->name('midtrans.cek_status');

@@ -15,8 +15,13 @@ class PembayaranController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
             
-        // Data Payouts
-        $penarikanSaldos = \App\Models\PenarikanSaldo::orderBy('created_at', 'desc')->paginate(10);
+        // Data Payouts Mitra
+        $penarikanMitras = \App\Models\PenarikanSaldo::whereIn('role', ['penjual', 'kurir'])
+            ->orderBy('created_at', 'desc')->paginate(10, ['*'], 'mitra_page');
+
+        // Data Payouts Customer (Pembeli)
+        $penarikanPembelis = \App\Models\PenarikanSaldo::where('role', 'pembeli')
+            ->orderBy('created_at', 'desc')->paginate(10, ['*'], 'customer_page');
 
         // DATA UNTUK TAB KEUANGAN
         // 1. Total Uang Masuk (Hanya yang Paid/Valid)
@@ -25,6 +30,7 @@ class PembayaranController extends Controller
         // 2. Daftar Saldo Penjual & Kurir
         $penjuals = \App\Models\Penjual::where('saldo', '>', 0)->orderBy('saldo', 'desc')->get();
         $kurirs = \App\Models\Kurir::where('saldo', '>', 0)->orderBy('saldo', 'desc')->get();
+        $pembelis = \App\Models\User::where('role', 'pembeli')->where('saldo', '>', 0)->orderBy('saldo', 'desc')->get();
         
         // 3. Saldo Mitra Tertahan (Escrow)
         $saldoTertahan = $penjuals->sum('saldo') + $kurirs->sum('saldo');
@@ -42,14 +48,16 @@ class PembayaranController extends Controller
 
         return view('admin.manajemen.pembayaran', compact(
             'pembayarans', 
-            'penarikanSaldos',
+            'penarikanMitras',
+            'penarikanPembelis',
             'totalUangMasuk',
             'saldoTertahan',
             'netProfit',
             'totalKomisi',
             'komisiPersen',
             'penjuals',
-            'kurirs'
+            'kurirs',
+            'pembelis'
         ));
     }
 
@@ -97,6 +105,8 @@ class PembayaranController extends Controller
                     \App\Models\Penjual::where('id_penjual', $payout->user_id)->increment('saldo', $payout->jumlah_penarikan);
                 } else if ($payout->role === 'kurir') {
                     \App\Models\Kurir::where('id_kurir', $payout->user_id)->increment('saldo', $payout->jumlah_penarikan);
+                } else if ($payout->role === 'pembeli') {
+                    \App\Models\User::where('id_user', $payout->user_id)->increment('saldo', $payout->jumlah_penarikan);
                 }
             }
 
@@ -104,9 +114,14 @@ class PembayaranController extends Controller
             if ($payout->role === 'penjual') {
                 $penjual = \App\Models\Penjual::where('id_penjual', $payout->user_id)->first();
                 $idUserForNotif = $penjual ? $penjual->id_user : null;
-            } else {
+                $redirectUrl = '/penjual/saldo';
+            } else if ($payout->role === 'kurir') {
                 $kurir = \App\Models\Kurir::where('id_kurir', $payout->user_id)->first();
                 $idUserForNotif = $kurir ? $kurir->id_user : null;
+                $redirectUrl = '/kurir/saldo';
+            } else {
+                $idUserForNotif = $payout->user_id;
+                $redirectUrl = '/user/dompet';
             }
 
             // Kirim notifikasi real-time jika id_user ditemukan
@@ -115,7 +130,7 @@ class PembayaranController extends Controller
                     'id_user' => $idUserForNotif,
                     'judul' => $judulNotif,
                     'pesan' => $pesanNotif,
-                    'redirect_url' => $payout->role === 'penjual' ? '/penjual/saldo' : '/kurir/saldo',
+                    'redirect_url' => $redirectUrl,
                     'is_read' => false
                 ]);
             }

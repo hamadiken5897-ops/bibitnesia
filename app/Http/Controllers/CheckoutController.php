@@ -188,6 +188,11 @@ class CheckoutController extends Controller
                         'email' => $user->email,
                         'phone' => $user->no_hp ?? '',
                     ],
+                    'callbacks' => [
+                        'finish' => route('marketplace.pesanan.saya'),
+                        'error' => route('marketplace.pesanan.saya'),
+                        'pending' => route('marketplace.pesanan.saya')
+                    ]
                 ];
 
                 if ($request->metode !== 'other_qris') {

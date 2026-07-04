@@ -33,6 +33,10 @@ class User extends Authenticatable
         'google_id',
         'peringatan_teks',
         'tgl_peringatan',
+        'saldo',
+        'nama_bank',
+        'no_rekening',
+        'nama_pemilik_rekening',
     ];
 
     protected $hidden = ['password'];
@@ -152,5 +156,10 @@ class User extends Authenticatable
     public function alamats()
     {
         return $this->hasMany(Alamat::class, 'id_user', 'id_user');
+    }
+
+    public function walletHistories()
+    {
+        return $this->hasMany(WalletHistory::class, 'user_id', 'id_user');
     }
 }
