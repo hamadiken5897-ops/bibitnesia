@@ -283,7 +283,7 @@
                         </div>
                     </div>
                     <div class="order-status-badge">
-                        @if($p->status_pesanan == 'Menunggu konfirmasi penjual')
+                        @if(in_array($p->status_pesanan, ['Menunggu konfirmasi penjual', 'Menunggu Konfirmasi', 'Menunggu konfirmasi']))
                             <span class="badge badge-warning">Pesanan Baru</span>
                         @elseif($p->status_pesanan == 'Pesanan sedang diproses')
                             <span class="badge badge-info">Perlu Dikirim</span>
@@ -329,7 +329,7 @@
                         <i class="bi bi-eye"></i> Lihat Detail
                     </a>
 
-                    @if ($p->status_pesanan == 'Menunggu konfirmasi penjual')
+                    @if (in_array($p->status_pesanan, ['Menunggu konfirmasi penjual', 'Menunggu Konfirmasi', 'Menunggu konfirmasi']))
                         <button type="button" class="btn-action btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $p->id_pesanan }}">
                             <i class="bi bi-x-circle"></i> Tolak
                         </button>
@@ -344,7 +344,7 @@
                 </div>
 
                 <!-- Accept Modal -->
-                @if ($p->status_pesanan == 'Menunggu konfirmasi penjual')
+                @if (in_array($p->status_pesanan, ['Menunggu konfirmasi penjual', 'Menunggu Konfirmasi', 'Menunggu konfirmasi']))
                 <div class="modal fade" id="acceptModal{{ $p->id_pesanan }}" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <form method="POST" action="{{ route('penjual.pesanan.accept', $p->id_pesanan) }}">

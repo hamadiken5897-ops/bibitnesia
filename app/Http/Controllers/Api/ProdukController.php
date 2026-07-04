@@ -14,7 +14,7 @@ class ProdukController extends Controller
     public function index()
     {
         // Mengambil semua produk yang stoknya > 0 dan berstatus tersedia
-        $query = Produk::with(['penjual:id_penjual,nama_penjual,id_provinsi', 'penjual.provinsi', 'ulasans', 'ulasans.user'])
+        $query = Produk::with(['penjual:id_penjual,nama_penjual,id_provinsi,id_user', 'penjual.provinsi', 'penjual.user:id_user,profile_image', 'ulasans', 'ulasans.user'])
             ->withCount('ulasans as ulasan_count')
             ->withAvg('ulasans as rating', 'rating')
             ->where('stok', '>', 0)
@@ -58,7 +58,7 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-        $produk = Produk::with(['penjual:id_penjual,nama_penjual,id_provinsi', 'penjual.provinsi', 'ulasans', 'ulasans.user'])
+        $produk = Produk::with(['penjual:id_penjual,nama_penjual,id_provinsi,id_user', 'penjual.provinsi', 'penjual.user:id_user,profile_image', 'ulasans', 'ulasans.user'])
             ->withCount('ulasans as ulasan_count')
             ->withAvg('ulasans as rating', 'rating')
             ->find($id);

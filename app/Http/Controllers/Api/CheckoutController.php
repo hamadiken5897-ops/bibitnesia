@@ -174,4 +174,47 @@ class CheckoutController extends Controller
             ], 500);
         }
     }
+
+    public function checkPayment(Request $request, $id)
+    {
+        $pesanan = \App\Models\Pesanan::where('id_pesanan', $id)->where('id_user', auth()->id())->first();
+        if (!$pesanan) {
+            return response()->json(['success' => false, 'message' => 'Pesanan tidak ditemukan'], 404);
+        }
+
+        if ($pesanan->status_pesanan != 'Menunggu Pembayaran') {
+            return response()->json(['success' => true, 'status' => $pesanan->status_pesanan]);
+        }
+
+        $pengaturan = \App\Models\PengaturanPembayaran::first();
+        if ($pengaturan && $pengaturan->midtrans_is_active && $pengaturan->midtrans_server_key) {
+            \Midtrans\Config::$serverKey = $pengaturan->midtrans_server_key;
+            \Midtrans\Config::$isProduction = false;
+            
+            try {
+                $status = \Midtrans\Transaction::status($id);
+                $transactionStatus = $status->transaction_status;
+                
+                if ($transactionStatus == 'capture' || $transactionStatus == 'settlement') {
+                    $pesanan->update(['status_pesanan' => 'Menunggu Konfirmasi']);
+                    \App\Models\Pembayaran::where('id_pesanan', $id)->update(['status_pembayaran' => 'success']);
+                    
+                    \App\Models\RiwayatPesanan::create([
+                        'id_pesanan' => $id,
+                        'status' => 'Menunggu Konfirmasi',
+                        'keterangan' => 'Pembayaran berhasil dikonfirmasi. Pesanan sedang diproses.',
+                    ]);
+                    
+                    return response()->json(['success' => true, 'status' => 'Menunggu Konfirmasi']);
+                }
+                
+                return response()->json(['success' => true, 'status' => 'Menunggu Pembayaran']);
+            } catch (\Exception $e) {
+                // Not found in Midtrans or error
+                return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
+        
+        return response()->json(['success' => true, 'status' => $pesanan->status_pesanan]);
+    }
 }

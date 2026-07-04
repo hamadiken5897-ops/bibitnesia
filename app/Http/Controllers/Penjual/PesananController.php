@@ -28,7 +28,7 @@ class PesananController extends Controller
             ->orderBy('created_at', 'desc');
 
         if ($status == 'baru') {
-            $query->where('status_pesanan', 'Menunggu konfirmasi penjual');
+            $query->whereIn('status_pesanan', ['Menunggu konfirmasi penjual', 'Menunggu Konfirmasi', 'Menunggu konfirmasi']);
         } elseif ($status == 'perlu-dikirim') {
             $query->where('status_pesanan', 'Pesanan sedang diproses');
         } elseif ($status == 'dikirim') {
