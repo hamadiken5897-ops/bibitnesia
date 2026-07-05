@@ -10,7 +10,7 @@ class InvoiceController extends Controller
     public function show($id_pesanan)
     {
         // Ambil pesanan milik user login
-        $pesanan = DB::table('pesanans')
+        $pesanan = \App\Models\Pesanan::query()
             ->where('id_pesanan', $id_pesanan)
             ->where('id_user', auth()->user()->id_user)
             ->first();

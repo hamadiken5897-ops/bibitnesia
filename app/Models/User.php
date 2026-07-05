@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class User extends Authenticatable
 {
@@ -46,6 +48,38 @@ class User extends Authenticatable
         return [
             'tgl_peringatan' => 'datetime',
         ];
+    }
+
+    protected function noTelepon(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function alamat(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function noRekening(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function namaPemilikRekening(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
     }
 
     #// Bagian Generate ID USER Secara Terurut //

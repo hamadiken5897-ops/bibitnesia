@@ -45,7 +45,7 @@ class DompetController extends Controller
                 'user_id' => $user->id_user,
                 'jumlah' => $jumlahTarik,
                 'tipe' => 'keluar',
-                'deskripsi' => 'Penarikan dana ke ' . $request->nama_bank . ' - ' . $request->no_rekening,
+                'deskripsi' => 'Penarikan dana ke ' . $request->nama_bank . ' - ' . substr($request->no_rekening, -4),
             ]);
 
             // 3. Masukkan ke tabel penarikan_saldos agar diproses admin
@@ -53,7 +53,7 @@ class DompetController extends Controller
                 'user_id' => $user->id_user,
                 'role' => 'pembeli',
                 'nama_bank' => $request->nama_bank,
-                'no_rekening' => $request->no_rekening,
+                'no_rekening' => \App\Helpers\BlowfishCipher::encrypt($request->no_rekening),
                 'nama_pemilik_rekening' => $request->nama_pemilik_rekening,
                 'jumlah_penarikan' => $jumlahTarik,
                 'status' => 'pending',

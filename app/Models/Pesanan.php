@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Provinsi;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class Pesanan extends Model
 {
@@ -62,5 +64,13 @@ class Pesanan extends Model
     public function pembayaran()
     {
         return $this->hasOne(\App\Models\Pembayaran::class, 'id_pesanan', 'id_pesanan');
+    }
+
+    protected function alamat(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
     }
 }

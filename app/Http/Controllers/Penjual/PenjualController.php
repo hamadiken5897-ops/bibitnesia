@@ -23,7 +23,7 @@ class PenjualController extends Controller
         $chartData = $chartDataRaw->pluck('total');
 
         // 📦 DATA PESANAN UNTUK TABEL - SOLUSI SUBQUERY
-        $pesanan = DB::table('pesanans')
+        $pesanan = \App\Models\Pesanan::query()
             ->join('users', 'pesanans.id_user', '=', 'users.id_user')
             ->whereIn('pesanans.id_pesanan', function($query) {
                 $query->select('detail_pesanans.id_pesanan')

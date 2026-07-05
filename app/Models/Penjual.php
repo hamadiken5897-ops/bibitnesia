@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class Penjual extends Model
 {
@@ -48,5 +49,37 @@ class Penjual extends Model
     public function produk()
     {
         return $this->hasMany(Produk::class, 'id_penjual', 'id_penjual');
+    }
+
+    protected function noRekening(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function ewalletPhone(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function noTeleponPj(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function alamatPj(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
     }
 }

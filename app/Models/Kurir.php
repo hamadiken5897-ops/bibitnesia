@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Provinsi;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class Kurir extends Model
 {
@@ -36,5 +38,21 @@ class Kurir extends Model
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class, 'id_provinsi');
+    }
+
+    protected function noRekening(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
+
+    protected function ewalletPhone(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
     }
 }

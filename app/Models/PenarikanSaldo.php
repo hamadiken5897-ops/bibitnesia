@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class PenarikanSaldo extends Model
 {
@@ -30,4 +32,12 @@ class PenarikanSaldo extends Model
         'tgl_selesai' => 'datetime',
         'jumlah_penarikan' => 'decimal:2',
     ];
+
+    protected function noRekening(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
+    }
 }

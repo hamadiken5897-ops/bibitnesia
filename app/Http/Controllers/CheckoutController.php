@@ -128,8 +128,8 @@ class CheckoutController extends Controller
                 'tanggal_pesanan' => now(),
                 'total_harga' => $totalHarga,
 
-                // 🔥 SNAPSHOT DARI CHECKOUT
-                'alamat' => $request->alamat,
+                // 🔥 SNAPSHOT DARI CHECKOUT (Enkripsi Manual karena menggunakan DB::table)
+                'alamat' => \App\Helpers\BlowfishCipher::encrypt($request->alamat),
                 'catatan' => $request->catatan ?? null,
                 'provinsi' => $request->provinsi,
                 'status_pesanan' => 'Menunggu Pembayaran',

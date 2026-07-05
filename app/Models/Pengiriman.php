@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Helpers\BlowfishCipher;
 
 class Pengiriman extends Model
 {
@@ -32,5 +34,13 @@ class Pengiriman extends Model
     public function kurir()
     {
         return $this->belongsTo(Kurir::class, 'id_kurir', 'id_kurir');
+    }
+
+    protected function alamatTujuan(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => BlowfishCipher::decrypt($value),
+            set: fn ($value) => BlowfishCipher::encrypt($value),
+        );
     }
 }
